@@ -1,0 +1,4 @@
+/home/vmuser/project/cmake_test/build/CMakeFiles/rebuild_cache.dir
+/home/vmuser/project/cmake_test/build/CMakeFiles/edit_cache.dir
+/home/vmuser/project/cmake_test/build/CMakeFiles/mylib.dir
+/home/vmuser/project/cmake_test/build/CMakeFiles/MyProject.dir
