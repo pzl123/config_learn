@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "mylib.h"
 #include "get_config.h"
 
 int main()

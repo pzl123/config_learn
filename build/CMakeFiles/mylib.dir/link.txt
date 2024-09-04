@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../lib/libmylib.a  CMakeFiles/mylib.dir/lib/cJSON.c.o CMakeFiles/mylib.dir/lib/config_fun.c.o
-/usr/bin/ranlib ../lib/libmylib.a

@@ -9,9 +9,13 @@ MyProject/
 │         └── default_config.json
 ├── src/
 │   ├── main.c
+|   ├── CMakeLists.txt
 ├── lib/
-│      └── cJSON.c
-│      └── config_fun.c
+|      ├── CMakeLists.txt
+|      ├── lib/
+│             └── cJSON.c
+│             └── cJSONx.c
+│      ├── config_fun.c
 ├── include/
 │          └── mylib.h
 │          └── cJSON.h

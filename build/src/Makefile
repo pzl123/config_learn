@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles /home/vmuser/project/cmake_test/build/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
+	cd /home/vmuser/project/cmake_test/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles /home/vmuser/project/cmake_test/build/src/CMakeFiles/progress.marks
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,57 +97,60 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/vmuser/project/cmake_test/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named MyProject
+# Convenience name for target.
+src/CMakeFiles/MyProject.dir/rule:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/MyProject.dir/rule
+.PHONY : src/CMakeFiles/MyProject.dir/rule
 
-# Build rule for target.
-MyProject: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 MyProject
+# Convenience name for target.
+MyProject: src/CMakeFiles/MyProject.dir/rule
+
 .PHONY : MyProject
 
 # fast build rule for target.
 MyProject/fast:
-	$(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/build
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/build
 .PHONY : MyProject/fast
 
-#=============================================================================
-# Target rules for targets named cJSOnlib
+main.o: main.c.o
 
-# Build rule for target.
-cJSOnlib: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cJSOnlib
-.PHONY : cJSOnlib
+.PHONY : main.o
 
-# fast build rule for target.
-cJSOnlib/fast:
-	$(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/build
-.PHONY : cJSOnlib/fast
+# target to build an object file
+main.c.o:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.o
+.PHONY : main.c.o
 
-#=============================================================================
-# Target rules for targets named configlib
+main.i: main.c.i
 
-# Build rule for target.
-configlib: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 configlib
-.PHONY : configlib
+.PHONY : main.i
 
-# fast build rule for target.
-configlib/fast:
-	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/build
-.PHONY : configlib/fast
+# target to preprocess a source file
+main.c.i:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.i
+.PHONY : main.c.i
+
+main.s: main.c.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.c.s:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.s
+.PHONY : main.c.s
 
 # Help Target
 help:
@@ -156,10 +159,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... edit_cache"
 	@echo "... MyProject"
-	@echo "... cJSOnlib"
-	@echo "... configlib"
+	@echo "... edit_cache"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 
@@ -171,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/vmuser/project/cmake_test/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

@@ -1,8 +1,9 @@
-# 创建库目标
-add_library(MyLib STATIC
-    lib/config_fun.c
-    lib/cJSON.c
-)
-# 指定库的头文件
-target_include_directories(MyLib PUBLIC ${CMAKE_SOURCE_DIR}/include)
+# 设置当前目录为目标目录
+file(GLOB SOURCES "*.c")
+
+# 添加可执行文件
+add_executable(MyProject ${SOURCES})
+
+# 链接库
+target_link_libraries(MyProject configlib cJSOnlib)
 

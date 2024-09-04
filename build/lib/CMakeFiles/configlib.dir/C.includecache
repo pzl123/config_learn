@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/cJSON/cJSON.h
+stddef.h
+-
+
+../include/get_config.h
+
+/home/vmuser/project/cmake_test/lib/config_fun.c
+get_config.h
+/home/vmuser/project/cmake_test/lib/get_config.h
+stdio.h
+-
+cJSON/cJSON.h
+-
+stdlib.h
+-
+string.h
+-
+

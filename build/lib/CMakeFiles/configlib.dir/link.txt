@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC   -shared -Wl,-soname,libconfiglib.so -o ../../lib/libconfiglib.so CMakeFiles/configlib.dir/config_fun.c.o 

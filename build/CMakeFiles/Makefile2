@@ -60,76 +60,152 @@ CMAKE_SOURCE_DIR = /home/vmuser/project/cmake_test
 CMAKE_BINARY_DIR = /home/vmuser/project/cmake_test/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/configlib.dir
+# Directory level rules for directory src
 
-# All Build rule for target.
-CMakeFiles/configlib.dir/all:
-	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/depend
-	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=3,4,5 "Built target configlib"
-.PHONY : CMakeFiles/configlib.dir/all
+# Convenience name for "all" pass in the directory.
+src/all: src/CMakeFiles/MyProject.dir/all
 
-# Include target in all.
-all: CMakeFiles/configlib.dir/all
+.PHONY : src/all
 
-.PHONY : all
+# Convenience name for "clean" pass in the directory.
+src/clean: src/CMakeFiles/MyProject.dir/clean
 
-# Build rule for subdir invocation for target.
-CMakeFiles/configlib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/configlib.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 0
-.PHONY : CMakeFiles/configlib.dir/rule
+.PHONY : src/clean
 
-# Convenience name for target.
-configlib: CMakeFiles/configlib.dir/rule
+# Convenience name for "preinstall" pass in the directory.
+src/preinstall:
 
-.PHONY : configlib
-
-# clean rule for target.
-CMakeFiles/configlib.dir/clean:
-	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/clean
-.PHONY : CMakeFiles/configlib.dir/clean
-
-# clean rule for target.
-clean: CMakeFiles/configlib.dir/clean
-
-.PHONY : clean
+.PHONY : src/preinstall
 
 #=============================================================================
-# Target rules for target CMakeFiles/MyProject.dir
+# Target rules for target src/CMakeFiles/MyProject.dir
 
 # All Build rule for target.
-CMakeFiles/MyProject.dir/all: CMakeFiles/configlib.dir/all
-	$(MAKE) -f CMakeFiles/MyProject.dir/build.make CMakeFiles/MyProject.dir/depend
-	$(MAKE) -f CMakeFiles/MyProject.dir/build.make CMakeFiles/MyProject.dir/build
+src/CMakeFiles/MyProject.dir/all: lib/CMakeFiles/cJSOnlib.dir/all
+src/CMakeFiles/MyProject.dir/all: lib/CMakeFiles/configlib.dir/all
+	$(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/depend
+	$(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=1,2 "Built target MyProject"
-.PHONY : CMakeFiles/MyProject.dir/all
+.PHONY : src/CMakeFiles/MyProject.dir/all
 
 # Include target in all.
-all: CMakeFiles/MyProject.dir/all
+all: src/CMakeFiles/MyProject.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/MyProject.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 5
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/MyProject.dir/all
+src/CMakeFiles/MyProject.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 7
+	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/MyProject.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 0
-.PHONY : CMakeFiles/MyProject.dir/rule
+.PHONY : src/CMakeFiles/MyProject.dir/rule
 
 # Convenience name for target.
-MyProject: CMakeFiles/MyProject.dir/rule
+MyProject: src/CMakeFiles/MyProject.dir/rule
 
 .PHONY : MyProject
 
 # clean rule for target.
-CMakeFiles/MyProject.dir/clean:
-	$(MAKE) -f CMakeFiles/MyProject.dir/build.make CMakeFiles/MyProject.dir/clean
-.PHONY : CMakeFiles/MyProject.dir/clean
+src/CMakeFiles/MyProject.dir/clean:
+	$(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/clean
+.PHONY : src/CMakeFiles/MyProject.dir/clean
 
 # clean rule for target.
-clean: CMakeFiles/MyProject.dir/clean
+clean: src/CMakeFiles/MyProject.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory lib
+
+# Convenience name for "all" pass in the directory.
+lib/all: lib/CMakeFiles/cJSOnlib.dir/all
+lib/all: lib/CMakeFiles/configlib.dir/all
+
+.PHONY : lib/all
+
+# Convenience name for "clean" pass in the directory.
+lib/clean: lib/CMakeFiles/cJSOnlib.dir/clean
+lib/clean: lib/CMakeFiles/configlib.dir/clean
+
+.PHONY : lib/clean
+
+# Convenience name for "preinstall" pass in the directory.
+lib/preinstall:
+
+.PHONY : lib/preinstall
+
+#=============================================================================
+# Target rules for target lib/CMakeFiles/cJSOnlib.dir
+
+# All Build rule for target.
+lib/CMakeFiles/cJSOnlib.dir/all:
+	$(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/depend
+	$(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=3,4,5 "Built target cJSOnlib"
+.PHONY : lib/CMakeFiles/cJSOnlib.dir/all
+
+# Include target in all.
+all: lib/CMakeFiles/cJSOnlib.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+lib/CMakeFiles/cJSOnlib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/cJSOnlib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 0
+.PHONY : lib/CMakeFiles/cJSOnlib.dir/rule
+
+# Convenience name for target.
+cJSOnlib: lib/CMakeFiles/cJSOnlib.dir/rule
+
+.PHONY : cJSOnlib
+
+# clean rule for target.
+lib/CMakeFiles/cJSOnlib.dir/clean:
+	$(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/clean
+.PHONY : lib/CMakeFiles/cJSOnlib.dir/clean
+
+# clean rule for target.
+clean: lib/CMakeFiles/cJSOnlib.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target lib/CMakeFiles/configlib.dir
+
+# All Build rule for target.
+lib/CMakeFiles/configlib.dir/all:
+	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/depend
+	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=6,7 "Built target configlib"
+.PHONY : lib/CMakeFiles/configlib.dir/all
+
+# Include target in all.
+all: lib/CMakeFiles/configlib.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+lib/CMakeFiles/configlib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/configlib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 0
+.PHONY : lib/CMakeFiles/configlib.dir/rule
+
+# Convenience name for target.
+configlib: lib/CMakeFiles/configlib.dir/rule
+
+.PHONY : configlib
+
+# clean rule for target.
+lib/CMakeFiles/configlib.dir/clean:
+	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/clean
+.PHONY : lib/CMakeFiles/configlib.dir/clean
+
+# clean rule for target.
+clean: lib/CMakeFiles/configlib.dir/clean
 
 .PHONY : clean
 

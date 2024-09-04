@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/get_config.h
+
+/home/vmuser/project/cmake_test/src/main.c
+stdio.h
+-
+get_config.h
+/home/vmuser/project/cmake_test/src/get_config.h
+

@@ -1,6 +1,6 @@
 #include "get_config.h"
 #include <stdio.h>
-#include <cJSON.h>
+#include <cJSON/cJSON.h>
 #include <stdlib.h>
 #include <string.h>
 
