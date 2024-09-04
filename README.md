@@ -4,6 +4,9 @@
 ```
 MyProject/
 ├── CMakeLists.txt
+├── 3party/
+│      └── cJSON.c
+│      └── cJSONx.c
 ├── config/
 │         └── config.json
 │         └── default_config.json

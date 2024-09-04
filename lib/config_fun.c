@@ -48,15 +48,12 @@ void get_config(const char * keyname,const char * type){
         return;
     }
 
-    if (strcmp(type, "string") == 0){
-        if (cJSON_IsString(config_weneed) && (config_weneed->valuestring != NULL)){
-            printf("%s: %s\n", keyname, config_weneed->valuestring);
-        }else{
-            fprintf(stderr, "JSON field is not a string\n");
-        }
+    if (cJSON_IsString(config_weneed) && (config_weneed->valuestring != NULL)){
+        printf("%s: %s\n", keyname, config_weneed->valuestring);
     }else{
-        fprintf(stderr, "Unsupported type\n");
+        fprintf(stderr, "JSON field is not a string\n");
     }
+
 
     // 释放 JSON 对象
     cJSON_Delete(cjson_config);
