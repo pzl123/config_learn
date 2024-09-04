@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/mylib.dir/lib/module1.c.o"
-  "CMakeFiles/mylib.dir/lib/module2.c.o"
+  "CMakeFiles/mylib.dir/lib/cJSON.c.o"
+  "CMakeFiles/mylib.dir/lib/config_fun.c.o"
   "../lib/libmylib.pdb"
   "../lib/libmylib.a"
 )

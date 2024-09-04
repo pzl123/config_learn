@@ -90,7 +90,7 @@ MyProject_EXTERNAL_OBJECTS =
 
 ../bin/MyProject: CMakeFiles/MyProject.dir/src/main.c.o
 ../bin/MyProject: CMakeFiles/MyProject.dir/build.make
-../bin/MyProject: ../lib/libmylib.a
+../bin/MyProject: ../lib/libconfiglib.a
 ../bin/MyProject: CMakeFiles/MyProject.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable ../bin/MyProject"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MyProject.dir/link.txt --verbose=$(VERBOSE)

@@ -60,39 +60,39 @@ CMAKE_SOURCE_DIR = /home/vmuser/project/cmake_test
 CMAKE_BINARY_DIR = /home/vmuser/project/cmake_test/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/mylib.dir
+# Target rules for target CMakeFiles/configlib.dir
 
 # All Build rule for target.
-CMakeFiles/mylib.dir/all:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/depend
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=3,4,5 "Built target mylib"
-.PHONY : CMakeFiles/mylib.dir/all
+CMakeFiles/configlib.dir/all:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/depend
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=3,4,5 "Built target configlib"
+.PHONY : CMakeFiles/configlib.dir/all
 
 # Include target in all.
-all: CMakeFiles/mylib.dir/all
+all: CMakeFiles/configlib.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/mylib.dir/rule: cmake_check_build_system
+CMakeFiles/configlib.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/mylib.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/configlib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/vmuser/project/cmake_test/build/CMakeFiles 0
-.PHONY : CMakeFiles/mylib.dir/rule
+.PHONY : CMakeFiles/configlib.dir/rule
 
 # Convenience name for target.
-mylib: CMakeFiles/mylib.dir/rule
+configlib: CMakeFiles/configlib.dir/rule
 
-.PHONY : mylib
-
-# clean rule for target.
-CMakeFiles/mylib.dir/clean:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/clean
-.PHONY : CMakeFiles/mylib.dir/clean
+.PHONY : configlib
 
 # clean rule for target.
-clean: CMakeFiles/mylib.dir/clean
+CMakeFiles/configlib.dir/clean:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/clean
+.PHONY : CMakeFiles/configlib.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/configlib.dir/clean
 
 .PHONY : clean
 
@@ -100,7 +100,7 @@ clean: CMakeFiles/mylib.dir/clean
 # Target rules for target CMakeFiles/MyProject.dir
 
 # All Build rule for target.
-CMakeFiles/MyProject.dir/all: CMakeFiles/mylib.dir/all
+CMakeFiles/MyProject.dir/all: CMakeFiles/configlib.dir/all
 	$(MAKE) -f CMakeFiles/MyProject.dir/build.make CMakeFiles/MyProject.dir/depend
 	$(MAKE) -f CMakeFiles/MyProject.dir/build.make CMakeFiles/MyProject.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=1,2 "Built target MyProject"

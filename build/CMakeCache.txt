@@ -188,6 +188,9 @@ cmake_test_BINARY_DIR:STATIC=/home/vmuser/project/cmake_test/build
 cmake_test_SOURCE_DIR:STATIC=/home/vmuser/project/cmake_test
 
 //Dependencies for target
+configlib_LIB_DEPENDS:STATIC=
+
+//Dependencies for target
 mylib_LIB_DEPENDS:STATIC=
 
 

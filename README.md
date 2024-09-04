@@ -4,16 +4,17 @@
 ```
 MyProject/
 ├── CMakeLists.txt
+├── config/
+│         └── config.json
+│         └── default_config.json
 ├── src/
-│   ├── main.cpp
+│   ├── main.c
 ├── lib/
-│      └── module1.cpp
-│      └──module2.cpp
+│      └── cJSON.c
+│      └── config_fun.c
 ├── include/
-│       └── mylib.h
-└── tests/
-    ├── test_main.cpp
-    └── CMakeLists.txt
+│          └── mylib.h
+│          └── cJSON.h
 ```
 
 运行项目如下：

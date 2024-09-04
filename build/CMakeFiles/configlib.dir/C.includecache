@@ -39,4 +39,8 @@ stdio.h
 -
 cJSON.h
 -
+stdlib.h
+-
+string.h
+-
 

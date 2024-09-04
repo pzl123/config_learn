@@ -6,6 +6,8 @@
 
 #IncludeRegexTransform: 
 
+../include/get_config.h
+
 ../include/mylib.h
 
 /home/vmuser/project/cmake_test/src/main.c
@@ -13,4 +15,6 @@ stdio.h
 -
 mylib.h
 /home/vmuser/project/cmake_test/src/mylib.h
+get_config.h
+/home/vmuser/project/cmake_test/src/get_config.h
 

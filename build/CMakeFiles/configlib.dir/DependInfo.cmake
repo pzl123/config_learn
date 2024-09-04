@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/vmuser/project/cmake_test/lib/cJSON.c" "/home/vmuser/project/cmake_test/build/CMakeFiles/mylib.dir/lib/cJSON.c.o"
-  "/home/vmuser/project/cmake_test/lib/config_fun.c" "/home/vmuser/project/cmake_test/build/CMakeFiles/mylib.dir/lib/config_fun.c.o"
+  "/home/vmuser/project/cmake_test/lib/cJSON.c" "/home/vmuser/project/cmake_test/build/CMakeFiles/configlib.dir/lib/cJSON.c.o"
+  "/home/vmuser/project/cmake_test/lib/config_fun.c" "/home/vmuser/project/cmake_test/build/CMakeFiles/configlib.dir/lib/config_fun.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

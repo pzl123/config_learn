@@ -5,11 +5,23 @@
 set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib) # 静态库
 # set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib) # 动态库
 
-add_library(mylib STATIC
-    module1
-    module2
+# 添加库的源文件
+set(LIB_SOURCES
+    cJSON.c
+    config_fun.c
 )
 
-target_include_directories(mylib PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+# 创建静态库
+add_library(configlib STATIC ${LIB_SOURCES})
+
+# 如果你需要创建动态库，使用以下命令：
+# add_library(mylib SHARED ${LIB_SOURCES})
+
+
+# 设置包含目录
+target_include_directories(configlib PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
 )
+
+# 目标链接库（如果需要）
+# target_link_libraries(mylib <other_libraries>)

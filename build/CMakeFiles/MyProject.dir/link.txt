@@ -1,1 +1,1 @@
-/usr/bin/cc    CMakeFiles/MyProject.dir/src/main.c.o  -o ../bin/MyProject ../lib/libmylib.a 
+/usr/bin/cc    CMakeFiles/MyProject.dir/src/main.c.o  -o ../bin/MyProject ../lib/libconfiglib.a 

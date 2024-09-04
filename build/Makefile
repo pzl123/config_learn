@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named mylib
+# Target rules for targets named configlib
 
 # Build rule for target.
-mylib: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 mylib
-.PHONY : mylib
+configlib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 configlib
+.PHONY : configlib
 
 # fast build rule for target.
-mylib/fast:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/build
-.PHONY : mylib/fast
+configlib/fast:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/build
+.PHONY : configlib/fast
 
 #=============================================================================
 # Target rules for targets named MyProject
@@ -136,59 +136,59 @@ MyProject/fast:
 	$(MAKE) -f CMakeFiles/MyProject.dir/build.make CMakeFiles/MyProject.dir/build
 .PHONY : MyProject/fast
 
-lib/module1.o: lib/module1.c.o
+lib/cJSON.o: lib/cJSON.c.o
 
-.PHONY : lib/module1.o
-
-# target to build an object file
-lib/module1.c.o:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/module1.c.o
-.PHONY : lib/module1.c.o
-
-lib/module1.i: lib/module1.c.i
-
-.PHONY : lib/module1.i
-
-# target to preprocess a source file
-lib/module1.c.i:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/module1.c.i
-.PHONY : lib/module1.c.i
-
-lib/module1.s: lib/module1.c.s
-
-.PHONY : lib/module1.s
-
-# target to generate assembly for a file
-lib/module1.c.s:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/module1.c.s
-.PHONY : lib/module1.c.s
-
-lib/module2.o: lib/module2.c.o
-
-.PHONY : lib/module2.o
+.PHONY : lib/cJSON.o
 
 # target to build an object file
-lib/module2.c.o:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/module2.c.o
-.PHONY : lib/module2.c.o
+lib/cJSON.c.o:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/lib/cJSON.c.o
+.PHONY : lib/cJSON.c.o
 
-lib/module2.i: lib/module2.c.i
+lib/cJSON.i: lib/cJSON.c.i
 
-.PHONY : lib/module2.i
+.PHONY : lib/cJSON.i
 
 # target to preprocess a source file
-lib/module2.c.i:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/module2.c.i
-.PHONY : lib/module2.c.i
+lib/cJSON.c.i:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/lib/cJSON.c.i
+.PHONY : lib/cJSON.c.i
 
-lib/module2.s: lib/module2.c.s
+lib/cJSON.s: lib/cJSON.c.s
 
-.PHONY : lib/module2.s
+.PHONY : lib/cJSON.s
 
 # target to generate assembly for a file
-lib/module2.c.s:
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/module2.c.s
-.PHONY : lib/module2.c.s
+lib/cJSON.c.s:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/lib/cJSON.c.s
+.PHONY : lib/cJSON.c.s
+
+lib/config_fun.o: lib/config_fun.c.o
+
+.PHONY : lib/config_fun.o
+
+# target to build an object file
+lib/config_fun.c.o:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/lib/config_fun.c.o
+.PHONY : lib/config_fun.c.o
+
+lib/config_fun.i: lib/config_fun.c.i
+
+.PHONY : lib/config_fun.i
+
+# target to preprocess a source file
+lib/config_fun.c.i:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/lib/config_fun.c.i
+.PHONY : lib/config_fun.c.i
+
+lib/config_fun.s: lib/config_fun.c.s
+
+.PHONY : lib/config_fun.s
+
+# target to generate assembly for a file
+lib/config_fun.c.s:
+	$(MAKE) -f CMakeFiles/configlib.dir/build.make CMakeFiles/configlib.dir/lib/config_fun.c.s
+.PHONY : lib/config_fun.c.s
 
 src/main.o: src/main.c.o
 
@@ -225,14 +225,14 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... mylib"
+	@echo "... configlib"
 	@echo "... MyProject"
-	@echo "... lib/module1.o"
-	@echo "... lib/module1.i"
-	@echo "... lib/module1.s"
-	@echo "... lib/module2.o"
-	@echo "... lib/module2.i"
-	@echo "... lib/module2.s"
+	@echo "... lib/cJSON.o"
+	@echo "... lib/cJSON.i"
+	@echo "... lib/cJSON.s"
+	@echo "... lib/config_fun.o"
+	@echo "... lib/config_fun.i"
+	@echo "... lib/config_fun.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

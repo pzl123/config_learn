@@ -57,64 +57,64 @@ include CMakeFiles/mylib.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/mylib.dir/flags.make
 
-CMakeFiles/mylib.dir/lib/module1.c.o: CMakeFiles/mylib.dir/flags.make
-CMakeFiles/mylib.dir/lib/module1.c.o: ../lib/module1.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/mylib.dir/lib/module1.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/mylib.dir/lib/module1.c.o   -c /home/vmuser/project/cmake_test/lib/module1.c
+CMakeFiles/mylib.dir/lib/cJSON.c.o: CMakeFiles/mylib.dir/flags.make
+CMakeFiles/mylib.dir/lib/cJSON.c.o: ../lib/cJSON.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/mylib.dir/lib/cJSON.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/mylib.dir/lib/cJSON.c.o   -c /home/vmuser/project/cmake_test/lib/cJSON.c
 
-CMakeFiles/mylib.dir/lib/module1.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mylib.dir/lib/module1.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/vmuser/project/cmake_test/lib/module1.c > CMakeFiles/mylib.dir/lib/module1.c.i
+CMakeFiles/mylib.dir/lib/cJSON.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mylib.dir/lib/cJSON.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/vmuser/project/cmake_test/lib/cJSON.c > CMakeFiles/mylib.dir/lib/cJSON.c.i
 
-CMakeFiles/mylib.dir/lib/module1.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mylib.dir/lib/module1.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/vmuser/project/cmake_test/lib/module1.c -o CMakeFiles/mylib.dir/lib/module1.c.s
+CMakeFiles/mylib.dir/lib/cJSON.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mylib.dir/lib/cJSON.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/vmuser/project/cmake_test/lib/cJSON.c -o CMakeFiles/mylib.dir/lib/cJSON.c.s
 
-CMakeFiles/mylib.dir/lib/module1.c.o.requires:
+CMakeFiles/mylib.dir/lib/cJSON.c.o.requires:
 
-.PHONY : CMakeFiles/mylib.dir/lib/module1.c.o.requires
+.PHONY : CMakeFiles/mylib.dir/lib/cJSON.c.o.requires
 
-CMakeFiles/mylib.dir/lib/module1.c.o.provides: CMakeFiles/mylib.dir/lib/module1.c.o.requires
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/module1.c.o.provides.build
-.PHONY : CMakeFiles/mylib.dir/lib/module1.c.o.provides
+CMakeFiles/mylib.dir/lib/cJSON.c.o.provides: CMakeFiles/mylib.dir/lib/cJSON.c.o.requires
+	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/cJSON.c.o.provides.build
+.PHONY : CMakeFiles/mylib.dir/lib/cJSON.c.o.provides
 
-CMakeFiles/mylib.dir/lib/module1.c.o.provides.build: CMakeFiles/mylib.dir/lib/module1.c.o
+CMakeFiles/mylib.dir/lib/cJSON.c.o.provides.build: CMakeFiles/mylib.dir/lib/cJSON.c.o
 
 
-CMakeFiles/mylib.dir/lib/module2.c.o: CMakeFiles/mylib.dir/flags.make
-CMakeFiles/mylib.dir/lib/module2.c.o: ../lib/module2.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/mylib.dir/lib/module2.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/mylib.dir/lib/module2.c.o   -c /home/vmuser/project/cmake_test/lib/module2.c
+CMakeFiles/mylib.dir/lib/config_fun.c.o: CMakeFiles/mylib.dir/flags.make
+CMakeFiles/mylib.dir/lib/config_fun.c.o: ../lib/config_fun.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/mylib.dir/lib/config_fun.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/mylib.dir/lib/config_fun.c.o   -c /home/vmuser/project/cmake_test/lib/config_fun.c
 
-CMakeFiles/mylib.dir/lib/module2.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mylib.dir/lib/module2.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/vmuser/project/cmake_test/lib/module2.c > CMakeFiles/mylib.dir/lib/module2.c.i
+CMakeFiles/mylib.dir/lib/config_fun.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mylib.dir/lib/config_fun.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/vmuser/project/cmake_test/lib/config_fun.c > CMakeFiles/mylib.dir/lib/config_fun.c.i
 
-CMakeFiles/mylib.dir/lib/module2.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mylib.dir/lib/module2.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/vmuser/project/cmake_test/lib/module2.c -o CMakeFiles/mylib.dir/lib/module2.c.s
+CMakeFiles/mylib.dir/lib/config_fun.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mylib.dir/lib/config_fun.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/vmuser/project/cmake_test/lib/config_fun.c -o CMakeFiles/mylib.dir/lib/config_fun.c.s
 
-CMakeFiles/mylib.dir/lib/module2.c.o.requires:
+CMakeFiles/mylib.dir/lib/config_fun.c.o.requires:
 
-.PHONY : CMakeFiles/mylib.dir/lib/module2.c.o.requires
+.PHONY : CMakeFiles/mylib.dir/lib/config_fun.c.o.requires
 
-CMakeFiles/mylib.dir/lib/module2.c.o.provides: CMakeFiles/mylib.dir/lib/module2.c.o.requires
-	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/module2.c.o.provides.build
-.PHONY : CMakeFiles/mylib.dir/lib/module2.c.o.provides
+CMakeFiles/mylib.dir/lib/config_fun.c.o.provides: CMakeFiles/mylib.dir/lib/config_fun.c.o.requires
+	$(MAKE) -f CMakeFiles/mylib.dir/build.make CMakeFiles/mylib.dir/lib/config_fun.c.o.provides.build
+.PHONY : CMakeFiles/mylib.dir/lib/config_fun.c.o.provides
 
-CMakeFiles/mylib.dir/lib/module2.c.o.provides.build: CMakeFiles/mylib.dir/lib/module2.c.o
+CMakeFiles/mylib.dir/lib/config_fun.c.o.provides.build: CMakeFiles/mylib.dir/lib/config_fun.c.o
 
 
 # Object files for target mylib
 mylib_OBJECTS = \
-"CMakeFiles/mylib.dir/lib/module1.c.o" \
-"CMakeFiles/mylib.dir/lib/module2.c.o"
+"CMakeFiles/mylib.dir/lib/cJSON.c.o" \
+"CMakeFiles/mylib.dir/lib/config_fun.c.o"
 
 # External object files for target mylib
 mylib_EXTERNAL_OBJECTS =
 
-../lib/libmylib.a: CMakeFiles/mylib.dir/lib/module1.c.o
-../lib/libmylib.a: CMakeFiles/mylib.dir/lib/module2.c.o
+../lib/libmylib.a: CMakeFiles/mylib.dir/lib/cJSON.c.o
+../lib/libmylib.a: CMakeFiles/mylib.dir/lib/config_fun.c.o
 ../lib/libmylib.a: CMakeFiles/mylib.dir/build.make
 ../lib/libmylib.a: CMakeFiles/mylib.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C static library ../lib/libmylib.a"
@@ -126,8 +126,8 @@ CMakeFiles/mylib.dir/build: ../lib/libmylib.a
 
 .PHONY : CMakeFiles/mylib.dir/build
 
-CMakeFiles/mylib.dir/requires: CMakeFiles/mylib.dir/lib/module1.c.o.requires
-CMakeFiles/mylib.dir/requires: CMakeFiles/mylib.dir/lib/module2.c.o.requires
+CMakeFiles/mylib.dir/requires: CMakeFiles/mylib.dir/lib/cJSON.c.o.requires
+CMakeFiles/mylib.dir/requires: CMakeFiles/mylib.dir/lib/config_fun.c.o.requires
 
 .PHONY : CMakeFiles/mylib.dir/requires
 
