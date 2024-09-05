@@ -3,5 +3,6 @@
 
 lib/CMakeFiles/configlib.dir/config_fun.c.o
  ../include/cJSON/cJSON.h
+ ../include/cJSON/cJSONx.h
  ../include/get_config.h
  /home/vmuser/project/cmake_test/lib/config_fun.c

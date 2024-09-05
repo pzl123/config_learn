@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "get_config.h"
 
+
 int main()
 {
     printf("this is main cmake hello!\n");

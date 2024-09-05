@@ -1,8 +1,18 @@
 #include "get_config.h"
 #include <stdio.h>
 #include <cJSON/cJSON.h>
+#include <cJSON/cJSONx.h>
 #include <stdlib.h>
 #include <string.h>
+
+
+CONFIG sys_config;
+
+const cjsonx_reflect_t device_reflection[] = {
+    __cjsonx_str(CONFIG, time),
+    __cjsonx_int(CONFIG, Software_version),
+    __cjsonx_end()
+};
 
 
 
@@ -41,18 +51,11 @@ void get_config(const char * keyname,const char * type){
         fprintf(stderr, "Failed to parse JSON\n");
         return;
     }
-    cJSON* config_weneed =  cJSON_GetObjectItem(cjson_config, keyname);
-    if(config_weneed==NULL){
-        fprintf(stderr, "Missing JSON fields\n");
-        cJSON_Delete(cjson_config);
-        return;
-    }
 
-    if (cJSON_IsString(config_weneed) && (config_weneed->valuestring != NULL)){
-        printf("%s: %s\n", keyname, config_weneed->valuestring);
-    }else{
-        fprintf(stderr, "JSON field is not a string\n");
-    }
+    cjsonx_obj2struct(cjson_config, &sys_config, device_reflection);
+
+    printf("sys_config.time: %s\n",sys_config.time);
+    printf("sys_config.Software_version: %d\n",sys_config.Software_version);
 
 
     // 释放 JSON 对象

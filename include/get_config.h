@@ -7,4 +7,12 @@
 void get_config(const char * keyname,const char * type);
 void Determine_the_type(void * b);
 
+
+typedef struct 
+{
+    char time[1024];
+    int Software_version;
+}CONFIG;
+
+
 #endif
