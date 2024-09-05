@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/configlib.dir/config_fun.c.o"
+  "CMakeFiles/configlib.dir/__/src/config_fun.c.o"
   "../../lib/libconfiglib.pdb"
   "../../lib/libconfiglib.so"
 )

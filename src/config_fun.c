@@ -18,6 +18,7 @@ const cjsonx_reflect_t device_reflection[] = {
 
 
 
+
 void get_config(const char * keyname,const char * type){
     FILE* fp = fopen(CONFIG_FILE_PATH,"r");
     if (fp == NULL) {
@@ -52,10 +53,7 @@ void get_config(const char * keyname,const char * type){
         return;
     }
 
-    cjsonx_obj2struct(cjson_config, &sys_config, device_reflection);
 
-    printf("sys_config.time: %s\n",sys_config.time);
-    printf("sys_config.Software_version: %d\n",sys_config.Software_version);
 
 
     // 释放 JSON 对象

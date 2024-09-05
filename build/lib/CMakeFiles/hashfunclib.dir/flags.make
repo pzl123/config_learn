@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_FLAGS = -fPIC   -std=gnu11
 
-C_DEFINES = -DcJSOnlib_EXPORTS
+C_DEFINES = -Dhashfunclib_EXPORTS
 
-C_INCLUDES = -I/home/vmuser/project/cmake_test/include -I/home/vmuser/project/cmake_test/include/cJSON 
+C_INCLUDES = -I/home/vmuser/project/cmake_test/include -I/home/vmuser/project/cmake_test/include/uthash 
 

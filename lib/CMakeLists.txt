@@ -13,9 +13,9 @@ add_library(cJSOnlib SHARED
 )
 
 add_library(configlib SHARED
-    ${PROJECT_SOURCE_DIR}/lib/config_fun.c
+    ${PROJECT_SOURCE_DIR}/src/config_fun.c
 )
 
 # 包含头文件目录
-target_include_directories(cJSOnlib PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(cJSOnlib PRIVATE ${PROJECT_SOURCE_DIR}/include/cJSON)
 target_include_directories(configlib PRIVATE ${PROJECT_SOURCE_DIR}/include)

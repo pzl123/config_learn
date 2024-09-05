@@ -193,6 +193,9 @@ cmake_test_SOURCE_DIR:STATIC=/home/vmuser/project/cmake_test
 //Dependencies for target
 configlib_LIB_DEPENDS:STATIC=
 
+//Dependencies for target
+hashfunclib_LIB_DEPENDS:STATIC=
+
 
 ########################
 # INTERNAL cache entries

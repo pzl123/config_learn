@@ -18,9 +18,9 @@ cJSON.h
 
 ../include/get_config.h
 
-/home/vmuser/project/cmake_test/lib/config_fun.c
+/home/vmuser/project/cmake_test/src/config_fun.c
 get_config.h
-/home/vmuser/project/cmake_test/lib/get_config.h
+/home/vmuser/project/cmake_test/src/get_config.h
 stdio.h
 -
 cJSON/cJSON.h

@@ -194,32 +194,32 @@ __/3party/cJSON/cJSONx.c.s:
 	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSONx.c.s
 .PHONY : __/3party/cJSON/cJSONx.c.s
 
-config_fun.o: config_fun.c.o
+__/src/config_fun.o: __/src/config_fun.c.o
 
-.PHONY : config_fun.o
+.PHONY : __/src/config_fun.o
 
 # target to build an object file
-config_fun.c.o:
-	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/config_fun.c.o
-.PHONY : config_fun.c.o
+__/src/config_fun.c.o:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o
+.PHONY : __/src/config_fun.c.o
 
-config_fun.i: config_fun.c.i
+__/src/config_fun.i: __/src/config_fun.c.i
 
-.PHONY : config_fun.i
+.PHONY : __/src/config_fun.i
 
 # target to preprocess a source file
-config_fun.c.i:
-	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/config_fun.c.i
-.PHONY : config_fun.c.i
+__/src/config_fun.c.i:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/__/src/config_fun.c.i
+.PHONY : __/src/config_fun.c.i
 
-config_fun.s: config_fun.c.s
+__/src/config_fun.s: __/src/config_fun.c.s
 
-.PHONY : config_fun.s
+.PHONY : __/src/config_fun.s
 
 # target to generate assembly for a file
-config_fun.c.s:
-	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/config_fun.c.s
-.PHONY : config_fun.c.s
+__/src/config_fun.c.s:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/__/src/config_fun.c.s
+.PHONY : __/src/config_fun.c.s
 
 # Help Target
 help:
@@ -237,9 +237,9 @@ help:
 	@echo "... __/3party/cJSON/cJSONx.o"
 	@echo "... __/3party/cJSON/cJSONx.i"
 	@echo "... __/3party/cJSON/cJSONx.s"
-	@echo "... config_fun.o"
-	@echo "... config_fun.i"
-	@echo "... config_fun.s"
+	@echo "... __/src/config_fun.o"
+	@echo "... __/src/config_fun.i"
+	@echo "... __/src/config_fun.s"
 .PHONY : help
 
 

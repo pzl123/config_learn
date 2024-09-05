@@ -6,11 +6,49 @@
 
 #IncludeRegexTransform: 
 
+../include/cJSON/cJSON.h
+stddef.h
+-
+
+../include/cJSON/cJSONx.h
+stdbool.h
+-
+cJSON.h
+../include/cJSON/cJSON.h
+
 ../include/get_config.h
+
+../include/uthash/uthash.h
+string.h
+-
+stddef.h
+-
+stdlib.h
+-
+stdint.h
+-
+stdio.h
+-
+
+/home/vmuser/project/cmake_test/src/config_fun.c
+get_config.h
+/home/vmuser/project/cmake_test/src/get_config.h
+stdio.h
+-
+cJSON/cJSON.h
+-
+cJSON/cJSONx.h
+-
+stdlib.h
+-
+string.h
+-
 
 /home/vmuser/project/cmake_test/src/main.c
 stdio.h
 -
 get_config.h
 /home/vmuser/project/cmake_test/src/get_config.h
+uthash/uthash.h
+/home/vmuser/project/cmake_test/src/uthash/uthash.h
 

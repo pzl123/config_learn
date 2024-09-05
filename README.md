@@ -11,17 +11,25 @@ MyProject/
 │         └── config.json
 │         └── default_config.json
 ├── src/
-│   ├── main.c
-|   ├── CMakeLists.txt
+│      ├── main.c
+|      ├── CMakeLists.txt
+|      ├── config_fun.c
+|      ├── hashfunc.c
+|
 ├── lib/
 |      ├── CMakeLists.txt
 |      ├── lib/
 │             └── cJSON.c
 │             └── cJSONx.c
-│      ├── config_fun.c
+│      
 ├── include/
-│          └── mylib.h
-│          └── cJSON.h
+│          └── get_config.h
+|          ├── cJSON/
+│          |        └── cJSON.h
+|          |        └── cJSONx.h
+|          ├── uthash/
+│                   └── uthash.h
+|                   
 ```
 
 运行项目如下：

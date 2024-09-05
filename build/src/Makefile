@@ -125,6 +125,33 @@ MyProject/fast:
 	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/build
 .PHONY : MyProject/fast
 
+config_fun.o: config_fun.c.o
+
+.PHONY : config_fun.o
+
+# target to build an object file
+config_fun.c.o:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/config_fun.c.o
+.PHONY : config_fun.c.o
+
+config_fun.i: config_fun.c.i
+
+.PHONY : config_fun.i
+
+# target to preprocess a source file
+config_fun.c.i:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/config_fun.c.i
+.PHONY : config_fun.c.i
+
+config_fun.s: config_fun.c.s
+
+.PHONY : config_fun.s
+
+# target to generate assembly for a file
+config_fun.c.s:
+	cd /home/vmuser/project/cmake_test/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/config_fun.c.s
+.PHONY : config_fun.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -161,6 +188,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... MyProject"
 	@echo "... edit_cache"
+	@echo "... config_fun.o"
+	@echo "... config_fun.i"
+	@echo "... config_fun.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

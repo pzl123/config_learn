@@ -57,38 +57,38 @@ include lib/CMakeFiles/configlib.dir/progress.make
 # Include the compile flags for this target's objects.
 include lib/CMakeFiles/configlib.dir/flags.make
 
-lib/CMakeFiles/configlib.dir/config_fun.c.o: lib/CMakeFiles/configlib.dir/flags.make
-lib/CMakeFiles/configlib.dir/config_fun.c.o: ../lib/config_fun.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object lib/CMakeFiles/configlib.dir/config_fun.c.o"
-	cd /home/vmuser/project/cmake_test/build/lib && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/configlib.dir/config_fun.c.o   -c /home/vmuser/project/cmake_test/lib/config_fun.c
+lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o: lib/CMakeFiles/configlib.dir/flags.make
+lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o: ../src/config_fun.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o"
+	cd /home/vmuser/project/cmake_test/build/lib && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/configlib.dir/__/src/config_fun.c.o   -c /home/vmuser/project/cmake_test/src/config_fun.c
 
-lib/CMakeFiles/configlib.dir/config_fun.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/configlib.dir/config_fun.c.i"
-	cd /home/vmuser/project/cmake_test/build/lib && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/vmuser/project/cmake_test/lib/config_fun.c > CMakeFiles/configlib.dir/config_fun.c.i
+lib/CMakeFiles/configlib.dir/__/src/config_fun.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/configlib.dir/__/src/config_fun.c.i"
+	cd /home/vmuser/project/cmake_test/build/lib && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/vmuser/project/cmake_test/src/config_fun.c > CMakeFiles/configlib.dir/__/src/config_fun.c.i
 
-lib/CMakeFiles/configlib.dir/config_fun.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/configlib.dir/config_fun.c.s"
-	cd /home/vmuser/project/cmake_test/build/lib && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/vmuser/project/cmake_test/lib/config_fun.c -o CMakeFiles/configlib.dir/config_fun.c.s
+lib/CMakeFiles/configlib.dir/__/src/config_fun.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/configlib.dir/__/src/config_fun.c.s"
+	cd /home/vmuser/project/cmake_test/build/lib && /usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/vmuser/project/cmake_test/src/config_fun.c -o CMakeFiles/configlib.dir/__/src/config_fun.c.s
 
-lib/CMakeFiles/configlib.dir/config_fun.c.o.requires:
+lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o.requires:
 
-.PHONY : lib/CMakeFiles/configlib.dir/config_fun.c.o.requires
+.PHONY : lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o.requires
 
-lib/CMakeFiles/configlib.dir/config_fun.c.o.provides: lib/CMakeFiles/configlib.dir/config_fun.c.o.requires
-	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/config_fun.c.o.provides.build
-.PHONY : lib/CMakeFiles/configlib.dir/config_fun.c.o.provides
+lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o.provides: lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o.requires
+	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o.provides.build
+.PHONY : lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o.provides
 
-lib/CMakeFiles/configlib.dir/config_fun.c.o.provides.build: lib/CMakeFiles/configlib.dir/config_fun.c.o
+lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o.provides.build: lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o
 
 
 # Object files for target configlib
 configlib_OBJECTS = \
-"CMakeFiles/configlib.dir/config_fun.c.o"
+"CMakeFiles/configlib.dir/__/src/config_fun.c.o"
 
 # External object files for target configlib
 configlib_EXTERNAL_OBJECTS =
 
-../lib/libconfiglib.so: lib/CMakeFiles/configlib.dir/config_fun.c.o
+../lib/libconfiglib.so: lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o
 ../lib/libconfiglib.so: lib/CMakeFiles/configlib.dir/build.make
 ../lib/libconfiglib.so: lib/CMakeFiles/configlib.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/vmuser/project/cmake_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C shared library ../../lib/libconfiglib.so"
@@ -99,7 +99,7 @@ lib/CMakeFiles/configlib.dir/build: ../lib/libconfiglib.so
 
 .PHONY : lib/CMakeFiles/configlib.dir/build
 
-lib/CMakeFiles/configlib.dir/requires: lib/CMakeFiles/configlib.dir/config_fun.c.o.requires
+lib/CMakeFiles/configlib.dir/requires: lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o.requires
 
 .PHONY : lib/CMakeFiles/configlib.dir/requires
 

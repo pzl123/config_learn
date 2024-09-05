@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/vmuser/project/cmake_test/lib/config_fun.c" "/home/vmuser/project/cmake_test/build/lib/CMakeFiles/configlib.dir/config_fun.c.o"
+  "/home/vmuser/project/cmake_test/src/config_fun.c" "/home/vmuser/project/cmake_test/build/lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

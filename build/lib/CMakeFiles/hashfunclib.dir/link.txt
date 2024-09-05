@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC   -shared -Wl,-soname,libhashfunclib.so -o ../../lib/libhashfunclib.so CMakeFiles/hashfunclib.dir/__/src/hashfunc.c.o 
