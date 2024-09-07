@@ -1,0 +1,11 @@
+{
+	"name":	"mculover666",
+	"age":	22,
+	"weight":	55.5,
+	"address":	{
+		"country":	"China",
+		"zip-code":	111111
+	},
+	"skill":	["c", "Java", "Python"],
+	"student":	false
+}

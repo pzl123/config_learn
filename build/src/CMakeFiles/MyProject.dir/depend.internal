@@ -5,8 +5,10 @@ src/CMakeFiles/MyProject.dir/config_fun.c.o
  ../include/cJSON/cJSON.h
  ../include/cJSON/cJSONx.h
  ../include/get_config.h
+ ../include/uthash/uthash.h
  /home/vmuser/project/cmake_test/src/config_fun.c
 src/CMakeFiles/MyProject.dir/main.c.o
+ ../include/cJSON/cJSON.h
  ../include/get_config.h
  ../include/uthash/uthash.h
  /home/vmuser/project/cmake_test/src/main.c

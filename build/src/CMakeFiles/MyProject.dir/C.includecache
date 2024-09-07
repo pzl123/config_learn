@@ -17,6 +17,10 @@ cJSON.h
 ../include/cJSON/cJSON.h
 
 ../include/get_config.h
+uthash/uthash.h
+../include/uthash/uthash.h
+cJSON/cJSON.h
+../include/cJSON/cJSON.h
 
 ../include/uthash/uthash.h
 string.h
@@ -35,20 +39,28 @@ get_config.h
 /home/vmuser/project/cmake_test/src/get_config.h
 stdio.h
 -
-cJSON/cJSON.h
--
-cJSON/cJSONx.h
--
 stdlib.h
 -
 string.h
 -
+dirent.h
+-
+stdint.h
+-
+sys/stat.h
+-
+unistd.h
+-
+cJSON/cJSON.h
+/home/vmuser/project/cmake_test/src/cJSON/cJSON.h
+cJSON/cJSONx.h
+/home/vmuser/project/cmake_test/src/cJSON/cJSONx.h
 
 /home/vmuser/project/cmake_test/src/main.c
-stdio.h
--
 get_config.h
 /home/vmuser/project/cmake_test/src/get_config.h
-uthash/uthash.h
-/home/vmuser/project/cmake_test/src/uthash/uthash.h
+stdio.h
+-
+dirent.h
+-
 

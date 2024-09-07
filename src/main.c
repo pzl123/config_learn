@@ -1,56 +1,50 @@
-#include <stdio.h>
 #include "get_config.h"
-#include "uthash/uthash.h"
 
-typedef struct{
-    char keyname[100];                   /* key */
-    char value[100];
-    UT_hash_handle hh;         /* makes this structure hashable */
-}HashEntry;
+#include <stdio.h>
+#include <dirent.h>
 
+char *message = 
+"{                              \
+    \"name\":\"mculover666\",   \
+    \"age\": 22,                \
+    \"weight\": 55.5,           \
+    \"address\":                \
+        {                       \
+            \"country\": \"China\",\
+            \"zip-code\": 111111\
+        },                      \
+    \"skill\": [\"c\", \"Java\", \"Python\"],\
+    \"student\": false          \
+}";
 
-HashEntry *MAP =NULL;
-struct uint{
-    char keyname[100];
-    char value[100];
-};
+char *new_message = 
+"{                              \
+    \"name\":\"sadasdasdasdasdasdasdasd\",   \
+    \"age\": 22,                \
+    \"weight\": 55.5,           \
+    \"address\":                \
+        {                       \
+            \"country\": \"China\",\
+            \"zip-code\": 111111\
+        },                      \
+    \"skill\": [\"c\", \"Java\", \"Python\"],\
+    \"student\": false          \
+}";
 
 
 int main() {
-    HashEntry *found;
 
-    // 插入数据
-    HashEntry *entry1 = (HashEntry *)malloc(sizeof(HashEntry));
-    if (!entry1) return -1;
-    strcpy(entry1->keyname, "abc");
-    strcpy(entry1->value, "./abcname");
-    HASH_ADD_STR(MAP, keyname, entry1);
+    config_file_init_to_hashtable(CONFIG_PATH);
+    char *filename = "abc.json";
+    cJSON *cjson_test = cJSON_Parse(message);
+    char *json_str = cJSON_Print(cjson_test);
+    set_config_file(filename, "./../web/", cjson_test);
+    print_hash_table(ALL_CONFIG_FILE);
 
-    HashEntry *entry2 = (HashEntry *)malloc(sizeof(HashEntry));
-    if (!entry2) return -1;
-    strcpy(entry2->keyname, "def");
-    strcpy(entry2->value, "./defname");
-    HASH_ADD_STR(MAP, keyname, entry2);
-
-    // 查找并使用数据
-    HASH_FIND_STR(MAP, "abc", found);
-    if (found) {
-        printf("Found value for 'abc': %s\n", found->value);
-    } else {
-        printf("'abc' not found.\n");
-    }
-
-    // 清理内存
-    HashEntry *current_entry, *tmp;
-    HASH_ITER(hh, MAP, current_entry, tmp) {
-        HASH_DEL(MAP, current_entry);
-        free(current_entry);
-    }
-
-    printf("This is main cmake hello!\n");
-    char* time = "time";
-    char* type = "string";
-    get_config(time, type);
-
+    filename = "abc.json";
+    cjson_test = cJSON_Parse(new_message);
+    json_str = cJSON_Print(cjson_test);
+    set_config_file(filename, "./../web/", cjson_test);
+    print_hash_table(ALL_CONFIG_FILE);
     return 0;
 }
