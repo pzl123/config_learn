@@ -16,7 +16,9 @@ stdbool.h
 cJSON.h
 ../include/cJSON/cJSON.h
 
-../include/get_config.h
+../include/config_manage.h
+stdbool.h
+-
 uthash/uthash.h
 ../include/uthash/uthash.h
 cJSON/cJSON.h
@@ -35,8 +37,8 @@ stdio.h
 -
 
 /home/vmuser/project/cmake_test/src/config_fun.c
-get_config.h
-/home/vmuser/project/cmake_test/src/get_config.h
+config_manage.h
+/home/vmuser/project/cmake_test/src/config_manage.h
 stdio.h
 -
 stdlib.h
@@ -57,8 +59,8 @@ cJSON/cJSONx.h
 /home/vmuser/project/cmake_test/src/cJSON/cJSONx.h
 
 /home/vmuser/project/cmake_test/src/main.c
-get_config.h
-/home/vmuser/project/cmake_test/src/get_config.h
+config_manage.h
+/home/vmuser/project/cmake_test/src/config_manage.h
 stdio.h
 -
 dirent.h

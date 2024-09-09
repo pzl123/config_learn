@@ -1,4 +1,4 @@
-#include "get_config.h"
+#include "config_manage.h"
 
 #include <stdio.h>
 #include <dirent.h>
@@ -18,33 +18,31 @@ char *message =
 }";
 
 char *new_message = 
-"{                              \
-    \"name\":\"sadasdasdasdasdasdasdasd\",   \
-    \"age\": 22,                \
-    \"weight\": 55.5,           \
-    \"address\":                \
-        {                       \
-            \"country\": \"China\",\
-            \"zip-code\": 111111\
-        },                      \
-    \"skill\": [\"c\", \"Java\", \"Python\"],\
-    \"student\": false          \
+"{ \
+    \"time\":\"202409040821\", \
+    \"Software_version\": 12345678 \
 }";
 
 
 int main() {
 
-    config_file_init_to_hashtable(CONFIG_PATH);
-    char *filename = "abc.json";
-    cJSON *cjson_test = cJSON_Parse(message);
-    char *json_str = cJSON_Print(cjson_test);
-    set_config_file(filename, "./../web/", cjson_test);
-    print_hash_table(ALL_CONFIG_FILE);
+    config_init();  
+    cJSON * new = cJSON_CreateObject();
+    cJSON* config = cJSON_Parse(message);
+    set_config("config.json",config);
+    print_hash_table();
 
-    filename = "abc.json";
-    cjson_test = cJSON_Parse(new_message);
-    json_str = cJSON_Print(cjson_test);
-    set_config_file(filename, "./../web/", cjson_test);
-    print_hash_table(ALL_CONFIG_FILE);
+    config = cJSON_Parse(new_message);
+    set_config("config.json",config);
+    print_hash_table();
+
+    get_config("config.json",&new);
+    char * str  = cJSON_Print(new);
+    printf("%s\n",str);
+
+
+    cJSON_Delete(config);
+    cJSON_Delete(new);
+    clear_hash_table();
     return 0;
 }

@@ -3,12 +3,12 @@
 
 src/CMakeFiles/MyProject.dir/config_fun.c.o: ../include/cJSON/cJSON.h
 src/CMakeFiles/MyProject.dir/config_fun.c.o: ../include/cJSON/cJSONx.h
-src/CMakeFiles/MyProject.dir/config_fun.c.o: ../include/get_config.h
+src/CMakeFiles/MyProject.dir/config_fun.c.o: ../include/config_manage.h
 src/CMakeFiles/MyProject.dir/config_fun.c.o: ../include/uthash/uthash.h
 src/CMakeFiles/MyProject.dir/config_fun.c.o: ../src/config_fun.c
 
 src/CMakeFiles/MyProject.dir/main.c.o: ../include/cJSON/cJSON.h
-src/CMakeFiles/MyProject.dir/main.c.o: ../include/get_config.h
+src/CMakeFiles/MyProject.dir/main.c.o: ../include/config_manage.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../include/uthash/uthash.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../src/main.c
 

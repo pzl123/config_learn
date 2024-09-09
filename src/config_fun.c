@@ -1,4 +1,4 @@
-#include "get_config.h"
+#include "config_manage.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,163 +11,117 @@
 #include "cJSON/cJSON.h"
 #include "cJSON/cJSONx.h"
 
-struct file_struct *ALL_CONFIG_FILE = NULL;
 
+#define CONFIG_FILE "./../config_file_dir/config/config.json"
+#define CONFIG_PATH "./../config_file_dir/config/"
 
+#define DEFAULT_CONFIG_FILE "./../config_file_dir/default/default_config.json"
+#define DEFAULT_CONFIG_PATH "./../config_file_dir/default/"
 
-/**
- * @brief Adds a default configuration file if it does not already exist.
- *
- * This function checks if a file with the specified name exists in the
- * configuration files. If it does not exist, it adds the filename and 
- * associated path to the hash table, creates the target file path, 
- * serializes the provided cJSON object into a JSON string, and writes 
- * that string to the file.
- * 
- * @param filename The name of the configuration file to add.
- * @param path The path where the configuration file should be created.
- * @param cjson_config The cJSON object containing the configuration data.
- */
-void add_default_config_file(char *filename, const char *path, cJSON *cjson_config)
+#define MAX_PATH_LEN (1024)
+
+typedef struct
 {
-    struct file_struct *s = find_filename(filename);
-    if (NULL == s) {
-        printf("no such file in config files, add this file %s\n",filename);
-        add_filename(filename, path, cjson_config);
+    char key[100];
+    cJSON *value;
+} key_and_value_t;
 
-        char target_file_path[MAX_PATH_LEN] = {0}; 
-        snprintf(target_file_path, sizeof(target_file_path), "%s%s", path, filename);
-        
-        FILE *target_file = fopen(target_file_path , "w");
-        if (NULL == target_file) 
-        {
-            perror("Failed to open the target file");
-        }
 
-        char *json_string = cJSON_Print(cjson_config); 
-        if (json_string != NULL) {
-            fwrite(json_string, sizeof(char), strlen(json_string), target_file);
-
-            fflush(target_file);
-            int fd = fileno(target_file);
-            if (fd != -1) {
-                if (fsync(fd) != 0) {
-                    perror("fsync failed");
-                }
-            } else {
-                perror("Failed to get file descriptor");
-            }
-
-            free(json_string);
-        }else {
-            printf("Failed to serialize cJSON object to string.\n");
-        }
-        fclose(target_file); 
-    }
-    else
-    {
-        printf("this file already exists. Modification is not allowed\n");
-    }
-}
-
-void set_config_file(char *filename, const char *path, cJSON *cjson_config)
+typedef struct
 {
-    struct file_struct *s = find_filename(filename);
-    if (NULL == s) {
-        printf("no such file in config files, add this file %s\n",filename);
-        add_filename(filename, path, cjson_config);
+    char path[MAX_PATH_LEN];   
+    key_and_value_t kv; 
+    UT_hash_handle hh;  
+} file_struct_t;
 
-        char target_file_path[MAX_PATH_LEN] = {0}; 
-        snprintf(target_file_path, sizeof(target_file_path), "%s%s", path, filename);
-        
-        FILE *target_file = fopen(target_file_path , "w");
-        if (NULL == target_file) 
-        {
-            perror("Failed to open the target file");
-        }
-
-        char *json_string = cJSON_Print(cjson_config); 
-        if (json_string != NULL) {
-            fwrite(json_string, sizeof(char), strlen(json_string), target_file);
-
-            fflush(target_file);
-            int fd = fileno(target_file);
-            if (fd != -1) {
-                if (fsync(fd) != 0) {
-                    perror("fsync failed");
-                }
-            } else {
-                perror("Failed to get file descriptor");
-            }
-
-            free(json_string);
-        }else {
-            printf("Failed to serialize cJSON object to string.\n");
-        }
-        fclose(target_file); 
-    }
-    else
-    {
-        printf("This file already exists. Modifying this configuration file.\n");
-        s->vp.value = cjson_config;
-    }
-}
+file_struct_t *ALL_CONFIG_FILE = NULL;
 
 
 
+static void add_config_name(const char *config_name, const cJSON *cjson_config);
+static file_struct_t *find_config_name(const char *config_name);
+static bool file_to_json(const char *target_file, cJSON **cjson_config);
+static cJSON *json_to_file(const char *config_name, const cJSON *cjson_config);
 
-/*
-*@brief Adds a filename to the configuration file list with an associated path and JSON configuration.
-*
-*@param filename The name of the file to add.
-*@param path The path where the file is located.
-*@param cjson_config A pointer to the JSON configuration associated with the file.
-*
-*@return None. This function modifies the global configuration file list.
-*/
-void add_filename(char *filename, const char *path, cJSON *cjson_config) 
-{
-    struct file_struct *s = NULL;
 
-    HASH_FIND_STR(ALL_CONFIG_FILE,filename,s);
+bool set_config(const char *name, const cJSON *config)
+{   
+    file_struct_t *s = find_config_name(name);  
     if (NULL == s) 
     {
-        s = (struct file_struct*)malloc(sizeof(struct file_struct));
+        printf("no such config %s in path %s",name,CONFIG_PATH);
+        return false;
+    } 
+    else
+    {
+        if(cJSON_Compare(s->kv.value, config, true))
+        {
+            printf("Same, no need to modify.\n");
+            return false;
+        }
+        else
+        {
+            s->kv.value = cJSON_Duplicate(config, 1);
+            json_to_file(s->kv.key, s->kv.value);
+            return true;
+        }
+    }
+}
+
+bool get_config(const char *name, cJSON **config)
+{   
+    file_struct_t *s = find_config_name(name);  
+    if (NULL == s) 
+    {
+        printf("no such config %s in path %s",name,CONFIG_PATH);
+        return false;
+    } 
+    else
+    {
+        *config = cJSON_Duplicate(s->kv.value, 1);
+        return true;
+    }
+}
+
+
+
+void add_config_name(const char *config_name, const cJSON *cjson_config) 
+{
+    file_struct_t *s = NULL;
+    HASH_FIND_STR(ALL_CONFIG_FILE,config_name,s);
+    if (NULL == s) 
+    {
+        s = (file_struct_t*)malloc(sizeof(file_struct_t));
         if (NULL == s)
         {
             perror("malloc error");
         }
-        strncpy(s->filename,filename,strlen(filename));
-        s->filename[strlen(filename)] = '\0';
-        HASH_ADD_STR(ALL_CONFIG_FILE, filename, s);
+        strncpy(s->kv.key,config_name,strlen(config_name));
+        s->kv.key[strlen(config_name)] = '\0';
+        HASH_ADD_STR(ALL_CONFIG_FILE, kv.key, s);
     }
     char dest_path[MAX_PATH_LEN] = {0};
-    snprintf(dest_path, sizeof(dest_path), "%s%s", path, filename);
-    strncpy(s->vp.path,dest_path,sizeof(s->vp.path)-1);
-    s->vp.path[sizeof(s->vp.path)-1] = '\0';
-    s->vp.value = cjson_config;
+    snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, config_name);
+    strncpy(s->path,dest_path,strlen(dest_path));
+    s->path[strlen(dest_path)] = '\0';
+    s->kv.value = cJSON_Duplicate(cjson_config, 1);
+    if (s->kv.value == NULL) {
+        perror("Failed to duplicate cJSON object");
+    }
 }
 
 
 
-/*
-*@brief Initializes a hash table with configuration files found in a specified directory.
-*
-*@param path The path to the directory containing the configuration files.
-*
-*@return Returns the number of configuration files successfully processed 
-*        if at least one file was found, 
-*        -1 if an error occurred (e.g., directory not found or no files to process).
-*/
-int config_file_init_to_hashtable(const char *path)
+
+bool config_init()
 {
     struct dirent *file  = NULL;
-    DIR *dp = opendir(path);
+    DIR *dp = opendir(CONFIG_PATH);
 
     if (dp == NULL) 
     {
         perror("opendir");
-        return -1;
+        return false;
     }
     int files_found = 0; 
 
@@ -176,111 +130,137 @@ int config_file_init_to_hashtable(const char *path)
         if (strncmp(file->d_name, ".", 1) == 0)
             continue;
         char dest_path[MAX_PATH_LEN] = {0};
-        snprintf(dest_path, sizeof(dest_path), "%s%s", path, file->d_name);
+        (void)snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, file->d_name);
 
         struct stat buf;
         memset(&buf, 0, sizeof(buf));    
-        int ret = stat(dest_path, &buf);
+        if (stat(dest_path, &buf) != 0) 
+        {
+            perror("stat error");
+            return false;
+        }
 
         if (S_ISREG(buf.st_mode))
         {
             cJSON *cjson_config = NULL;
-            cjson_config = file_to_json(dest_path, cjson_config);
-            add_filename(file->d_name, path, cjson_config);
-            files_found ++;    
+            if (file_to_json(dest_path, &cjson_config)) 
+            {
+                add_config_name(file->d_name, cjson_config);
+                files_found++;    
+                cJSON_Delete(cjson_config); 
+            } 
+            else 
+            {
+                fprintf(stderr, "Failed to load or parse JSON from %s\n", dest_path);
+            }
         }
     }
-
     closedir(dp);
 
     if (files_found == 0) 
     {
         printf("No files in the target directory\n");
-        return -1;
+        return false;
     }
 
 
-    return files_found;
+    return true;
 }
 
 
 
-/*
-*@brief Reads a JSON file and parses its content into a cJSON object.
-*
-*@param target_file The path to the target JSON file to be read.
-*@param cjson_config A pointer to a cJSON object where the parsed data will be stored.
-*
-*@return A pointer to the populated cJSON object on success, or NULL on failure. 
-*        The caller is responsible for freeing the returned cJSON object.
-*/
-cJSON *file_to_json(const char *target_file,cJSON *cjson_config)
+
+bool file_to_json(const char *target_file, cJSON **cjson_config)
 {
     FILE* fp = fopen(target_file,"r");
     if (fp == NULL) 
     {
         perror("open file error ");
-        return NULL;
+        return false;
     }
 
     (void)fseek(fp,0,SEEK_END);
     int file_len = ftell(fp);
     (void)fseek(fp,0,SEEK_SET);
 
-    
+
+    if (file_len <= 0) 
+    {
+        fclose(fp);
+        return false; 
+    }
+
     char * readbuf = (char *)malloc(file_len);
     if (readbuf == 0)
     {
         perror("malloc error");
         fclose(fp);
-        return NULL;
+        return false;
     }
-    readbuf[file_len] = '\0';
 
-    size_t bytes_read = fread(readbuf, 1, file_len+1, fp);
-    if (bytes_read == 0) 
-    {
-        perror("Unable to read file");
-        fclose(fp);
-        return NULL;
-    }
+    size_t bytes_read = fread(readbuf, 1, file_len, fp);
     fclose(fp);
 
-    cjson_config = cJSON_Parse(readbuf);
-    if (cjson_config == NULL)
+    if (bytes_read != file_len) 
+    {
+        perror("Unable to read full file");
+        free(readbuf);
+        return false;
+    }
+
+    readbuf[file_len] = '\0';
+
+    *cjson_config = cJSON_Parse(readbuf);
+    if (*cjson_config == NULL)
     {
         fprintf(stderr, "Failed to parse JSON\n");
-        return NULL;
+        return false;
     }
 
     free(readbuf);
-    return cjson_config;
+    return true;
 }
 
+cJSON *json_to_file(const char *config_name, const cJSON *cjson_config)
+{
+    char *json_string = cJSON_Print(cjson_config); 
+    char target_file_path[MAX_PATH_LEN] = {0}; 
+    snprintf(target_file_path, sizeof(target_file_path), "%s%s", CONFIG_PATH, config_name);
+    
+    FILE *target_file = fopen(target_file_path , "w");
+    if (NULL == target_file) 
+    {
+        perror("Failed to open the target file");
+    }
 
-/**
- * @brief Prints the contents of a hash table.
- * 
- * This function iterates through all entries in the hash table, starting from the 
- * head of the list pointed to by `files`. For each entry, it prints the filename 
- * and associated path.
- * 
- * @param files Pointer to the head of the hash table. Each entry is a `file_struct` 
- *              containing a filename and path.
- * 
- * @note This function assumes that `files` is a valid pointer to a hash table and 
- *       that `file_struct` contains members `filename` and `vp.path` which are 
- *       properly initialized.
- */
-void print_hash_table(struct file_struct *files) {
-    struct file_struct *s = NULL;
+    if (json_string != NULL) {
+        fwrite(json_string, sizeof(char), strlen(json_string), target_file);
+
+        fflush(target_file);
+        int fd = fileno(target_file);
+        if (fd != -1) {
+            if (fsync(fd) != 0) {
+                perror("fsync failed");
+            }
+        } else {
+            perror("Failed to get file descriptor");
+        }
+
+        free(json_string);
+    }else {
+        printf("Failed to serialize cJSON object to string.\n");
+    }
+}
+
+void print_hash_table(void) {
+    file_struct_t *s = NULL;
     
     printf("ALL HASH TABLE is\n"
            "----------------------------------\n");
-    for (s = files; s != NULL; s = s->hh.next) {
-        printf("Filename: %s\n", s->filename);
-        printf("path: %s\n", s->vp.path);
-        char *json_str = cJSON_Print(s->vp.value);
+    for (s = ALL_CONFIG_FILE; s != NULL; s = s->hh.next) {
+        printf("configname: %s\n", s->kv.key);
+        printf("path: %s\n", s->path);
+        char *json_str = cJSON_Print(s->kv.value);
         printf("value is %s\n", json_str);
         printf("\n");
     }
@@ -289,26 +269,20 @@ void print_hash_table(struct file_struct *files) {
 }
 
 
-/**
- * @brief Finds a file entry in the hash table by filename.
- * 
- * This function searches for a `file_struct` entry in the hash table using the 
- * specified filename. It utilizes the `HASH_FIND_STR` macro to perform the 
- * lookup. If the entry is found, it returns a pointer to the corresponding 
- * `file_struct`; otherwise, it returns NULL.
- * 
- * @param filename The filename to search for in the hash table.
- * 
- * @return A pointer to the `file_struct` associated with the filename, or NULL 
- *         if no matching entry is found.
- * 
- * @note `ALL_CONFIG_FILE` should be a global hash table where the filenames are 
- *       stored.
- */
-struct file_struct *find_filename(const char *filename)
+
+file_struct_t *find_config_name(const char *config_name)
 {
-    struct file_struct *s;
-    HASH_FIND_STR(ALL_CONFIG_FILE, filename, s);
+    file_struct_t *s;
+    HASH_FIND_STR(ALL_CONFIG_FILE, config_name, s);
     return s;
 }
 
+void clear_hash_table(void)
+{
+	file_struct_t *node = ALL_CONFIG_FILE, *temp = NULL;
+	for (; node; node = temp)
+	{
+		temp = (file_struct_t *)node->hh.next;
+		free(node);
+	}
+}
