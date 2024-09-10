@@ -12,41 +12,22 @@
 #include "cJSON/cJSONx.h"
 
 
-#define CONFIG_FILE "./../config_file_dir/config/config.json"
-#define CONFIG_PATH "./../config_file_dir/config/"
-
-#define DEFAULT_CONFIG_FILE "./../config_file_dir/default/default_config.json"
-#define DEFAULT_CONFIG_PATH "./../config_file_dir/default/"
-
-#define MAX_PATH_LEN (1024)
-
-typedef struct
-{
-    char key[100];
-    cJSON *value;
-} key_and_value_t;
 
 
-typedef struct
-{
-    char path[MAX_PATH_LEN];   
-    key_and_value_t kv; 
-    UT_hash_handle hh;  
-} file_struct_t;
 
 file_struct_t *ALL_CONFIG_FILE = NULL;
+file_struct_t *ALL_DEFAULT_FILE = NULL;
 
 
-
-static void add_config_name(const char *config_name, const cJSON *cjson_config);
-static file_struct_t *find_config_name(const char *config_name);
+void add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config);
+static file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name);
 static bool file_to_json(const char *target_file, cJSON **cjson_config);
-static cJSON *json_to_file(const char *config_name, const cJSON *cjson_config);
+static cJSON *json_to_file(const char *config_name, const cJSON *cjson_config,char *PATH);
 
 
 bool set_config(const char *name, const cJSON *config)
 {   
-    file_struct_t *s = find_config_name(name);  
+    file_struct_t *s =find_config_name(ALL_CONFIG_FILE, name);  
     if (NULL == s) 
     {
         printf("no such config %s in path %s",name,CONFIG_PATH);
@@ -62,7 +43,7 @@ bool set_config(const char *name, const cJSON *config)
         else
         {
             s->kv.value = cJSON_Duplicate(config, 1);
-            json_to_file(s->kv.key, s->kv.value);
+            json_to_file(s->kv.key, s->kv.value,CONFIG_PATH);
             return true;
         }
     }
@@ -70,10 +51,10 @@ bool set_config(const char *name, const cJSON *config)
 
 bool get_config(const char *name, cJSON **config)
 {   
-    file_struct_t *s = find_config_name(name);  
+    file_struct_t *s = find_config_name(ALL_CONFIG_FILE, name);  
     if (NULL == s) 
     {
-        printf("no such config %s in path %s",name,CONFIG_PATH);
+        printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
         return false;
     } 
     else
@@ -83,12 +64,52 @@ bool get_config(const char *name, cJSON **config)
     }
 }
 
+bool set_default(const char *name, const cJSON *config)
+{   
+    file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);  
+    if (NULL == s) 
+    {
+        printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
+        return false;
+    } 
+    else
+    {
+        if(cJSON_Compare(s->kv.value, config, true))
+        {
+            printf("Same, no need to modify.\n");
+            return false;
+        }
+        else
+        {
+            s->kv.value = cJSON_Duplicate(config, 1);
+            json_to_file(s->kv.key, s->kv.value,DEFAULT_CONFIG_PATH);
+            strtok(s->kv.key, "_");
+            char *prefix = strtok(NULL, "_");
+            set_config(prefix, s->kv.value);
+            return true;
+        }
+    }
+}
 
+bool get_default(const char *name, cJSON **config)
+{   
+    file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);  
+    if (NULL == s) 
+    {
+        printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
+        return false;
+    } 
+    else
+    {
+        *config = cJSON_Duplicate(s->kv.value, 1);
+        return true;
+    }
+}
 
-void add_config_name(const char *config_name, const cJSON *cjson_config) 
+void add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config) 
 {
     file_struct_t *s = NULL;
-    HASH_FIND_STR(ALL_CONFIG_FILE,config_name,s);
+    HASH_FIND_STR(*table,config_name,s);
     if (NULL == s) 
     {
         s = (file_struct_t*)malloc(sizeof(file_struct_t));
@@ -98,7 +119,7 @@ void add_config_name(const char *config_name, const cJSON *cjson_config)
         }
         strncpy(s->kv.key,config_name,strlen(config_name));
         s->kv.key[strlen(config_name)] = '\0';
-        HASH_ADD_STR(ALL_CONFIG_FILE, kv.key, s);
+        HASH_ADD_STR(*table, kv.key, s);
     }
     char dest_path[MAX_PATH_LEN] = {0};
     snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, config_name);
@@ -110,13 +131,10 @@ void add_config_name(const char *config_name, const cJSON *cjson_config)
     }
 }
 
-
-
-
-bool config_init()
+bool config_init(char *PATH, file_struct_t **table)
 {
     struct dirent *file  = NULL;
-    DIR *dp = opendir(CONFIG_PATH);
+    DIR *dp = opendir(PATH);
 
     if (dp == NULL) 
     {
@@ -130,7 +148,7 @@ bool config_init()
         if (strncmp(file->d_name, ".", 1) == 0)
             continue;
         char dest_path[MAX_PATH_LEN] = {0};
-        (void)snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, file->d_name);
+        (void)snprintf(dest_path, sizeof(dest_path), "%s%s", PATH, file->d_name);
 
         struct stat buf;
         memset(&buf, 0, sizeof(buf));    
@@ -145,7 +163,7 @@ bool config_init()
             cJSON *cjson_config = NULL;
             if (file_to_json(dest_path, &cjson_config)) 
             {
-                add_config_name(file->d_name, cjson_config);
+                add_config_name(table,file->d_name, cjson_config);
                 files_found++;    
                 cJSON_Delete(cjson_config); 
             } 
@@ -166,9 +184,6 @@ bool config_init()
 
     return true;
 }
-
-
-
 
 bool file_to_json(const char *target_file, cJSON **cjson_config)
 {
@@ -221,11 +236,11 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     return true;
 }
 
-cJSON *json_to_file(const char *config_name, const cJSON *cjson_config)
+cJSON *json_to_file(const char *config_name, const cJSON *cjson_config, char *PATH)
 {
     char *json_string = cJSON_Print(cjson_config); 
     char target_file_path[MAX_PATH_LEN] = {0}; 
-    snprintf(target_file_path, sizeof(target_file_path), "%s%s", CONFIG_PATH, config_name);
+    snprintf(target_file_path, sizeof(target_file_path), "%s%s", PATH, config_name);
     
     FILE *target_file = fopen(target_file_path , "w");
     if (NULL == target_file) 
@@ -252,37 +267,37 @@ cJSON *json_to_file(const char *config_name, const cJSON *cjson_config)
     }
 }
 
-void print_hash_table(void) {
+void print_hash_table(file_struct_t * table) 
+{
     file_struct_t *s = NULL;
     
-    printf("ALL HASH TABLE is\n"
-           "----------------------------------\n");
-    for (s = ALL_CONFIG_FILE; s != NULL; s = s->hh.next) {
-        printf("configname: %s\n", s->kv.key);
+    printf("\n"
+           "----------------------------------------HASH TABLE-------------------------------------\n");
+    for (s = table; s != NULL; s = s->hh.next) {
+        printf("config_name: %s\n", s->kv.key);
         printf("path: %s\n", s->path);
         char *json_str = cJSON_Print(s->kv.value);
-        printf("value is %s\n", json_str);
-        printf("\n");
+        printf("value:\n%s\n", json_str);
     }
-    printf("----------------------------------\n"
-           "ALL HASH TABLE end\n");
+    printf("----------------------------------------HASH TABLE-------------------------------------\n\n");
 }
 
-
-
-file_struct_t *find_config_name(const char *config_name)
+file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name)
 {
     file_struct_t *s;
-    HASH_FIND_STR(ALL_CONFIG_FILE, config_name, s);
+    HASH_FIND_STR(dorc, config_name, s);
     return s;
 }
 
-void clear_hash_table(void)
+void clear_hash_table(file_struct_t *table)
 {
-	file_struct_t *node = ALL_CONFIG_FILE, *temp = NULL;
-	for (; node; node = temp)
-	{
-		temp = (file_struct_t *)node->hh.next;
-		free(node);
-	}
+    file_struct_t *node = table;
+    file_struct_t *temp = NULL;
+
+    while (node) 
+    {
+        temp = (file_struct_t *)node->hh.next;
+        free(node); 
+        node = temp; 
+    }
 }
