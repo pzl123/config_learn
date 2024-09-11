@@ -13,6 +13,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 include_directories(${PROJECT_SOURCE_DIR}/include) # ${PROJECT_SOURCE_DIR} 是一个 CMake 变量，指向项目的根目录
 
 
+set(CMAKE_CXX_FLAGS "-g -fsanitize=asan")
 
 # 添加子目录
 add_subdirectory(src)

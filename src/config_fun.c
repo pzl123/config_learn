@@ -35,15 +35,15 @@ bool set_config(const char *name, const cJSON *config)
     } 
     else
     {
-        if(cJSON_Compare(s->kv.value, config, true))
+        if(cJSON_Compare(s->value, config, true))
         {
             printf("Same, no need to modify.\n");
             return false;
         }
         else
         {
-            s->kv.value = cJSON_Duplicate(config, 1);
-            json_to_file(s->kv.key, s->kv.value,CONFIG_PATH);
+            s->value = cJSON_Duplicate(config, 1);
+            json_to_file(s->key, s->value,CONFIG_PATH);
             return true;
         }
     }
@@ -59,7 +59,7 @@ bool get_config(const char *name, cJSON **config)
     } 
     else
     {
-        *config = cJSON_Duplicate(s->kv.value, 1);
+        *config = cJSON_Duplicate(s->value, 1);
         return true;
     }
 }
@@ -74,18 +74,18 @@ bool set_default(const char *name, const cJSON *config)
     } 
     else
     {
-        if(cJSON_Compare(s->kv.value, config, true))
+        if(cJSON_Compare(s->value, config, true))
         {
             printf("Same, no need to modify.\n");
             return false;
         }
         else
         {
-            s->kv.value = cJSON_Duplicate(config, 1);
-            json_to_file(s->kv.key, s->kv.value,DEFAULT_CONFIG_PATH);
-            strtok(s->kv.key, "_");
+            s->value = cJSON_Duplicate(config, 1);
+            json_to_file(s->key, s->value,DEFAULT_CONFIG_PATH);
+            strtok(s->key, "_");
             char *prefix = strtok(NULL, "_");
-            set_config(prefix, s->kv.value);
+            set_config(prefix, s->value);
             return true;
         }
     }
@@ -101,7 +101,7 @@ bool get_default(const char *name, cJSON **config)
     } 
     else
     {
-        *config = cJSON_Duplicate(s->kv.value, 1);
+        *config = cJSON_Duplicate(s->value, 1);
         return true;
     }
 }
@@ -116,19 +116,32 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         if (NULL == s)
         {
             perror("malloc error");
+            return ;
         }
-        strncpy(s->kv.key,config_name,strlen(config_name));
-        s->kv.key[strlen(config_name)] = '\0';
-        HASH_ADD_STR(*table, kv.key, s);
+        strncpy(s->key,config_name,strlen(config_name));
+        s->key[strlen(config_name)] = '\0';
+        char dest_path[MAX_PATH_LEN] = {0};
+        snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, config_name);
+        strncpy(s->path,dest_path,strlen(dest_path));
+        s->path[strlen(dest_path)] = '\0';
+        // 先释放旧的值，然后复制新的值
+        // if (s->value != NULL) 
+        // {
+        //     cJSON_Delete(s->value);
+        // }
+        s->value = cJSON_Duplicate(cjson_config, 1);
+        if (s->value == NULL) 
+        {
+            perror("Failed to duplicate cJSON object");
+        }
+
+        HASH_ADD_STR(*table, key, s);
     }
-    char dest_path[MAX_PATH_LEN] = {0};
-    snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, config_name);
-    strncpy(s->path,dest_path,strlen(dest_path));
-    s->path[strlen(dest_path)] = '\0';
-    s->kv.value = cJSON_Duplicate(cjson_config, 1);
-    if (s->kv.value == NULL) {
-        perror("Failed to duplicate cJSON object");
+    else
+    {
+        printf("file already exits in hash table\n ");
     }
+
 }
 
 bool config_init(char *PATH, file_struct_t **table)
@@ -206,7 +219,7 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     }
 
     char * readbuf = (char *)malloc(file_len);
-    if (readbuf == 0)
+    if (NULL == readbuf)
     {
         perror("malloc error");
         fclose(fp);
@@ -229,6 +242,7 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     if (*cjson_config == NULL)
     {
         fprintf(stderr, "Failed to parse JSON\n");
+        free(readbuf);
         return false;
     }
 
@@ -270,16 +284,17 @@ cJSON *json_to_file(const char *config_name, const cJSON *cjson_config, char *PA
 void print_hash_table(file_struct_t * table) 
 {
     file_struct_t *s = NULL;
-    
+    char *json_str = NULL;
     printf("\n"
            "----------------------------------------HASH TABLE-------------------------------------\n");
     for (s = table; s != NULL; s = s->hh.next) {
-        printf("config_name: %s\n", s->kv.key);
+        printf("config_name: %s\n", s->key);
         printf("path: %s\n", s->path);
-        char *json_str = cJSON_Print(s->kv.value);
+        json_str = cJSON_Print(s->value);
         printf("value:\n%s\n", json_str);
     }
     printf("----------------------------------------HASH TABLE-------------------------------------\n\n");
+    free(json_str);
 }
 
 file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name)
@@ -291,13 +306,33 @@ file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name)
 
 void clear_hash_table(file_struct_t *table)
 {
-    file_struct_t *node = table;
-    file_struct_t *temp = NULL;
+    // file_struct_t *node = table;
+    // file_struct_t *temp = NULL;
 
-    while (node) 
-    {
-        temp = (file_struct_t *)node->hh.next;
-        free(node); 
-        node = temp; 
+    // while (node) 
+    // {
+    //     temp = node->hh.next;
+    //     free(node->value);
+    //     free(node); 
+    //     node = temp; 
+        
+    // }
+
+    file_struct_t *current_user;
+    file_struct_t *tmp;
+
+    file_struct_t *temp = NULL;
+    HASH_ITER(hh, table, current_user, tmp) {
+        HASH_DEL(table, current_user);  /* delete it (users advances to next) */
+        cJSON_free(current_user->value);
+        free(current_user);             /* free it */
     }
+
+    // struct my_struct *current_user;
+    // struct my_struct *tmp;
+
+    // HASH_ITER(hh, users, current_user, tmp) {
+    //     HASH_DEL(users, current_user);  /* delete it (users advances to next) */
+    //     free(current_user);             /* free it */
+    // }
 }

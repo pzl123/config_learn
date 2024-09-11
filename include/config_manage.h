@@ -16,17 +16,12 @@ extern "C"
 #define DEFAULT_CONFIG_PATH "./../config_file_dir/default/"
 #define MAX_PATH_LEN (1024)
 
-typedef struct
-{
-    char key[100];
-    cJSON *value;
-} key_and_value_t;
-
 
 typedef struct
 {
     char path[MAX_PATH_LEN];   
-    key_and_value_t kv; 
+    char key[100];
+    cJSON *value;
     UT_hash_handle hh;  
 } file_struct_t;
 
