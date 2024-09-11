@@ -6,6 +6,18 @@
 
 #IncludeRegexTransform: 
 
+../include/UTHASH/uthash.h
+string.h
+-
+stddef.h
+-
+stdlib.h
+-
+stdint.h
+-
+stdio.h
+-
+
 ../include/cJSON/cJSON.h
 stddef.h
 -
@@ -19,22 +31,10 @@ cJSON.h
 ../include/config_manage.h
 stdbool.h
 -
-uthash/uthash.h
-../include/uthash/uthash.h
+UTHASH/uthash.h
+../include/UTHASH/uthash.h
 cJSON/cJSON.h
 ../include/cJSON/cJSON.h
-
-../include/uthash/uthash.h
-string.h
--
-stddef.h
--
-stdlib.h
--
-stdint.h
--
-stdio.h
--
 
 /home/vmuser/project/cmake_test/src/config_fun.c
 config_manage.h

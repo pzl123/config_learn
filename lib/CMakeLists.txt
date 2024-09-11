@@ -9,7 +9,7 @@
 # 添加 lib 目录下的源文件作为库（动态库）
 add_library(cJSOnlib SHARED
     ${PROJECT_SOURCE_DIR}/3party/cJSON/cJSON.c
-    ${PROJECT_SOURCE_DIR}/3party/cJSON/cJSONx.c    
+    ${PROJECT_SOURCE_DIR}/3party/cJSON/cJSONx.c
 )
 
 add_library(configlib SHARED

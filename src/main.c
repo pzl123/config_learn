@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <dirent.h>
 
-char *message = 
+char *message =
 "{                              \
     \"name\":\"mculover666\",   \
     \"age\": 22,                \
@@ -17,7 +17,7 @@ char *message =
     \"student\": false          \
 }";
 
-char *new_message = 
+char *new_message =
 "{ \
     \"time\":\"202409040821\", \
     \"Software_version\": 12345678 \
@@ -28,11 +28,11 @@ int main() {
     cJSON *new = NULL; // 初始化为 NULL
     char *str = NULL;
 
-    config_init(CONFIG_PATH, &ALL_CONFIG_FILE);  
+    config_init(CONFIG_PATH, &ALL_CONFIG_FILE);
     // cJSON* config = cJSON_Parse(message);
     // set_config("config.json",config);
     // print_hash_table(ALL_CONFIG_FILE);
-    
+
 
     // config = cJSON_Parse(new_message);
     // set_config("config.json",config);
@@ -48,7 +48,7 @@ int main() {
     new = NULL; // 避免悬空指针
 
 
-    // config_init(DEFAULT_CONFIG_PATH, &ALL_DEFAULT_FILE);  
+    // config_init(DEFAULT_CONFIG_PATH, &ALL_DEFAULT_FILE);
     // print_hash_table(ALL_DEFAULT_FILE);
     // // config = cJSON_Parse(message);
     // // config = cJSON_Parse(new_message);

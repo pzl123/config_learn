@@ -26,13 +26,13 @@ static cJSON *json_to_file(const char *config_name, const cJSON *cjson_config,ch
 
 
 bool set_config(const char *name, const cJSON *config)
-{   
-    file_struct_t *s =find_config_name(ALL_CONFIG_FILE, name);  
-    if (NULL == s) 
+{
+    file_struct_t *s =find_config_name(ALL_CONFIG_FILE, name);
+    if (NULL == s)
     {
         printf("no such config %s in path %s",name,CONFIG_PATH);
         return false;
-    } 
+    }
     else
     {
         if(cJSON_Compare(s->value, config, true))
@@ -50,13 +50,13 @@ bool set_config(const char *name, const cJSON *config)
 }
 
 bool get_config(const char *name, cJSON **config)
-{   
-    file_struct_t *s = find_config_name(ALL_CONFIG_FILE, name);  
-    if (NULL == s) 
+{
+    file_struct_t *s = find_config_name(ALL_CONFIG_FILE, name);
+    if (NULL == s)
     {
         printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
         return false;
-    } 
+    }
     else
     {
         *config = cJSON_Duplicate(s->value, 1);
@@ -65,13 +65,13 @@ bool get_config(const char *name, cJSON **config)
 }
 
 bool set_default(const char *name, const cJSON *config)
-{   
-    file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);  
-    if (NULL == s) 
+{
+    file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);
+    if (NULL == s)
     {
         printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
         return false;
-    } 
+    }
     else
     {
         if(cJSON_Compare(s->value, config, true))
@@ -92,13 +92,13 @@ bool set_default(const char *name, const cJSON *config)
 }
 
 bool get_default(const char *name, cJSON **config)
-{   
-    file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);  
-    if (NULL == s) 
+{
+    file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);
+    if (NULL == s)
     {
         printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
         return false;
-    } 
+    }
     else
     {
         *config = cJSON_Duplicate(s->value, 1);
@@ -110,7 +110,7 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
 {
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table,config_name,s);
-    if (NULL == s) 
+    if (NULL == s)
     {
         s = (file_struct_t*)malloc(sizeof(file_struct_t));
         if (NULL == s)
@@ -125,7 +125,7 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         strncpy(s->path,dest_path,strlen(dest_path));
         s->path[strlen(dest_path)] = '\0';
         s->value = cJSON_Duplicate(cjson_config, 1);
-        if (s->value == NULL) 
+        if (s->value == NULL)
         {
             perror("Failed to duplicate cJSON object");
         }
@@ -144,14 +144,14 @@ bool config_init(char *PATH, file_struct_t **table)
     struct dirent *file  = NULL;
     DIR *dp = opendir(PATH);
 
-    if (dp == NULL) 
+    if (dp == NULL)
     {
         perror("opendir");
         return false;
     }
-    int files_found = 0; 
+    int files_found = 0;
 
-    while ((file = readdir(dp)) != NULL) 
+    while ((file = readdir(dp)) != NULL)
     {
         if (strncmp(file->d_name, ".", 1) == 0)
             continue;
@@ -159,8 +159,8 @@ bool config_init(char *PATH, file_struct_t **table)
         (void)snprintf(dest_path, sizeof(dest_path), "%s%s", PATH, file->d_name);
 
         struct stat buf;
-        memset(&buf, 0, sizeof(buf));    
-        if (stat(dest_path, &buf) != 0) 
+        memset(&buf, 0, sizeof(buf));
+        if (stat(dest_path, &buf) != 0)
         {
             perror("stat error");
             return false;
@@ -169,13 +169,13 @@ bool config_init(char *PATH, file_struct_t **table)
         if (S_ISREG(buf.st_mode))
         {
             cJSON *cjson_config = NULL;
-            if (file_to_json(dest_path, &cjson_config)) 
+            if (file_to_json(dest_path, &cjson_config))
             {
                 add_config_name(table,file->d_name, cjson_config);
-                files_found++;    
-                cJSON_Delete(cjson_config); 
-            } 
-            else 
+                files_found++;
+                cJSON_Delete(cjson_config);
+            }
+            else
             {
                 fprintf(stderr, "Failed to load or parse JSON from %s\n", dest_path);
             }
@@ -183,7 +183,7 @@ bool config_init(char *PATH, file_struct_t **table)
     }
     closedir(dp);
 
-    if (files_found == 0) 
+    if (files_found == 0)
     {
         printf("No files in the target directory\n");
         return false;
@@ -196,7 +196,7 @@ bool config_init(char *PATH, file_struct_t **table)
 bool file_to_json(const char *target_file, cJSON **cjson_config)
 {
     FILE* fp = fopen(target_file,"r");
-    if (fp == NULL) 
+    if (fp == NULL)
     {
         perror("open file error ");
         return false;
@@ -207,10 +207,10 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     (void)fseek(fp,0,SEEK_SET);
 
 
-    if (file_len <= 0) 
+    if (file_len <= 0)
     {
         fclose(fp);
-        return false; 
+        return false;
     }
 
     char * readbuf = (char *)malloc(file_len + 1);
@@ -224,7 +224,7 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     size_t bytes_read = fread(readbuf, 1, file_len, fp);
     fclose(fp);
 
-    if (bytes_read != file_len) 
+    if (bytes_read != file_len)
     {
         perror("Unable to read full file");
         free(readbuf);
@@ -247,12 +247,12 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
 
 cJSON *json_to_file(const char *config_name, const cJSON *cjson_config, char *PATH)
 {
-    char *json_string = cJSON_Print(cjson_config); 
-    char target_file_path[MAX_PATH_LEN] = {0}; 
+    char *json_string = cJSON_Print(cjson_config);
+    char target_file_path[MAX_PATH_LEN] = {0};
     snprintf(target_file_path, sizeof(target_file_path), "%s%s", PATH, config_name);
-    
+
     FILE *target_file = fopen(target_file_path , "w");
-    if (NULL == target_file) 
+    if (NULL == target_file)
     {
         perror("Failed to open the target file");
     }
@@ -276,7 +276,7 @@ cJSON *json_to_file(const char *config_name, const cJSON *cjson_config, char *PA
     }
 }
 
-void print_hash_table(file_struct_t * table) 
+void print_hash_table(file_struct_t * table)
 {
     file_struct_t *s = NULL;
     char *json_str = NULL;
@@ -310,5 +310,4 @@ void clear_hash_table(file_struct_t *table)
         cJSON_Delete(current_user->value);
         free(current_user);             /* free it */
     }
-
 }
