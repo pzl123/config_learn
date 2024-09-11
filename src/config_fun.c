@@ -124,11 +124,6 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, config_name);
         strncpy(s->path,dest_path,strlen(dest_path));
         s->path[strlen(dest_path)] = '\0';
-        // 先释放旧的值，然后复制新的值
-        // if (s->value != NULL) 
-        // {
-        //     cJSON_Delete(s->value);
-        // }
         s->value = cJSON_Duplicate(cjson_config, 1);
         if (s->value == NULL) 
         {
@@ -218,7 +213,7 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
         return false; 
     }
 
-    char * readbuf = (char *)malloc(file_len);
+    char * readbuf = (char *)malloc(file_len + 1);
     if (NULL == readbuf)
     {
         perror("malloc error");
@@ -306,33 +301,14 @@ file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name)
 
 void clear_hash_table(file_struct_t *table)
 {
-    // file_struct_t *node = table;
-    // file_struct_t *temp = NULL;
-
-    // while (node) 
-    // {
-    //     temp = node->hh.next;
-    //     free(node->value);
-    //     free(node); 
-    //     node = temp; 
-        
-    // }
-
     file_struct_t *current_user;
     file_struct_t *tmp;
 
     file_struct_t *temp = NULL;
     HASH_ITER(hh, table, current_user, tmp) {
         HASH_DEL(table, current_user);  /* delete it (users advances to next) */
-        cJSON_free(current_user->value);
+        cJSON_Delete(current_user->value);
         free(current_user);             /* free it */
     }
 
-    // struct my_struct *current_user;
-    // struct my_struct *tmp;
-
-    // HASH_ITER(hh, users, current_user, tmp) {
-    //     HASH_DEL(users, current_user);  /* delete it (users advances to next) */
-    //     free(current_user);             /* free it */
-    // }
 }
