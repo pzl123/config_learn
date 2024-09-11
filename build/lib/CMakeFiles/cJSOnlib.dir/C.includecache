@@ -16,7 +16,7 @@ stdbool.h
 cJSON.h
 ../include/cJSON/cJSON.h
 
-/home/vmuser/project/cmake_test/3party/cJSON/cJSON.c
+/home/zlgmcu/project/config_learn/3party/cJSON/cJSON.c
 string.h
 -
 stdio.h
@@ -34,9 +34,9 @@ float.h
 locale.h
 -
 cJSON/cJSON.h
-/home/vmuser/project/cmake_test/3party/cJSON/cJSON/cJSON.h
+/home/zlgmcu/project/config_learn/3party/cJSON/cJSON/cJSON.h
 
-/home/vmuser/project/cmake_test/3party/cJSON/cJSONx.c
+/home/zlgmcu/project/config_learn/3party/cJSON/cJSONx.c
 limits.h
 -
 stddef.h
@@ -50,5 +50,5 @@ stdlib.h
 string.h
 -
 cJSON/cJSONx.h
-/home/vmuser/project/cmake_test/3party/cJSON/cJSON/cJSONx.h
+/home/zlgmcu/project/config_learn/3party/cJSON/cJSON/cJSONx.h
 

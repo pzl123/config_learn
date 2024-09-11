@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/vmuser/project/cmake_test/src/config_fun.c" "/home/vmuser/project/cmake_test/build/src/CMakeFiles/MyProject.dir/config_fun.c.o"
-  "/home/vmuser/project/cmake_test/src/main.c" "/home/vmuser/project/cmake_test/build/src/CMakeFiles/MyProject.dir/main.c.o"
+  "/home/zlgmcu/project/config_learn/src/config_fun.c" "/home/zlgmcu/project/config_learn/build/src/CMakeFiles/MyProject.dir/config_fun.c.o"
+  "/home/zlgmcu/project/config_learn/src/main.c" "/home/zlgmcu/project/config_learn/build/src/CMakeFiles/MyProject.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -16,8 +16,8 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/vmuser/project/cmake_test/build/lib/CMakeFiles/configlib.dir/DependInfo.cmake"
-  "/home/vmuser/project/cmake_test/build/lib/CMakeFiles/cJSOnlib.dir/DependInfo.cmake"
+  "/home/zlgmcu/project/config_learn/build/lib/CMakeFiles/configlib.dir/DependInfo.cmake"
+  "/home/zlgmcu/project/config_learn/build/lib/CMakeFiles/cJSOnlib.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

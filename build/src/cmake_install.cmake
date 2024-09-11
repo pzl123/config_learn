@@ -1,4 +1,4 @@
-# Install script for directory: /home/vmuser/project/cmake_test/src
+# Install script for directory: /home/zlgmcu/project/config_learn/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

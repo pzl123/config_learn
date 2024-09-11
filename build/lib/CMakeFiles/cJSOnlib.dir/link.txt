@@ -1,1 +1,1 @@
-/usr/bin/cc -fPIC   -shared -Wl,-soname,libcJSOnlib.so -o ../../lib/libcJSOnlib.so CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSON.c.o CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSONx.c.o 
+/usr/bin/cc -fPIC  -fsanitize=address -fsanitize=leak  -shared -Wl,-soname,libcJSOnlib.so -o ../../lib/libcJSOnlib.so CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSON.c.o CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSONx.c.o 

@@ -5,5 +5,5 @@ file(GLOB SOURCES "*.c")
 add_executable(MyProject ${SOURCES})
 
 # 链接库
-target_link_libraries(MyProject configlib cJSOnlib lsan)
+target_link_libraries(MyProject configlib cJSOnlib)
 

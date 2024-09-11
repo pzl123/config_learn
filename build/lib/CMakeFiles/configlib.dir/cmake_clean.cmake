@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/configlib.dir/__/src/config_fun.c.o"
   "../../lib/libconfiglib.pdb"
   "../../lib/libconfiglib.so"
+  "CMakeFiles/configlib.dir/__/src/config_fun.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -36,9 +36,9 @@ UTHASH/uthash.h
 cJSON/cJSON.h
 ../include/cJSON/cJSON.h
 
-/home/vmuser/project/cmake_test/src/config_fun.c
+/home/zlgmcu/project/config_learn/src/config_fun.c
 config_manage.h
-/home/vmuser/project/cmake_test/src/config_manage.h
+/home/zlgmcu/project/config_learn/src/config_manage.h
 stdio.h
 -
 stdlib.h
@@ -54,7 +54,7 @@ sys/stat.h
 unistd.h
 -
 cJSON/cJSON.h
-/home/vmuser/project/cmake_test/src/cJSON/cJSON.h
+/home/zlgmcu/project/config_learn/src/cJSON/cJSON.h
 cJSON/cJSONx.h
-/home/vmuser/project/cmake_test/src/cJSON/cJSONx.h
+/home/zlgmcu/project/config_learn/src/cJSON/cJSONx.h
 

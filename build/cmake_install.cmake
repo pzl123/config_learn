@@ -1,4 +1,4 @@
-# Install script for directory: /home/vmuser/project/cmake_test
+# Install script for directory: /home/zlgmcu/project/config_learn
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,8 +39,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/vmuser/project/cmake_test/build/src/cmake_install.cmake")
-  include("/home/vmuser/project/cmake_test/build/lib/cmake_install.cmake")
+  include("/home/zlgmcu/project/config_learn/build/src/cmake_install.cmake")
+  include("/home/zlgmcu/project/config_learn/build/lib/cmake_install.cmake")
 
 endif()
 
@@ -52,5 +52,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/vmuser/project/cmake_test/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/zlgmcu/project/config_learn/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
