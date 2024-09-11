@@ -1,0 +1,1 @@
+/usr/bin/cc    CMakeFiles/MyProject.dir/config_fun.c.o CMakeFiles/MyProject.dir/main.c.o  -o ../../bin/MyProject -Wl,-rpath,/home/vmuser/project/cmake_test/lib ../../lib/libconfiglib.so ../../lib/libcJSOnlib.so -llsan 

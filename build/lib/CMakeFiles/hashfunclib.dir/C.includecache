@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/hashfunc.h
+uthash/uthash.h
+../include/uthash/uthash.h
+
+../include/uthash/uthash.h
+string.h
+-
+stddef.h
+-
+stdlib.h
+-
+stdint.h
+-
+stdio.h
+-
+
+/home/vmuser/project/cmake_test/src/hashfunc.c
+hashfunc.h
+/home/vmuser/project/cmake_test/src/hashfunc.h
+stdlib.h
+-
+
