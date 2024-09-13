@@ -81,16 +81,16 @@ int main() {
     ConcreteObserver observer1, observer2;
 
     subject_init(&subject);
-
-    init_concrete_observer(&observer1);
-    init_concrete_observer(&observer2);
+    int i = 1;
+    init_concrete_observer(&observer1,i);
+    init_concrete_observer(&observer2,i+1);
 
     subject_add_observer(&subject, &observer1.base);
     subject_add_observer(&subject, &observer2.base);
 
     subject_notify_observers(&subject, "Hello, World!");
 
-    subject_remove_observer(&subject, &observer1.base);
+    subject_remove_observer(&subject, &observer2.base);
 
     subject_notify_observers(&subject, "Goodbye, World!");
 

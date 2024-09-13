@@ -37,10 +37,11 @@ ConcreteObserver（具体观察者）：
 
 
 //定义 Observer 接口
-typedef void (*UpdateFunc)(const char *event);
+typedef void (*UpdateFunc)(const char *event,int id);
 
 typedef struct {
     UpdateFunc update;
+    int id;
 } Observer;
 
 
@@ -62,8 +63,8 @@ typedef struct {
     Observer base;
 } ConcreteObserver;
 
-void init_concrete_observer(ConcreteObserver *observer);
-void concrete_observer_update(const char *event);
+void init_concrete_observer(ConcreteObserver *observer,int id);
+void concrete_observer_update(const char *event,int id);
 
 
 #ifdef __cplusplus
