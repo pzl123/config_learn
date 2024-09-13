@@ -1,4 +1,6 @@
 #include "config_manage.h"
+#include "observer.h"
+
 
 #include <stdio.h>
 #include <dirent.h>
@@ -67,6 +69,39 @@ int main() {
     //  内存释放区
     clear_hash_table(ALL_CONFIG_FILE);
     // clear_hash_table(ALL_DEFAULT_FILE);
+
+
+
+
+
+
+    printf("------------------------------测试观察者模式-----------------------------\n");
+
+    Subject subject;
+    ConcreteObserver observer1, observer2;
+
+    subject_init(&subject);
+
+    init_concrete_observer(&observer1);
+    init_concrete_observer(&observer2);
+
+    subject_add_observer(&subject, &observer1.base);
+    subject_add_observer(&subject, &observer2.base);
+
+    subject_notify_observers(&subject, "Hello, World!");
+
+    subject_remove_observer(&subject, &observer1.base);
+
+    subject_notify_observers(&subject, "Goodbye, World!");
+
+
+
+
+
+    free(subject.observers);
+
+
+
 
     return 0;
 }

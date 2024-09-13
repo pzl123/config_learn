@@ -54,6 +54,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "src/CMakeFiles/MyProject.dir/DependInfo.cmake"
+  "lib/CMakeFiles/observerlib.dir/DependInfo.cmake"
   "lib/CMakeFiles/config_managelib.dir/DependInfo.cmake"
   "third_party/CMakeFiles/cJSONxlib.dir/DependInfo.cmake"
   "third_party/CMakeFiles/cJSONlib.dir/DependInfo.cmake"

@@ -157,6 +157,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+lib/CMakeFiles/observerlib.dir/rule:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/observerlib.dir/rule
+.PHONY : lib/CMakeFiles/observerlib.dir/rule
+
+# Convenience name for target.
+observerlib: lib/CMakeFiles/observerlib.dir/rule
+
+.PHONY : observerlib
+
+# fast build rule for target.
+observerlib/fast:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/build
+.PHONY : observerlib/fast
+
+# Convenience name for target.
 lib/CMakeFiles/config_managelib.dir/rule:
 	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/config_managelib.dir/rule
 .PHONY : lib/CMakeFiles/config_managelib.dir/rule
@@ -198,6 +213,33 @@ __/include/config_manage/src/config_manage.c.s:
 	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.s
 .PHONY : __/include/config_manage/src/config_manage.c.s
 
+__/include/observer/src/observer.o: __/include/observer/src/observer.c.o
+
+.PHONY : __/include/observer/src/observer.o
+
+# target to build an object file
+__/include/observer/src/observer.c.o:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.o
+.PHONY : __/include/observer/src/observer.c.o
+
+__/include/observer/src/observer.i: __/include/observer/src/observer.c.i
+
+.PHONY : __/include/observer/src/observer.i
+
+# target to preprocess a source file
+__/include/observer/src/observer.c.i:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.i
+.PHONY : __/include/observer/src/observer.c.i
+
+__/include/observer/src/observer.s: __/include/observer/src/observer.c.s
+
+.PHONY : __/include/observer/src/observer.s
+
+# target to generate assembly for a file
+__/include/observer/src/observer.c.s:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.s
+.PHONY : __/include/observer/src/observer.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -210,10 +252,14 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... observerlib"
 	@echo "... config_managelib"
 	@echo "... __/include/config_manage/src/config_manage.o"
 	@echo "... __/include/config_manage/src/config_manage.i"
 	@echo "... __/include/config_manage/src/config_manage.s"
+	@echo "... __/include/observer/src/observer.o"
+	@echo "... __/include/observer/src/observer.i"
+	@echo "... __/include/observer/src/observer.s"
 .PHONY : help
 
 

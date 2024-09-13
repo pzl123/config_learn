@@ -14,6 +14,8 @@ uthash.h
 cJSON.h
 ../include/config_manage/include/cJSON.h
 
+../include/observer/include/observer.h
+
 ../third_party/cJSON/include/cJSON.h
 stddef.h
 -
@@ -33,6 +35,8 @@ stdio.h
 /home/zlgmcu/project/config_learn/src/main.c
 config_manage.h
 /home/zlgmcu/project/config_learn/src/config_manage.h
+observer.h
+/home/zlgmcu/project/config_learn/src/observer.h
 stdio.h
 -
 dirent.h

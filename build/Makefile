@@ -170,6 +170,19 @@ MyProject/fast:
 .PHONY : MyProject/fast
 
 #=============================================================================
+# Target rules for targets named observerlib
+
+# Build rule for target.
+observerlib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 observerlib
+.PHONY : observerlib
+
+# fast build rule for target.
+observerlib/fast:
+	$(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/build
+.PHONY : observerlib/fast
+
+#=============================================================================
 # Target rules for targets named config_managelib
 
 # Build rule for target.
@@ -221,6 +234,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... MyProject"
+	@echo "... observerlib"
 	@echo "... config_managelib"
 	@echo "... cJSONxlib"
 	@echo "... cJSONlib"

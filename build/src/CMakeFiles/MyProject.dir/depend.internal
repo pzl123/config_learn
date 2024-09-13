@@ -3,6 +3,7 @@
 
 src/CMakeFiles/MyProject.dir/main.c.o
  ../include/config_manage/include/config_manage.h
+ ../include/observer/include/observer.h
  ../third_party/cJSON/include/cJSON.h
  ../third_party/uthash/include/uthash.h
  /home/zlgmcu/project/config_learn/src/main.c

@@ -17,6 +17,7 @@
 /home/zlgmcu/project/config_learn/build/lib/CMakeFiles/list_install_components.dir
 /home/zlgmcu/project/config_learn/build/lib/CMakeFiles/rebuild_cache.dir
 /home/zlgmcu/project/config_learn/build/lib/CMakeFiles/edit_cache.dir
+/home/zlgmcu/project/config_learn/build/lib/CMakeFiles/observerlib.dir
 /home/zlgmcu/project/config_learn/build/lib/CMakeFiles/config_managelib.dir
 /home/zlgmcu/project/config_learn/build/include/CMakeFiles/install/strip.dir
 /home/zlgmcu/project/config_learn/build/include/CMakeFiles/install/local.dir

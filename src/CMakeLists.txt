@@ -11,5 +11,5 @@ target_link_libraries(MyProject
     cJSONlib
     cJSONxlib
     config_managelib
-    # observerlib
+    observerlib
 )
