@@ -8,8 +8,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "cJSON/cJSON.h"
-#include "cJSON/cJSONx.h"
+#include "cJSON.h"
+#include "cJSONx.h"
 
 
 

@@ -1,34 +1,56 @@
-这是一个学习cmake案例
+# 这是一个学习cmake案例
 
 项目管理架构如下
 ```
 MyProject/
 ├── CMakeLists.txt
-├── 3party/
-│      └── cJSON.c
-│      └── cJSONx.c
+├── third_party/
+|   ├── cJSON/  # 单个库的目录
+│   |   ├── src/       # 第三方库的源代码
+│   |   |   └── cJSON.c
+│   │   ├── include/   # 第三方库的头文件
+│   |   |   └── cJSON.h
+|   |
+|   ├── cJSONx/  
+│   |   ├── src/       
+│   |   |   └── cJSON.c
+│   │   ├── include/ 
+│   |   |   └── cJSONx.h
+|   | 
+|   ├── uthash/  
+│   |   ├── src/       
+│   │   ├── include/ 
+│   |   |   └── uthash.h
+|
 ├── config/
 │         └── config.json
 │         └── default_config.json
 ├── src/
 │      ├── main.c
 |      ├── CMakeLists.txt
-|      ├── config_fun.c
+|
 |      
 |
 ├── lib/
 |      ├── CMakeLists.txt
-|      ├── lib/
-│             └── cJSON.c
-│             └── cJSONx.c
+|
 │      
 ├── include/
-│          └── get_config.h
-|          ├── cJSON/
-│          |        └── cJSON.h
-|          |        └── cJSONx.h
-|          ├── uthash/
-│                   └── uthash.h
+|      ├── config/
+│      |   ├── src/       
+│      |   |   ├── config_manage.c
+│      │   ├── include/ 
+│      |   |   └── config_manage.h
+|      |
+|      ├── observer/
+│      |   ├── src/       
+│      |   |   ├── observer.c
+│      │   ├── include/ 
+│      |   |   └── observer.h
+|      |
+|      ├── uthash/       
+│      │   ├── include/ 
+│              └── observer.h
 |                   
 ```
 

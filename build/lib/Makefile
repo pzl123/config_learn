@@ -56,6 +56,52 @@ CMAKE_BINARY_DIR = /home/zlgmcu/project/config_learn/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -111,115 +157,46 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-lib/CMakeFiles/configlib.dir/rule:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/configlib.dir/rule
-.PHONY : lib/CMakeFiles/configlib.dir/rule
+lib/CMakeFiles/config_managelib.dir/rule:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/config_managelib.dir/rule
+.PHONY : lib/CMakeFiles/config_managelib.dir/rule
 
 # Convenience name for target.
-configlib: lib/CMakeFiles/configlib.dir/rule
+config_managelib: lib/CMakeFiles/config_managelib.dir/rule
 
-.PHONY : configlib
+.PHONY : config_managelib
 
 # fast build rule for target.
-configlib/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/build
-.PHONY : configlib/fast
+config_managelib/fast:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/build
+.PHONY : config_managelib/fast
 
-# Convenience name for target.
-lib/CMakeFiles/cJSOnlib.dir/rule:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/cJSOnlib.dir/rule
-.PHONY : lib/CMakeFiles/cJSOnlib.dir/rule
+__/include/config_manage/src/config_manage.o: __/include/config_manage/src/config_manage.c.o
 
-# Convenience name for target.
-cJSOnlib: lib/CMakeFiles/cJSOnlib.dir/rule
-
-.PHONY : cJSOnlib
-
-# fast build rule for target.
-cJSOnlib/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/build
-.PHONY : cJSOnlib/fast
-
-__/3party/cJSON/cJSON.o: __/3party/cJSON/cJSON.c.o
-
-.PHONY : __/3party/cJSON/cJSON.o
+.PHONY : __/include/config_manage/src/config_manage.o
 
 # target to build an object file
-__/3party/cJSON/cJSON.c.o:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSON.c.o
-.PHONY : __/3party/cJSON/cJSON.c.o
+__/include/config_manage/src/config_manage.c.o:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.o
+.PHONY : __/include/config_manage/src/config_manage.c.o
 
-__/3party/cJSON/cJSON.i: __/3party/cJSON/cJSON.c.i
+__/include/config_manage/src/config_manage.i: __/include/config_manage/src/config_manage.c.i
 
-.PHONY : __/3party/cJSON/cJSON.i
-
-# target to preprocess a source file
-__/3party/cJSON/cJSON.c.i:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSON.c.i
-.PHONY : __/3party/cJSON/cJSON.c.i
-
-__/3party/cJSON/cJSON.s: __/3party/cJSON/cJSON.c.s
-
-.PHONY : __/3party/cJSON/cJSON.s
-
-# target to generate assembly for a file
-__/3party/cJSON/cJSON.c.s:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSON.c.s
-.PHONY : __/3party/cJSON/cJSON.c.s
-
-__/3party/cJSON/cJSONx.o: __/3party/cJSON/cJSONx.c.o
-
-.PHONY : __/3party/cJSON/cJSONx.o
-
-# target to build an object file
-__/3party/cJSON/cJSONx.c.o:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSONx.c.o
-.PHONY : __/3party/cJSON/cJSONx.c.o
-
-__/3party/cJSON/cJSONx.i: __/3party/cJSON/cJSONx.c.i
-
-.PHONY : __/3party/cJSON/cJSONx.i
+.PHONY : __/include/config_manage/src/config_manage.i
 
 # target to preprocess a source file
-__/3party/cJSON/cJSONx.c.i:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSONx.c.i
-.PHONY : __/3party/cJSON/cJSONx.c.i
+__/include/config_manage/src/config_manage.c.i:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.i
+.PHONY : __/include/config_manage/src/config_manage.c.i
 
-__/3party/cJSON/cJSONx.s: __/3party/cJSON/cJSONx.c.s
+__/include/config_manage/src/config_manage.s: __/include/config_manage/src/config_manage.c.s
 
-.PHONY : __/3party/cJSON/cJSONx.s
-
-# target to generate assembly for a file
-__/3party/cJSON/cJSONx.c.s:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/__/3party/cJSON/cJSONx.c.s
-.PHONY : __/3party/cJSON/cJSONx.c.s
-
-__/src/config_fun.o: __/src/config_fun.c.o
-
-.PHONY : __/src/config_fun.o
-
-# target to build an object file
-__/src/config_fun.c.o:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/__/src/config_fun.c.o
-.PHONY : __/src/config_fun.c.o
-
-__/src/config_fun.i: __/src/config_fun.c.i
-
-.PHONY : __/src/config_fun.i
-
-# target to preprocess a source file
-__/src/config_fun.c.i:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/__/src/config_fun.c.i
-.PHONY : __/src/config_fun.c.i
-
-__/src/config_fun.s: __/src/config_fun.c.s
-
-.PHONY : __/src/config_fun.s
+.PHONY : __/include/config_manage/src/config_manage.s
 
 # target to generate assembly for a file
-__/src/config_fun.c.s:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/__/src/config_fun.c.s
-.PHONY : __/src/config_fun.c.s
+__/include/config_manage/src/config_manage.c.s:
+	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.s
+.PHONY : __/include/config_manage/src/config_manage.c.s
 
 # Help Target
 help:
@@ -227,19 +204,16 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... install/strip"
+	@echo "... install/local"
+	@echo "... install"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... configlib"
-	@echo "... cJSOnlib"
-	@echo "... __/3party/cJSON/cJSON.o"
-	@echo "... __/3party/cJSON/cJSON.i"
-	@echo "... __/3party/cJSON/cJSON.s"
-	@echo "... __/3party/cJSON/cJSONx.o"
-	@echo "... __/3party/cJSON/cJSONx.i"
-	@echo "... __/3party/cJSON/cJSONx.s"
-	@echo "... __/src/config_fun.o"
-	@echo "... __/src/config_fun.i"
-	@echo "... __/src/config_fun.s"
+	@echo "... config_managelib"
+	@echo "... __/include/config_manage/src/config_manage.o"
+	@echo "... __/include/config_manage/src/config_manage.i"
+	@echo "... __/include/config_manage/src/config_manage.s"
 .PHONY : help
 
 

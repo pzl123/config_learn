@@ -55,27 +55,50 @@ CMAKE_BINARY_DIR = /home/zlgmcu/project/config_learn/build
 # The main recursive "all" target.
 all: src/all
 all: lib/all
+all: include/all
+all: third_party/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: src/preinstall
 preinstall: lib/preinstall
+preinstall: include/preinstall
+preinstall: third_party/preinstall
 
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: src/clean
 clean: lib/clean
+clean: include/clean
+clean: third_party/clean
 
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory include
+
+# Recursive "all" directory target.
+include/all:
+
+.PHONY : include/all
+
+# Recursive "preinstall" directory target.
+include/preinstall:
+
+.PHONY : include/preinstall
+
+# Recursive "clean" directory target.
+include/clean:
+
+.PHONY : include/clean
 
 #=============================================================================
 # Directory level rules for directory lib
 
 # Recursive "all" directory target.
-lib/all: lib/CMakeFiles/configlib.dir/all
-lib/all: lib/CMakeFiles/cJSOnlib.dir/all
+lib/all: lib/CMakeFiles/config_managelib.dir/all
 
 .PHONY : lib/all
 
@@ -85,8 +108,7 @@ lib/preinstall:
 .PHONY : lib/preinstall
 
 # Recursive "clean" directory target.
-lib/clean: lib/CMakeFiles/configlib.dir/clean
-lib/clean: lib/CMakeFiles/cJSOnlib.dir/clean
+lib/clean: lib/CMakeFiles/config_managelib.dir/clean
 
 .PHONY : lib/clean
 
@@ -109,14 +131,35 @@ src/clean: src/CMakeFiles/MyProject.dir/clean
 .PHONY : src/clean
 
 #=============================================================================
+# Directory level rules for directory third_party
+
+# Recursive "all" directory target.
+third_party/all: third_party/CMakeFiles/cJSONxlib.dir/all
+third_party/all: third_party/CMakeFiles/cJSONlib.dir/all
+
+.PHONY : third_party/all
+
+# Recursive "preinstall" directory target.
+third_party/preinstall:
+
+.PHONY : third_party/preinstall
+
+# Recursive "clean" directory target.
+third_party/clean: third_party/CMakeFiles/cJSONxlib.dir/clean
+third_party/clean: third_party/CMakeFiles/cJSONlib.dir/clean
+
+.PHONY : third_party/clean
+
+#=============================================================================
 # Target rules for target src/CMakeFiles/MyProject.dir
 
 # All Build rule for target.
-src/CMakeFiles/MyProject.dir/all: lib/CMakeFiles/configlib.dir/all
-src/CMakeFiles/MyProject.dir/all: lib/CMakeFiles/cJSOnlib.dir/all
+src/CMakeFiles/MyProject.dir/all: lib/CMakeFiles/config_managelib.dir/all
+src/CMakeFiles/MyProject.dir/all: third_party/CMakeFiles/cJSONxlib.dir/all
+src/CMakeFiles/MyProject.dir/all: third_party/CMakeFiles/cJSONlib.dir/all
 	$(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/depend
 	$(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zlgmcu/project/config_learn/build/CMakeFiles --progress-num=1,2,3 "Built target MyProject"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zlgmcu/project/config_learn/build/CMakeFiles --progress-num=1,2 "Built target MyProject"
 .PHONY : src/CMakeFiles/MyProject.dir/all
 
 # Build rule for subdir invocation for target.
@@ -137,58 +180,85 @@ src/CMakeFiles/MyProject.dir/clean:
 .PHONY : src/CMakeFiles/MyProject.dir/clean
 
 #=============================================================================
-# Target rules for target lib/CMakeFiles/configlib.dir
+# Target rules for target lib/CMakeFiles/config_managelib.dir
 
 # All Build rule for target.
-lib/CMakeFiles/configlib.dir/all:
-	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/depend
-	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zlgmcu/project/config_learn/build/CMakeFiles --progress-num=7,8 "Built target configlib"
-.PHONY : lib/CMakeFiles/configlib.dir/all
+lib/CMakeFiles/config_managelib.dir/all:
+	$(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/depend
+	$(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zlgmcu/project/config_learn/build/CMakeFiles --progress-num=7,8 "Built target config_managelib"
+.PHONY : lib/CMakeFiles/config_managelib.dir/all
 
 # Build rule for subdir invocation for target.
-lib/CMakeFiles/configlib.dir/rule: cmake_check_build_system
+lib/CMakeFiles/config_managelib.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/configlib.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/config_managelib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 0
-.PHONY : lib/CMakeFiles/configlib.dir/rule
+.PHONY : lib/CMakeFiles/config_managelib.dir/rule
 
 # Convenience name for target.
-configlib: lib/CMakeFiles/configlib.dir/rule
+config_managelib: lib/CMakeFiles/config_managelib.dir/rule
 
-.PHONY : configlib
+.PHONY : config_managelib
 
 # clean rule for target.
-lib/CMakeFiles/configlib.dir/clean:
-	$(MAKE) -f lib/CMakeFiles/configlib.dir/build.make lib/CMakeFiles/configlib.dir/clean
-.PHONY : lib/CMakeFiles/configlib.dir/clean
+lib/CMakeFiles/config_managelib.dir/clean:
+	$(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/clean
+.PHONY : lib/CMakeFiles/config_managelib.dir/clean
 
 #=============================================================================
-# Target rules for target lib/CMakeFiles/cJSOnlib.dir
+# Target rules for target third_party/CMakeFiles/cJSONxlib.dir
 
 # All Build rule for target.
-lib/CMakeFiles/cJSOnlib.dir/all:
-	$(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/depend
-	$(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zlgmcu/project/config_learn/build/CMakeFiles --progress-num=4,5,6 "Built target cJSOnlib"
-.PHONY : lib/CMakeFiles/cJSOnlib.dir/all
+third_party/CMakeFiles/cJSONxlib.dir/all:
+	$(MAKE) -f third_party/CMakeFiles/cJSONxlib.dir/build.make third_party/CMakeFiles/cJSONxlib.dir/depend
+	$(MAKE) -f third_party/CMakeFiles/cJSONxlib.dir/build.make third_party/CMakeFiles/cJSONxlib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zlgmcu/project/config_learn/build/CMakeFiles --progress-num=5,6 "Built target cJSONxlib"
+.PHONY : third_party/CMakeFiles/cJSONxlib.dir/all
 
 # Build rule for subdir invocation for target.
-lib/CMakeFiles/cJSOnlib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/cJSOnlib.dir/all
+third_party/CMakeFiles/cJSONxlib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 third_party/CMakeFiles/cJSONxlib.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 0
-.PHONY : lib/CMakeFiles/cJSOnlib.dir/rule
+.PHONY : third_party/CMakeFiles/cJSONxlib.dir/rule
 
 # Convenience name for target.
-cJSOnlib: lib/CMakeFiles/cJSOnlib.dir/rule
+cJSONxlib: third_party/CMakeFiles/cJSONxlib.dir/rule
 
-.PHONY : cJSOnlib
+.PHONY : cJSONxlib
 
 # clean rule for target.
-lib/CMakeFiles/cJSOnlib.dir/clean:
-	$(MAKE) -f lib/CMakeFiles/cJSOnlib.dir/build.make lib/CMakeFiles/cJSOnlib.dir/clean
-.PHONY : lib/CMakeFiles/cJSOnlib.dir/clean
+third_party/CMakeFiles/cJSONxlib.dir/clean:
+	$(MAKE) -f third_party/CMakeFiles/cJSONxlib.dir/build.make third_party/CMakeFiles/cJSONxlib.dir/clean
+.PHONY : third_party/CMakeFiles/cJSONxlib.dir/clean
+
+#=============================================================================
+# Target rules for target third_party/CMakeFiles/cJSONlib.dir
+
+# All Build rule for target.
+third_party/CMakeFiles/cJSONlib.dir/all:
+	$(MAKE) -f third_party/CMakeFiles/cJSONlib.dir/build.make third_party/CMakeFiles/cJSONlib.dir/depend
+	$(MAKE) -f third_party/CMakeFiles/cJSONlib.dir/build.make third_party/CMakeFiles/cJSONlib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zlgmcu/project/config_learn/build/CMakeFiles --progress-num=3,4 "Built target cJSONlib"
+.PHONY : third_party/CMakeFiles/cJSONlib.dir/all
+
+# Build rule for subdir invocation for target.
+third_party/CMakeFiles/cJSONlib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 third_party/CMakeFiles/cJSONlib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 0
+.PHONY : third_party/CMakeFiles/cJSONlib.dir/rule
+
+# Convenience name for target.
+cJSONlib: third_party/CMakeFiles/cJSONlib.dir/rule
+
+.PHONY : cJSONlib
+
+# clean rule for target.
+third_party/CMakeFiles/cJSONlib.dir/clean:
+	$(MAKE) -f third_party/CMakeFiles/cJSONlib.dir/build.make third_party/CMakeFiles/cJSONlib.dir/clean
+.PHONY : third_party/CMakeFiles/cJSONlib.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

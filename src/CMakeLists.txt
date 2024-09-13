@@ -1,9 +1,15 @@
-# 设置当前目录为目标目录
-file(GLOB SOURCES "*.c")
+# src/CMakeLists.txt
 
-# 添加可执行文件
-add_executable(MyProject ${SOURCES})
+# Add executable
+add_executable(MyProject
+    main.c
+)
 
-# 链接库
-target_link_libraries(MyProject configlib cJSOnlib)
-
+# Link with third-party and custom libraries
+target_link_libraries(MyProject
+    PRIVATE
+    cJSONlib
+    cJSONxlib
+    config_managelib
+    # observerlib
+)

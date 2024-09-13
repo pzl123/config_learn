@@ -41,6 +41,8 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/zlgmcu/project/config_learn/build/src/cmake_install.cmake")
   include("/home/zlgmcu/project/config_learn/build/lib/cmake_install.cmake")
+  include("/home/zlgmcu/project/config_learn/build/include/cmake_install.cmake")
+  include("/home/zlgmcu/project/config_learn/build/third_party/cmake_install.cmake")
 
 endif()
 

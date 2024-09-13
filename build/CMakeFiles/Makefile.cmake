@@ -11,8 +11,10 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.16.3/CMakeCCompiler.cmake"
   "CMakeFiles/3.16.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.16.3/CMakeSystem.cmake"
+  "../include/CMakeLists.txt"
   "../lib/CMakeLists.txt"
   "../src/CMakeLists.txt"
+  "../third_party/CMakeLists.txt"
   "/usr/share/cmake-3.16/Modules/CMakeCInformation.cmake"
   "/usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake"
   "/usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake"
@@ -45,11 +47,14 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/CMakeFiles/CMakeDirectoryInformation.cmake"
   "lib/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "include/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "third_party/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "src/CMakeFiles/MyProject.dir/DependInfo.cmake"
-  "lib/CMakeFiles/configlib.dir/DependInfo.cmake"
-  "lib/CMakeFiles/cJSOnlib.dir/DependInfo.cmake"
+  "lib/CMakeFiles/config_managelib.dir/DependInfo.cmake"
+  "third_party/CMakeFiles/cJSONxlib.dir/DependInfo.cmake"
+  "third_party/CMakeFiles/cJSONlib.dir/DependInfo.cmake"
   )

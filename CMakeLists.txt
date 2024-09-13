@@ -8,14 +8,21 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-
 # 包含头文件
-include_directories(${PROJECT_SOURCE_DIR}/include) # ${PROJECT_SOURCE_DIR} 是一个 CMake 变量，指向项目的根目录
+include_directories(
+    ${PROJECT_SOURCE_DIR}/include/config_manage/include
+    ${PROJECT_SOURCE_DIR}/include/observer/include
+    ${PROJECT_SOURCE_DIR}/include/uthash/include
+    ${PROJECT_SOURCE_DIR}/third_party/cJSON/include
+    ${PROJECT_SOURCE_DIR}/third_party/cJSONx/include
+    ${PROJECT_SOURCE_DIR}/third_party/uthash/include
+)
 
-
+# 设置编译选项
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize=leak")
 
 # 添加子目录
 add_subdirectory(src)
 add_subdirectory(lib)
-
+add_subdirectory(include)
+add_subdirectory(third_party)

@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cJSON/cJSONx.h"
+#include "cJSONx.h"
 
 #define CJSONX_DBG_FIELD(xx)                                  
 

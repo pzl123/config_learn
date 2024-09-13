@@ -3,8 +3,8 @@
 
 #include <stdbool.h>
 
-#include "UTHASH/uthash.h"
-#include "cJSON/cJSON.h"
+#include "uthash.h"
+#include "cJSON.h"
 
 #ifdef __cplusplus
 extern "C"
