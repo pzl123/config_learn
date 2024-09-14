@@ -5,5 +5,6 @@ lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c
 lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.o: ../third_party/cJSON/include/cJSON.h
 lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.o: ../third_party/cJSONx/include/cJSONx.h
 lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.o: ../third_party/uthash/include/uthash.h
+lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.o: ../third_party/uthash/include/utlist.h
 lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.o: ../include/config_manage/src/config_manage.c
 

@@ -31,42 +31,29 @@ int main() {
     char *str = NULL;
 
     config_init(CONFIG_PATH, &ALL_CONFIG_FILE);
-    // cJSON* config = cJSON_Parse(message);
-    // set_config("config.json",config);
-    // print_hash_table(ALL_CONFIG_FILE);
+
+    add_owner(&ALL_CONFIG_FILE, "config.json", 1, callback);
+    add_owner(&ALL_CONFIG_FILE, "config.json", 2, callback);
 
 
-    // config = cJSON_Parse(new_message);
-    // set_config("config.json",config);
-    // print_hash_table(ALL_CONFIG_FILE);
+    new = cJSON_Parse(message);
 
-    get_config("config.json",&new);
-    str  = cJSON_Print(new);
-    printf("%s\n",str);
-
-    free(str); // 释放字符串
-    // 清理
-    cJSON_Delete(new); // 释放 cJSON 对象
-    new = NULL; // 避免悬空指针
-
-
-    // config_init(DEFAULT_CONFIG_PATH, &ALL_DEFAULT_FILE);
-    // print_hash_table(ALL_DEFAULT_FILE);
-    // // config = cJSON_Parse(message);
-    // // config = cJSON_Parse(new_message);
-    // // set_default("default_config.json", config);
+    set_config("config.json", new);
 
     // get_default("default_config.json",&new);
     // str  = cJSON_Print(new);
     // printf("%s\n",str);
 
     // free(str); // 释放字符串
-    // cJSON_Delete(new); // 释放 cJSON 对象
-    // new = NULL; // 避免悬空指
+    cJSON_Delete(new); // 释放 cJSON 对象
+    new = NULL; // 避免悬空指
+
+
 
 
     // cJSON_Delete(config);
     //  内存释放区
+
     clear_hash_table(ALL_CONFIG_FILE);
     // clear_hash_table(ALL_DEFAULT_FILE);
 
@@ -75,31 +62,26 @@ int main() {
 
 
 
-    printf("------------------------------测试观察者模式-----------------------------\n");
+    // printf("------------------------------测试观察者模式-----------------------------\n");
 
-    Subject subject;
-    ConcreteObserver observer1, observer2;
+    // Subject_t subject;
+    // ConcreteObserver_t observer1, observer2;
 
-    subject_init(&subject);
-    int i = 1;
-    init_concrete_observer(&observer1,i);
-    init_concrete_observer(&observer2,i+1);
+    // subject_init(&subject);
+    // int i = 1;
+    // init_concrete_observer(&observer1,i);
+    // init_concrete_observer(&observer2,i+1);
 
-    subject_add_observer(&subject, &observer1.base);
-    subject_add_observer(&subject, &observer2.base);
+    // subject_add_observer(&subject, &observer1.base);
+    // subject_add_observer(&subject, &observer2.base);
 
-    subject_notify_observers(&subject, "Hello, World!");
+    // subject_notify_observers(&subject, "Hello, World!");
 
-    subject_remove_observer(&subject, &observer2.base);
+    // subject_remove_observer(&subject, &observer2.base);
 
-    subject_notify_observers(&subject, "Goodbye, World!");
+    // subject_notify_observers(&subject, "Goodbye, World!");
 
-
-
-
-
-    free(subject.observers);
-
+    // free(subject.observers);
 
 
 

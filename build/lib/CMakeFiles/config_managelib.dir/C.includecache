@@ -9,8 +9,12 @@
 ../include/config_manage/include/config_manage.h
 stdbool.h
 -
+stdio.h
+-
 uthash.h
 ../include/config_manage/include/uthash.h
+utlist.h
+../include/config_manage/include/utlist.h
 cJSON.h
 ../include/config_manage/include/cJSON.h
 
@@ -34,6 +38,10 @@ stdlib.h
 stdint.h
 -
 stdio.h
+-
+
+../third_party/uthash/include/utlist.h
+assert.h
 -
 
 /home/zlgmcu/project/config_learn/include/config_manage/src/config_manage.c

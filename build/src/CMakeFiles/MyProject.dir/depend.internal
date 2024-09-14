@@ -6,4 +6,5 @@ src/CMakeFiles/MyProject.dir/main.c.o
  ../include/observer/include/observer.h
  ../third_party/cJSON/include/cJSON.h
  ../third_party/uthash/include/uthash.h
+ ../third_party/uthash/include/utlist.h
  /home/zlgmcu/project/config_learn/src/main.c

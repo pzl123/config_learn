@@ -5,5 +5,6 @@ src/CMakeFiles/MyProject.dir/main.c.o: ../include/config_manage/include/config_m
 src/CMakeFiles/MyProject.dir/main.c.o: ../include/observer/include/observer.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../third_party/cJSON/include/cJSON.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../third_party/uthash/include/uthash.h
+src/CMakeFiles/MyProject.dir/main.c.o: ../third_party/uthash/include/utlist.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../src/main.c
 

@@ -1,5 +1,5 @@
 #ifndef _OBSERVER_H_
-#define __OBSERVER_H__
+#define _OBSERVER_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -42,29 +42,43 @@ typedef void (*UpdateFunc)(const char *event,int id);
 typedef struct {
     UpdateFunc update;
     int id;
-} Observer;
+} Observer_t;
 
 
 //定义 Subject 接口
 typedef struct {
-    Observer *observers;
+    Observer_t *observers;
     int numObservers;
-} Subject;
+} Subject_t;
 
-void subject_init(Subject *subject);
-void subject_add_observer(Subject *subject, Observer *observer);
-void subject_remove_observer(Subject *subject, Observer *observer);
-void subject_notify_observers(Subject *subject, const char *event);
+void subject_init(Subject_t *subject);
+void subject_add_observer(Subject_t *subject, Observer_t *observer);
+void subject_remove_observer(Subject_t *subject, Observer_t *observer);
+void subject_notify_observers(Subject_t *subject, const char *event);
 
 
 
 //实现 ConcreteObserver
 typedef struct {
-    Observer base;
-} ConcreteObserver;
+    Observer_t base;
+} ConcreteObserver_t;
 
-void init_concrete_observer(ConcreteObserver *observer,int id);
+void init_concrete_observer(ConcreteObserver_t *observer,int id);
 void concrete_observer_update(const char *event,int id);
+
+
+/**
+ * --------------------------------------------------------------------------------------------------------------------------------
+ * 下面代码实现hash table中的观察者添加、删除、修改、通知
+ * --------------------------------------------------------------------------------------------------------------------------------
+ * /
+
+
+
+// void config_add_observer(file_struct_t **subject, Observer_t *observer);
+// void config_remove_observer(Subject_t *subject, Observer_t *observer);
+// void config_notify_observers(Subject_t *subject, const char *event);
+
 
 
 #ifdef __cplusplus

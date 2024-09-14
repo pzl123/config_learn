@@ -1,9 +1,13 @@
 #ifndef _CONFIG_MANAGE_H_
 #define _CONFIG_MANAGE_H_
 
+// #include "observer.h"
+
 #include <stdbool.h>
+#include <stdio.h>
 
 #include "uthash.h"
+#include "utlist.h"
 #include "cJSON.h"
 
 #ifdef __cplusplus
@@ -17,11 +21,19 @@ extern "C"
 #define MAX_PATH_LEN (1024)
 
 
+
+
+typedef struct{
+    void (*callback)(int num);
+    int owner_num;
+} observer_t;
+
 typedef struct
 {
     char path[MAX_PATH_LEN];
     char key[100];
     cJSON *value;
+    observer_t *owners[2]; // 存储拥有者
     UT_hash_handle hh;
 } file_struct_t;
 
@@ -92,6 +104,95 @@ void print_hash_table(file_struct_t * table);
  * @param table 要删除的hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
  */
 void clear_hash_table(file_struct_t *table);
+
+
+
+
+
+
+// 添加一个owner(该owner标识为num)到指定config中的owners数组
+void add_owner(file_struct_t **table, const char *config, int num, void (*callback)(int num))
+{
+    file_struct_t *s = NULL;
+    HASH_FIND_STR(*table, config, s);
+    if(s == NULL)
+    {
+        printf("config file %s not exist\n", config);
+        return;
+    }
+    else
+    {
+        printf("config file %s exist\n", config);
+        for(int i = 0; i < 2; i++)
+        {
+            if( NULL == s->owners[i])
+            {
+                s->owners[i] = (observer_t *)malloc(sizeof(observer_t));
+                if (s->owners[i] == NULL) {
+                    fprintf(stderr, "Memory allocation failed\n");
+                    exit(EXIT_FAILURE);
+                }
+                s->owners[i]->callback = callback;
+                s->owners[i]->owner_num = num;
+                return;
+            }
+        }
+    }
+}
+void callback(int num)
+{
+    printf("callback from owner_num %d\n", num);
+}
+void dele_owner(file_struct_t **table, const char *config, int num)
+{
+    file_struct_t *s = NULL;
+    HASH_FIND_STR(*table, config, s);
+    if(s == NULL)
+    {
+        printf("config file %s not exist\n", config);
+        return;
+    }
+    else
+    {
+        printf("config file %s exist\n", config);
+        for(int i = 0; i < 2; i++)
+        {
+            if( NULL != (*table)->owners[i])
+            {
+                if((*table)->owners[i]->owner_num == num)
+                {
+                    free((*table)->owners[i]);
+                    (*table)->owners[i] = NULL;
+                    return;
+                }
+        }
+    }
+}
+
+void notify_owner(file_struct_t **table, const char *config)
+{
+    file_struct_t *s = NULL;
+    HASH_FIND_STR(*table, config, s);
+    if(s == NULL)
+    {
+        printf("config file %s not exist\n", config);
+        return;
+    }
+    else
+    {
+        printf("config file %s exist\n", config);
+        for(int i = 0; i < 2; i++)
+        {
+            if( NULL != (*table)->owners[i])
+            {
+                (*table)->owners[i]->callback((*table)->owners[i]->owner_num);
+            }
+        }
+    }
+}
+
+
+
 
 #ifdef __cplusplus
 }

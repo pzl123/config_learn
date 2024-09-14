@@ -44,9 +44,11 @@ bool set_config(const char *name, const cJSON *config)
         {
             s->value = cJSON_Duplicate(config, 1);
             json_to_file(s->key, s->value,CONFIG_PATH);
+            notify_owner(&ALL_CONFIG_FILE, name); //通知所有者
             return true;
         }
     }
+    
 }
 
 bool get_config(const char *name, cJSON **config)
@@ -189,7 +191,11 @@ bool config_init(char *PATH, file_struct_t **table)
         return false;
     }
 
-
+    // 初始化该表的拥有者
+    for(int i =0;i<2;i++)
+    {
+        (*table)->owners[i] = NULL;
+    }
     return true;
 }
 
@@ -306,8 +312,26 @@ void clear_hash_table(file_struct_t *table)
 
     file_struct_t *temp = NULL;
     HASH_ITER(hh, table, current_user, tmp) {
-        HASH_DEL(table, current_user);  /* delete it (users advances to next) */
+        HASH_DEL(table, current_user); 
         cJSON_Delete(current_user->value);
-        free(current_user);             /* free it */
+        for(int i=0;i<2;i++)
+        {
+            if(current_user->owners[i]!=NULL)
+            {
+                free(current_user->owners[i]); /* free owners */
+            }
+        }
+        free(current_user); 
     }
 }
+
+
+
+
+
+/**
+ * ----------------------------------------------------------------------------------------------------------------
+ * 下面是通知机制
+ * ----------------------------------------------------------------------------------------------------------------
+ */
+
