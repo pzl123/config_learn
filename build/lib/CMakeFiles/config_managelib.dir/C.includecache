@@ -61,6 +61,8 @@ sys/stat.h
 -
 unistd.h
 -
+pthread.h
+-
 cJSON.h
 /home/zlgmcu/project/config_learn/include/config_manage/src/cJSON.h
 cJSONx.h

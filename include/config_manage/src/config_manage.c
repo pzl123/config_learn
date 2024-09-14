@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "cJSON.h"
 #include "cJSONx.h"
@@ -41,7 +42,7 @@ bool set_config(const char *name, const cJSON *config)
     file_struct_t *s =find_config_name(ALL_CONFIG_FILE, name);
     if (NULL == s)
     {
-        printf("no such config %s in path %s aaaaaaaaaaaaaaaaaaaaa\n",name,CONFIG_PATH);
+        printf("no such config %s in path %s\n",name,CONFIG_PATH);
         return false;
     }
     else
@@ -53,9 +54,13 @@ bool set_config(const char *name, const cJSON *config)
         }
         else
         {
+            // 加写锁
+            pthread_rwlock_wrlock(&s->valueLock);
             cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
             json_to_file(s->key, s->value,CONFIG_PATH);
+            // 解写锁
+            pthread_rwlock_unlock(&s->valueLock);
             notify(&ALL_CONFIG_FILE, name); //通知所有者
             return true;
         }
@@ -73,8 +78,12 @@ bool get_config(const char *name, cJSON **config)
     }
     else
     {   
+        // 加读锁
+        pthread_rwlock_rdlock(&s->valueLock);
         cJSON_Delete(*config);
         *config = cJSON_Duplicate(s->value, 1);
+        // 解读锁
+        pthread_rwlock_unlock(&s->valueLock);
         return true;
     }
 }
@@ -169,6 +178,20 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
     else
     {
         printf("file already exits in hash table\n ");
+    }
+
+    // 初始化读写锁
+    if (pthread_rwlock_init(&(s->valueLock), NULL) != 0) {
+        perror("Failed to initialize valueLock");
+        free(s);
+        return;
+    }
+
+    if (pthread_rwlock_init(&(s->ownersLock), NULL) != 0) {
+        perror("Failed to initialize ownersLock");
+        pthread_rwlock_destroy(&(s->valueLock)); // 清理 valueLock
+        free(s);
+        return;
     }
 
 }
@@ -360,6 +383,7 @@ void clear_hash_table(file_struct_t *table)
     file_struct_t *temp = NULL;
     HASH_ITER(hh, table, current_user, tmp)
     {
+        // 清除所有用户
         for(int i = 0; i < 2; i++)
         {
             if (current_user->owners[i] != NULL)
@@ -367,6 +391,10 @@ void clear_hash_table(file_struct_t *table)
                 free(current_user->owners[i]);
             }
         }
+        //销毁锁
+        (void)pthread_rwlock_destroy(&current_user->valueLock);
+        (void)pthread_rwlock_destroy(&current_user->ownersLock);
+        //清除表单
         HASH_DEL(table, current_user);  /* delete it (users advances to next) */
         cJSON_Delete(current_user->value);
         free(current_user);             /* free it */

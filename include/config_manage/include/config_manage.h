@@ -39,7 +39,9 @@ typedef struct{
  * @path 文件路径
  * @key 文件名
  * @value 文件内容
+ * @valueLock 读写锁
  * @owners 拥有者
+ * @ownersLock 拥有者读写锁
  * @hh uthash hash handle
  */
 typedef struct
@@ -47,7 +49,9 @@ typedef struct
     char path[100];
     char key[100];
     cJSON *value;
+    pthread_rwlock_t valueLock;
     observer_t *owners[2]; // 存储拥有者
+    pthread_rwlock_t ownersLock;
     UT_hash_handle hh;
 } file_struct_t;
 

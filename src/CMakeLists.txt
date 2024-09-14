@@ -6,10 +6,16 @@ add_executable(MyProject
 )
 
 # Link with third-party and custom libraries
+# target_link_libraries(MyProject
+#     pthread
+# )
+
 target_link_libraries(MyProject
     PRIVATE
     cJSONlib
     cJSONxlib
     config_managelib
     observerlib
+
+    pthread
 )
