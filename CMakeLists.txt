@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10) # cmake最低版本
 project(cmake_test VERSION 1.0)
 
-# set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build Type" FORCE)
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build Type" FORCE)
 
 # 设置C标准
 # set(CMAKE_C_STANDARD 11)
@@ -22,6 +22,7 @@ include_directories(
 )
 
 # 设置编译选项
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize=leak")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize=leak")
 # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 

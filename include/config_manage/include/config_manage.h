@@ -21,25 +21,70 @@ extern "C"
 #define MAX_PATH_LEN (1024)
 
 
-
-
+/**
+ * @brief 拥有者结构体
+ * 
+ * @owner_num 拥有者编号
+ * @callback 回调函数
+ */
 typedef struct{
     void (*callback)(int num);
     int owner_num;
 } observer_t;
 
+
+/**
+ * @brief 文件结构体
+ * 
+ * @path 文件路径
+ * @key 文件名
+ * @value 文件内容
+ * @owners 拥有者
+ * @hh uthash hash handle
+ */
 typedef struct
 {
-    char path[MAX_PATH_LEN];
+    char path[100];
     char key[100];
     cJSON *value;
     observer_t *owners[2]; // 存储拥有者
     UT_hash_handle hh;
 } file_struct_t;
 
-extern file_struct_t *ALL_CONFIG_FILE;
-extern file_struct_t *ALL_DEFAULT_FILE;
 
+
+/**
+ * ----------------------------------------------------------------------------------------------------------
+ * 管理函数
+ * ----------------------------------------------------------------------------------------------------------
+ */
+
+/**
+ * @brief 初始化配置文件
+ */
+bool all_config_init(void);
+
+/**
+ * @brief 指定hash table 打印
+ *
+ * @param table 指定的表头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
+ */
+void print_hash_table(file_struct_t * table);
+
+/**
+ * @brief 清空所有hash table
+ */
+void clear_all_hash_table(void);
+
+
+
+
+
+/**
+ * ----------------------------------------------------------------------------------------------------------
+ * config操作函数
+ * ----------------------------------------------------------------------------------------------------------
+ */
 
 /**
  * @brief Set the config object
@@ -52,7 +97,7 @@ extern file_struct_t *ALL_DEFAULT_FILE;
 bool set_config(const char *name, const cJSON *config);
 
 /**
- * @brief Get the config object
+ * @brief Get the config object 获得的对象需要手动释放
  *
  * @param name 要匹配的config文件名
  * @param config 匹配json对象存放区
@@ -72,7 +117,7 @@ bool get_config(const char *name, cJSON **config);
 bool set_default(const char *name, const cJSON *config);
 
 /**
- * @brief Get the default object
+ * @brief Get the default object 获得的对象需要手动释放
  *
  * @param name 要匹配的default文件名
  * @param config 匹配json对象存放区
@@ -81,65 +126,43 @@ bool set_default(const char *name, const cJSON *config);
  */
 bool get_default(const char *name, cJSON **config);
 
+
+
 /**
- * @brief 指定配置文件的路径和系统运行中默认的存储表头
- *
- * @param PATH 配置文件的路径  CONFIG_PATH or DEFAULT_CONFIG_PATH  配置 或 默认配置
- * @param table 默认的存储表头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- * @return true
- * @return false
+ * ----------------------------------------------------------------------------------------------------------
+ * 观察者函数
+ * ----------------------------------------------------------------------------------------------------------
  */
-bool config_init(char *PATH, file_struct_t **table);
 
 /**
- * @brief 指定hash table 打印
- *
- * @param table 指定的表头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- */
-void print_hash_table(file_struct_t * table);
-
-/**
- * @brief 指定hash table 删除
- *
- * @param table 要删除的hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- */
-void clear_hash_table(file_struct_t *table);
-
-
-/**
- * @brief 当config文件发生变化时，通知所有拥有者
+ * @brief 删除指定config文件的指定观察者
  * 
  * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- * @param config 发生变化的config文件
+ * @param config 要删除观察者的config文件
+ * @param num 要删除的观察者的编号
  */
-void notify_owner(file_struct_t **table, const char *config);
-
+void detach(file_struct_t **table, const char *config, int num);
 
 /**
- * @brief 删除指定config文件的指定拥有者
+ * @brief 添加指定config文件的指定观察者
  * 
  * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- * @param config 要删除拥有者的config文件
- * @param num 要删除的拥有者的编号
+ * @param config 要添加观察者的config文件
+ * @param num 要添加的观察者的编号
+ * @param callback 添加的观察者的回调函数
  */
-void dele_owner(file_struct_t **table, const char *config, int num);
+void attach(file_struct_t **table, const char *config, int num, void (*callback)(int num));
+
 
 /**
- * @brief 添加指定config文件的指定拥有者
+ * @brief 通知指定config文件的所有观察者
  * 
  * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- * @param config 要添加拥有者的config文件
- * @param num 要添加的拥有者的编号
- * @param callback 添加的拥有者的回调函数
+ * @param config 要通知的config文件
  */
-void add_owner(file_struct_t **table, const char *config, int num, void (*callback)(int num));
+void notify(file_struct_t **table, const char *config);
 
-/**
- * @brief 指定config文件的指定拥有者
- * 
- * @param num 要指定的拥有者的编号
- */
-void callback(int num);
+void callback(int num); // 测试回调函数
 
 
 #ifdef __cplusplus

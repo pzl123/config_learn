@@ -15,15 +15,20 @@
 
 
 
+
 file_struct_t *ALL_CONFIG_FILE = NULL;
 file_struct_t *ALL_DEFAULT_FILE = NULL;
+
+
 
 
 void add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config);
 static file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name);
 static bool file_to_json(const char *target_file, cJSON **cjson_config);
 static cJSON *json_to_file(const char *config_name, const cJSON *cjson_config,char *PATH);
-
+void notify(file_struct_t **table, const char *config);
+bool config_init(char *PATH, file_struct_t **table);
+char *split(const char *str);
 
 /**
  * ----------------------------------------------------------------------------------------------------------------
@@ -36,7 +41,7 @@ bool set_config(const char *name, const cJSON *config)
     file_struct_t *s =find_config_name(ALL_CONFIG_FILE, name);
     if (NULL == s)
     {
-        printf("no such config %s in path %s",name,CONFIG_PATH);
+        printf("no such config %s in path %s aaaaaaaaaaaaaaaaaaaaa\n",name,CONFIG_PATH);
         return false;
     }
     else
@@ -51,7 +56,7 @@ bool set_config(const char *name, const cJSON *config)
             cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
             json_to_file(s->key, s->value,CONFIG_PATH);
-            notify_owner(&ALL_CONFIG_FILE, name); //通知所有者
+            notify(&ALL_CONFIG_FILE, name); //通知所有者
             return true;
         }
     }
@@ -63,11 +68,12 @@ bool get_config(const char *name, cJSON **config)
     file_struct_t *s = find_config_name(ALL_CONFIG_FILE, name);
     if (NULL == s)
     {
-        printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
+        printf("no such default config %s in path %s\n",name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
-    {
+    {   
+        cJSON_Delete(*config);
         *config = cJSON_Duplicate(s->value, 1);
         return true;
     }
@@ -78,23 +84,35 @@ bool set_default(const char *name, const cJSON *config)
     file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);
     if (NULL == s)
     {
-        printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
+        printf("no such default config %s in path %s\n",name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
     {
         if(cJSON_Compare(s->value, config, true))
         {
-            printf("Same, no need to modify.\n");
+            printf("Same default, no need to modify.\n");
             return false;
         }
         else
         {
+            cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
             json_to_file(s->key, s->value,DEFAULT_CONFIG_PATH);
-            strtok(s->key, "_");
-            char *prefix = strtok(NULL, "_");
-            set_config(prefix, s->value);
+
+            char *buffer = split(s->key);
+            if(NULL == buffer)
+            {
+                printf("split error\n");
+                return false;
+            }
+            else
+            {
+                set_config(buffer, s->value);
+            }
+            notify(&ALL_DEFAULT_FILE, name); //通知所有者
+
+            free(buffer);
             return true;
         }
     }
@@ -105,11 +123,12 @@ bool get_default(const char *name, cJSON **config)
     file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);
     if (NULL == s)
     {
-        printf("no such config %s in path %s",name,DEFAULT_CONFIG_PATH);
+        printf("no such default config %s in path %s\n",name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
     {
+        cJSON_Delete(*config);
         *config = cJSON_Duplicate(s->value, 1);
         return true;
     }
@@ -124,7 +143,7 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         s = (file_struct_t*)malloc(sizeof(file_struct_t));
         if (NULL == s)
         {
-            perror("malloc error");
+            perror("malloc error\n");
             return ;
         }
         strncpy(s->key,config_name,strlen(config_name));
@@ -134,10 +153,9 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         strncpy(s->path,dest_path,strlen(dest_path));
         s->path[strlen(dest_path)] = '\0';
         s->value = cJSON_Duplicate(cjson_config, 1);
-        printf("s->value: %p\n", s->value);
         if (s->value == NULL)
         {
-            perror("Failed to duplicate cJSON object");
+            perror("Failed to duplicate cJSON object\n");
         }
 
         // 初始化该表的所有者
@@ -153,6 +171,25 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         printf("file already exits in hash table\n ");
     }
 
+}
+
+bool all_config_init(void)
+{
+    int ret = 0;
+    ret = config_init(CONFIG_PATH, &ALL_CONFIG_FILE);
+    if (ret == 0)
+    {
+        printf("Failed to initialize config\n");
+        return false;
+    }
+    
+    ret = config_init(DEFAULT_CONFIG_PATH, &ALL_DEFAULT_FILE);
+    if (ret == 0)
+    {
+        printf("Failed to initialize default config\n");
+        return false;
+    }
+    return true;
 }
 
 bool config_init(char *PATH, file_struct_t **table)
@@ -323,17 +360,14 @@ void clear_hash_table(file_struct_t *table)
     file_struct_t *temp = NULL;
     HASH_ITER(hh, table, current_user, tmp)
     {
-        printf("Deleting %s\n", current_user->key);
         for(int i = 0; i < 2; i++)
         {
             if (current_user->owners[i] != NULL)
             {
-                printf("num is %d\n",current_user->owners[i]->owner_num);
                 free(current_user->owners[i]);
             }
         }
         HASH_DEL(table, current_user);  /* delete it (users advances to next) */
-        printf("current_user->value: %p\n", current_user->value);
         cJSON_Delete(current_user->value);
         free(current_user);             /* free it */
     }
@@ -341,7 +375,11 @@ void clear_hash_table(file_struct_t *table)
 
 
 
-
+void clear_all_hash_table(void)
+{
+    clear_hash_table(ALL_CONFIG_FILE);
+    clear_hash_table(ALL_DEFAULT_FILE);
+}
 
 /**
  * ----------------------------------------------------------------------------------------------------------------
@@ -355,18 +393,18 @@ void callback(int num)
     printf("callback from owner_num %d\n", num);
 }
 
-void add_owner(file_struct_t **table, const char *config, int num, void (*callback)(int num))
+void attach(file_struct_t **table, const char *config, int num, void (*callback)(int num))
 {
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
-        printf("config file %s not exist\n", config);
+        printf("file %s not exist, can't attach\n", config);
         return;
     }
     else
     {
-        printf("config file %s exist\n", config);
+        printf("file %s exist, attaching\n", config);
         for(int i = 0; i < 2; i++)
         {
             if( NULL == s->owners[i])
@@ -384,18 +422,18 @@ void add_owner(file_struct_t **table, const char *config, int num, void (*callba
     }
 }
 
-void dele_owner(file_struct_t **table, const char *config, int num)
+void detach(file_struct_t **table, const char *config, int num)
 {
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
-        printf("config file %s not exist\n", config);
+        printf("file %s not exist, can't detach\n", config);
         return;
     }
     else
     {
-        printf("config file %s exist\n", config);
+        printf("file %s exist, detaching\n", config);
         for(int i = 0; i < 2; i++)
         {
             if( NULL != (*table)->owners[i])
@@ -411,18 +449,18 @@ void dele_owner(file_struct_t **table, const char *config, int num)
     }
 }
 
-void notify_owner(file_struct_t **table, const char *config)
+void notify(file_struct_t **table, const char *config)
 {
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
-        printf("config file %s not exist\n", config);
+        printf("file %s not exist, can't notify\n", config);
         return;
     }
     else
     {
-        printf("config file %s exist\n", config);
+        printf("file %s exist, notify\n", config);
         for(int i = 0; i < 2; i++)
         {
             if( NULL != (*table)->owners[i])
@@ -433,3 +471,29 @@ void notify_owner(file_struct_t **table, const char *config)
     }
 }
 
+
+
+
+char *split(const char *str)
+{
+    const char *start = strchr(str, '_'); 
+    if (start == NULL)
+    {
+        printf("Error: No delimiter found.\n");
+        return NULL;
+    }
+
+    int len = strlen(start + 1); // 获取下划线后字符串的长度
+    char *ret2 = (char *)malloc(len + 1); // 分配足够的内存
+    if (ret2 == NULL)
+    {
+        printf("Error: Could not allocate memory.\n");
+        return NULL;
+    }
+
+    // 复制下划线后的字符串到新分配的内存中
+    strncpy(ret2, start + 1, len);
+    ret2[len] = '\0'; 
+
+    return ret2;
+}
