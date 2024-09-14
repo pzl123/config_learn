@@ -106,96 +106,40 @@ void print_hash_table(file_struct_t * table);
 void clear_hash_table(file_struct_t *table);
 
 
+/**
+ * @brief 当config文件发生变化时，通知所有拥有者
+ * 
+ * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
+ * @param config 发生变化的config文件
+ */
+void notify_owner(file_struct_t **table, const char *config);
 
 
+/**
+ * @brief 删除指定config文件的指定拥有者
+ * 
+ * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
+ * @param config 要删除拥有者的config文件
+ * @param num 要删除的拥有者的编号
+ */
+void dele_owner(file_struct_t **table, const char *config, int num);
 
+/**
+ * @brief 添加指定config文件的指定拥有者
+ * 
+ * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
+ * @param config 要添加拥有者的config文件
+ * @param num 要添加的拥有者的编号
+ * @param callback 添加的拥有者的回调函数
+ */
+void add_owner(file_struct_t **table, const char *config, int num, void (*callback)(int num));
 
-void callback(int num)
-{
-    printf("callback from owner_num %d\n", num);
-}
-
-
-// 添加一个owner(该owner标识为num)到指定config中的owners数组
-void add_owner(file_struct_t **table, const char *config, int num, void (*callback)(int num))
-{
-    file_struct_t *s = NULL;
-    HASH_FIND_STR(*table, config, s);
-    if(s == NULL)
-    {
-        printf("config file %s not exist\n", config);
-        return;
-    }
-    else
-    {
-        printf("config file %s exist\n", config);
-        for(int i = 0; i < 2; i++)
-        {
-            if( NULL == s->owners[i])
-            {
-                s->owners[i] = (observer_t *)malloc(sizeof(observer_t));
-                if (s->owners[i] == NULL) {
-                    fprintf(stderr, "Memory allocation failed\n");
-                    exit(EXIT_FAILURE);
-                }
-                s->owners[i]->callback = callback;
-                s->owners[i]->owner_num = num;
-                return;
-            }
-        }
-    }
-}
-
-void dele_owner(file_struct_t **table, const char *config, int num)
-{
-    file_struct_t *s = NULL;
-    HASH_FIND_STR(*table, config, s);
-    if(s == NULL)
-    {
-        printf("config file %s not exist\n", config);
-        return;
-    }
-    else
-    {
-        printf("config file %s exist\n", config);
-        for(int i = 0; i < 2; i++)
-        {
-            if( NULL != (*table)->owners[i])
-            {
-                if((*table)->owners[i]->owner_num == num)
-                {
-                    free((*table)->owners[i]);
-                    (*table)->owners[i] = NULL;
-                    return;
-                }
-            }
-        }
-    }
-}
-
-void notify_owner(file_struct_t **table, const char *config)
-{
-    file_struct_t *s = NULL;
-    HASH_FIND_STR(*table, config, s);
-    if(s == NULL)
-    {
-        printf("config file %s not exist\n", config);
-        return;
-    }
-    else
-    {
-        printf("config file %s exist\n", config);
-        for(int i = 0; i < 2; i++)
-        {
-            if( NULL != (*table)->owners[i])
-            {
-                (*table)->owners[i]->callback((*table)->owners[i]->owner_num);
-            }
-        }
-    }
-}
-
-
+/**
+ * @brief 指定config文件的指定拥有者
+ * 
+ * @param num 要指定的拥有者的编号
+ */
+void callback(int num);
 
 
 #ifdef __cplusplus
