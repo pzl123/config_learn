@@ -110,6 +110,12 @@ void clear_hash_table(file_struct_t *table);
 
 
 
+void callback(int num)
+{
+    printf("callback from owner_num %d\n", num);
+}
+
+
 // 添加一个owner(该owner标识为num)到指定config中的owners数组
 void add_owner(file_struct_t **table, const char *config, int num, void (*callback)(int num))
 {
@@ -139,10 +145,7 @@ void add_owner(file_struct_t **table, const char *config, int num, void (*callba
         }
     }
 }
-void callback(int num)
-{
-    printf("callback from owner_num %d\n", num);
-}
+
 void dele_owner(file_struct_t **table, const char *config, int num)
 {
     file_struct_t *s = NULL;
@@ -165,6 +168,7 @@ void dele_owner(file_struct_t **table, const char *config, int num)
                     (*table)->owners[i] = NULL;
                     return;
                 }
+            }
         }
     }
 }

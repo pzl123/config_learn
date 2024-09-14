@@ -42,6 +42,7 @@ bool set_config(const char *name, const cJSON *config)
         }
         else
         {
+            cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
             json_to_file(s->key, s->value,CONFIG_PATH);
             notify_owner(&ALL_CONFIG_FILE, name); //通知所有者
@@ -127,9 +128,16 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         strncpy(s->path,dest_path,strlen(dest_path));
         s->path[strlen(dest_path)] = '\0';
         s->value = cJSON_Duplicate(cjson_config, 1);
+        printf("s->value: %p\n", s->value);
         if (s->value == NULL)
         {
             perror("Failed to duplicate cJSON object");
+        }
+
+        // 初始化该表的所有者
+        for(int i =0;i<2;i++)
+        {
+            s->owners[i] = NULL;
         }
 
         HASH_ADD_STR(*table, key, s);
@@ -191,11 +199,6 @@ bool config_init(char *PATH, file_struct_t **table)
         return false;
     }
 
-    // 初始化该表的拥有者
-    for(int i =0;i<2;i++)
-    {
-        (*table)->owners[i] = NULL;
-    }
     return true;
 }
 
@@ -293,9 +296,10 @@ void print_hash_table(file_struct_t * table)
         printf("path: %s\n", s->path);
         json_str = cJSON_Print(s->value);
         printf("value:\n%s\n", json_str);
+        free(json_str);
     }
     printf("----------------------------------------HASH TABLE-------------------------------------\n\n");
-    free(json_str);
+    
 }
 
 file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name)
@@ -311,17 +315,21 @@ void clear_hash_table(file_struct_t *table)
     file_struct_t *tmp;
 
     file_struct_t *temp = NULL;
-    HASH_ITER(hh, table, current_user, tmp) {
-        HASH_DEL(table, current_user); 
-        cJSON_Delete(current_user->value);
-        for(int i=0;i<2;i++)
+    HASH_ITER(hh, table, current_user, tmp)
+    {
+        printf("Deleting %s\n", current_user->key);
+        for(int i = 0; i < 2; i++)
         {
-            if(current_user->owners[i]!=NULL)
+            if (current_user->owners[i] != NULL)
             {
-                free(current_user->owners[i]); /* free owners */
+                printf("num is %d\n",current_user->owners[i]->owner_num);
+                free(current_user->owners[i]);
             }
         }
-        free(current_user); 
+        HASH_DEL(table, current_user);  /* delete it (users advances to next) */
+        printf("current_user->value: %p\n", current_user->value);
+        cJSON_Delete(current_user->value);
+        free(current_user);             /* free it */
     }
 }
 

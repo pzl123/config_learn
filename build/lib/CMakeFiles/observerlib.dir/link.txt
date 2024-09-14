@@ -1,1 +1,1 @@
-/usr/bin/cc -fPIC  -fsanitize=address -fsanitize=leak  -shared -Wl,-soname,libobserverlib.so -o ../../lib/libobserverlib.so CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.o 
+/usr/bin/cc -fPIC  -fsanitize=address -fsanitize=leak -g  -shared -Wl,-soname,libobserverlib.so -o ../../lib/libobserverlib.so CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.o 

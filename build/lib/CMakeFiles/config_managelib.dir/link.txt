@@ -1,1 +1,1 @@
-/usr/bin/cc -fPIC  -fsanitize=address -fsanitize=leak  -shared -Wl,-soname,libconfig_managelib.so -o ../../lib/libconfig_managelib.so CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.o 
+/usr/bin/cc -fPIC  -fsanitize=address -fsanitize=leak -g  -shared -Wl,-soname,libconfig_managelib.so -o ../../lib/libconfig_managelib.so CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c.o 

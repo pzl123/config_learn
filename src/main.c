@@ -35,9 +35,17 @@ int main() {
     add_owner(&ALL_CONFIG_FILE, "config.json", 1, callback);
     add_owner(&ALL_CONFIG_FILE, "config.json", 2, callback);
 
+    // file_struct_t *s = NULL;
+    // HASH_FIND_STR(ALL_CONFIG_FILE, "config.json", s);
+    // printf("s->owners[0]: %p\n", s->owners[0]);
+    // printf("s->owners[1]: %p\n", s->owners[1]);
 
-    new = cJSON_Parse(message);
-
+    // printf("ALL_CONFIG_FILE->owners[0]: %p\n", ALL_CONFIG_FILE->owners[0]);
+    // printf("ALL_CONFIG_FILE->owners[1]: %p\n", ALL_CONFIG_FILE->owners[1]);
+    
+    new = cJSON_Parse(new_message);
+    // new = cJSON_Parse(message);
+// 
     set_config("config.json", new);
 
     // get_default("default_config.json",&new);
@@ -54,9 +62,10 @@ int main() {
     // cJSON_Delete(config);
     //  内存释放区
 
+    // print_hash_table(ALL_CONFIG_FILE);
+
     clear_hash_table(ALL_CONFIG_FILE);
     // clear_hash_table(ALL_DEFAULT_FILE);
-
 
 
 
