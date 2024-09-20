@@ -1,0 +1,8 @@
+2024-09-21 00:54:18.12 INFO   (my_cat:/home/zlgmcu/project/config_learn/src/main.c:133) - -------------------------------hello, zlog--------------------------------------
+2024-09-21 01:19:53. 1 INFO   (my_cat:/home/zlgmcu/project/config_learn/src/main.c:133) - -------------------------------hello, zlog--------------------------------------
+2024-09-21 01:19:53. 1 DEBUG  (my_cat:/home/zlgmcu/project/config_learn/src/main.c:134) - -------------------------------hello, zlog--------------------------------------
+2024-09-21 01:21:16. 1 INFO   (my_cat:/home/zlgmcu/project/config_learn/src/main.c:133) - -------------------------------hello, zlog--------------------------------------
+2024-09-21 01:21:16. 1 DEBUG  (my_cat:/home/zlgmcu/project/config_learn/src/main.c:134) - -------------------------------hello, zlog--------------------------------------
+2024-09-21 01:21:16. 1 NOTICE (my_cat:/home/zlgmcu/project/config_learn/src/main.c:135) - -------------------------------hello, zlog--------------------------------------
+2024-09-21 01:21:16. 1 WARN   (my_cat:/home/zlgmcu/project/config_learn/src/main.c:136) - -------------------------------hello, zlog--------------------------------------
+2024-09-21 01:21:16. 1 FATAL  (my_cat:/home/zlgmcu/project/config_learn/src/main.c:138) - -------------------------------hello, zlog--------------------------------------

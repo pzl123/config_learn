@@ -16,6 +16,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "../third_party/cJSON/include"
   "../third_party/cJSONx/include"
   "../third_party/uthash/include"
+  "../third_party/zlog/include"
   "../include/config/include"
   )
 

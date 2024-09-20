@@ -40,6 +40,12 @@ stdio.h
 assert.h
 -
 
+../third_party/zlog/include/zlog.h
+stdarg.h
+-
+stdio.h
+-
+
 /home/zlgmcu/project/config_learn/src/main.c
 config_manage.h
 /home/zlgmcu/project/config_learn/src/config_manage.h
@@ -53,4 +59,6 @@ pthread.h
 -
 unistd.h
 -
+zlog.h
+/home/zlgmcu/project/config_learn/src/zlog.h
 

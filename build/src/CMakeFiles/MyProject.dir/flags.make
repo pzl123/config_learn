@@ -6,5 +6,5 @@ C_FLAGS =  -fsanitize=address -fsanitize=leak -g   -std=gnu99
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/zlgmcu/project/config_learn/include/config_manage/include -I/home/zlgmcu/project/config_learn/include/observer/include -I/home/zlgmcu/project/config_learn/include/uthash/include -I/home/zlgmcu/project/config_learn/third_party/cJSON/include -I/home/zlgmcu/project/config_learn/third_party/cJSONx/include -I/home/zlgmcu/project/config_learn/third_party/uthash/include -I/home/zlgmcu/project/config_learn/include/config/include 
+C_INCLUDES = -I/home/zlgmcu/project/config_learn/include/config_manage/include -I/home/zlgmcu/project/config_learn/include/observer/include -I/home/zlgmcu/project/config_learn/include/uthash/include -I/home/zlgmcu/project/config_learn/third_party/cJSON/include -I/home/zlgmcu/project/config_learn/third_party/cJSONx/include -I/home/zlgmcu/project/config_learn/third_party/uthash/include -I/home/zlgmcu/project/config_learn/third_party/zlog/include -I/home/zlgmcu/project/config_learn/include/config/include 
 

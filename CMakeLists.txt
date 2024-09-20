@@ -19,6 +19,8 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/third_party/cJSON/include
     ${PROJECT_SOURCE_DIR}/third_party/cJSONx/include
     ${PROJECT_SOURCE_DIR}/third_party/uthash/include
+    ${PROJECT_SOURCE_DIR}/third_party/uthash/include
+    ${PROJECT_SOURCE_DIR}/third_party/zlog/include
 )
 
 # 设置编译选项

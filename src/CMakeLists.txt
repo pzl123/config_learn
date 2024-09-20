@@ -16,6 +16,7 @@ target_link_libraries(MyProject
     cJSONxlib
     config_managelib
     observerlib
-
     pthread
+    # zlog
+    ${PROJECT_SOURCE_DIR}/lib/libzlog.so
 )

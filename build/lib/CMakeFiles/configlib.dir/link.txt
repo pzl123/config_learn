@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC  -fsanitize=address -fsanitize=leak  -shared -Wl,-soname,libconfiglib.so -o ../../lib/libconfiglib.so CMakeFiles/configlib.dir/__/src/config_fun.c.o 

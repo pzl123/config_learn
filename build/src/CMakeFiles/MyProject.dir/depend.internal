@@ -7,4 +7,5 @@ src/CMakeFiles/MyProject.dir/main.c.o
  ../third_party/cJSON/include/cJSON.h
  ../third_party/uthash/include/uthash.h
  ../third_party/uthash/include/utlist.h
+ ../third_party/zlog/include/zlog.h
  /home/zlgmcu/project/config_learn/src/main.c

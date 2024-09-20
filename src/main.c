@@ -7,6 +7,31 @@
 #include <pthread.h>
 #include <unistd.h>
 
+#include "zlog.h"
+
+zlog_category_t *c;
+
+int myzlog_init()
+{
+    // rc = zlog_init("./zlog.conf");
+    int rc = zlog_init("/home/zlgmcu/project/config_learn/bin/zlog.conf");
+    if(rc)
+    {
+        printf("init failed\n");
+        return -1;
+    }
+ 
+    c = zlog_get_category("my_cat");
+    if(!c)
+    {
+        printf("get cat fail\n");
+        zlog_fini();
+        return -2;
+    }
+
+
+}
+
 
 char *message =
 "{                              \
@@ -81,6 +106,8 @@ void *thread_func2(void *str)
 
 int main(void)
 {
+    myzlog_init();
+
     pthread_t tid1, tid2;
     cJSON *new1 = NULL; 
     
@@ -102,8 +129,16 @@ int main(void)
     new1 = cJSON_Parse(new_message); 
     (void)detach(&ALL_DEFAULT_FILE, "default_config.json", 1);
     set_default("default_config.json", new1);
+    
+    zlog_info(c, "-------------------------------hello, zlog--------------------------------------");
+    zlog_debug(c, "-------------------------------hello, zlog--------------------------------------");
+    zlog_notice(c, "-------------------------------hello, zlog--------------------------------------");
+    zlog_warn(c, "-------------------------------hello, zlog--------------------------------------");
+    zlog_error(c, "-------------------------------hello, zlog--------------------------------------");
+    zlog_fatal(c, "-------------------------------hello, zlog--------------------------------------");
 
 
+    // zlog_debug("my_cat", "set default success");
     // pthread_create(&tid1, NULL, thread_func1, (void *)message);
     // pthread_create(&tid2, NULL, thread_func2, (void *)new_message);
 
@@ -123,5 +158,6 @@ int main(void)
     // print_hash_table(ALL_DEFAULT_FILE);
     clear_all_hash_table();
 
+    zlog_fini();
     return 0;
 }

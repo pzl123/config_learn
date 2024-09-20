@@ -2,6 +2,7 @@
     "files.associations": {
         "stdlib.h": "c",
         "cjson.h": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "unistd.h": "c"
     }
 }
