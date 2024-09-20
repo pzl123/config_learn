@@ -7,4 +7,5 @@ lib/CMakeFiles/config_managelib.dir/__/include/config_manage/src/config_manage.c
  ../third_party/cJSONx/include/cJSONx.h
  ../third_party/uthash/include/uthash.h
  ../third_party/uthash/include/utlist.h
+ ../third_party/zlog/include/zlog.h
  /home/zlgmcu/project/config_learn/include/config_manage/src/config_manage.c

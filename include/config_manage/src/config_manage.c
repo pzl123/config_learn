@@ -12,7 +12,7 @@
 #include "cJSON.h"
 #include "cJSONx.h"
 #include "utlist.h"
-
+#include "zlog.h"
 
 
 
@@ -20,7 +20,7 @@
 
 file_struct_t *ALL_CONFIG_FILE = NULL;
 file_struct_t *ALL_DEFAULT_FILE = NULL;
-
+extern zlog_category_t *c;
 
 
 
@@ -44,7 +44,7 @@ bool set_config(const char *name, const cJSON *config)
     file_struct_t *s =find_config_name(ALL_CONFIG_FILE, name);
     if (NULL == s)
     {
-        printf("no such config %s in path %s\n",name,CONFIG_PATH);
+        zlog_warn(c,"no such config %s in path %s",name,CONFIG_PATH);
         return false;
     }
     else
@@ -54,7 +54,7 @@ bool set_config(const char *name, const cJSON *config)
         if(cJSON_Compare(s->value, config, true))
         {
             pthread_rwlock_unlock(&s->valueLock);
-            printf("Same, no need to modify.\n");
+            zlog_info(c, "Same, no need to modify.");
             return false;
         }
         else
@@ -76,7 +76,7 @@ bool get_config(const char *name, cJSON **config)
     file_struct_t *s = find_config_name(ALL_CONFIG_FILE, name);
     if (NULL == s)
     {
-        printf("no such default config %s in path %s\n",name,DEFAULT_CONFIG_PATH);
+        zlog_warn(c, "no such default config %s in path %s",name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
@@ -96,7 +96,7 @@ bool set_default(const char *name, const cJSON *config)
     file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);
     if (NULL == s)
     {
-        printf("no such default config %s in path %s\n",name,DEFAULT_CONFIG_PATH);
+        zlog_warn(c,"no such default config %s in path %s",name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
@@ -106,7 +106,7 @@ bool set_default(const char *name, const cJSON *config)
         if(cJSON_Compare(s->value, config, true))
         {
             pthread_rwlock_unlock(&s->valueLock);
-            printf("Same default, no need to modify.\n");
+            zlog_info(c, "Same default, no need to modify.");
             return false;
         }
         else
@@ -125,7 +125,7 @@ bool set_default(const char *name, const cJSON *config)
             char *buffer = split(s->key);
             if(NULL == buffer)
             {
-                printf("split error\n");
+                zlog_error(c,"split error");
                 return false;
             }
             else
@@ -145,7 +145,7 @@ bool get_default(const char *name, cJSON **config)
     file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);
     if (NULL == s)
     {
-        printf("no such default config %s in path %s\n",name,DEFAULT_CONFIG_PATH);
+        zlog_warn(c,"no such default config %s in path %s",name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
@@ -169,7 +169,7 @@ static bool add_config_name(file_struct_t **table, const char *config_name, cons
         s = (file_struct_t*)malloc(sizeof(file_struct_t));
         if (NULL == s)
         {
-            printf("malloc error\n");
+            zlog_error(c,"malloc error");
             return false;
         }
         strncpy(s->key,config_name,strlen(config_name));
@@ -181,7 +181,7 @@ static bool add_config_name(file_struct_t **table, const char *config_name, cons
         s->value = cJSON_Duplicate(cjson_config, 1);
         if (s->value == NULL)
         {
-            printf("Failed to duplicate cJSON object\n");
+            zlog_error(c, "Failed to duplicate cJSON object");
             free(s);
             return false;
         }
@@ -194,14 +194,14 @@ static bool add_config_name(file_struct_t **table, const char *config_name, cons
         // 初始化读写锁
         if (pthread_rwlock_init(&(s->valueLock), NULL) != 0)
         {
-            perror("Failed to initialize valueLock");
+            zlog_error(c, "Failed to initialize valueLock");
             free(s);
             return false;
         }
 
         if (pthread_rwlock_init(&(s->ownersLock), NULL) != 0)
         {
-            perror("Failed to initialize ownersLock");
+            zlog_error(c, "Failed to initialize ownersLock");
             pthread_rwlock_destroy(&(s->valueLock)); // 清理 valueLock
             free(s);
             return false;
@@ -210,7 +210,7 @@ static bool add_config_name(file_struct_t **table, const char *config_name, cons
     }
     else
     {
-        printf("file already exits in hash table\n ");
+        zlog_info(c,"file already exits in hash table");
         return true;
     }
 
@@ -222,14 +222,14 @@ bool all_config_init(void)
     ret = config_init(CONFIG_PATH, &ALL_CONFIG_FILE);
     if (ret == 0)
     {
-        printf("Failed to initialize config\n");
+        zlog_fatal(c,"Failed to initialize config");
         return false;
     }
     
     ret = config_init(DEFAULT_CONFIG_PATH, &ALL_DEFAULT_FILE);
     if (ret == 0)
     {
-        printf("Failed to initialize default config\n");
+        zlog_fatal(c,"Failed to initialize default config");
         return false;
     }
     return true;
@@ -241,7 +241,7 @@ static bool config_init(char *PATH, file_struct_t **table)
     DIR *dp = opendir(PATH);
     if(dp == NULL)
     {
-        perror("opendir");
+        zlog_error(c,"opendir");
         return false;
     }
     int files_found = 0;
@@ -257,7 +257,7 @@ static bool config_init(char *PATH, file_struct_t **table)
         memset(&buf, 0, sizeof(buf));
         if (stat(dest_path, &buf) != 0)
         {
-            perror("stat error");
+            zlog_error(c, "stat error");
             return false;
         }
 
@@ -268,14 +268,14 @@ static bool config_init(char *PATH, file_struct_t **table)
             {
                 if(add_config_name(table,file->d_name, cjson_config))
                 {
-                    printf("Successfully loaded JSON from %s\n", dest_path);
+                    zlog_info(c,"Successfully loaded JSON from %s", dest_path);
                 }
                 files_found++;
                 cJSON_Delete(cjson_config);
             }
             else
             {
-                fprintf(stderr, "Failed to load or parse JSON from %s\n", dest_path);
+                zlog_error(c, "Failed to load or parse JSON from %s", dest_path);
             }
         }
     }
@@ -283,7 +283,7 @@ static bool config_init(char *PATH, file_struct_t **table)
 
     if (files_found == 0)
     {
-        printf("No files in the target directory\n");
+        zlog_warn(c, "No files in the target directory");
         return false;
     }
 
@@ -295,7 +295,7 @@ static bool file_to_json(const char *target_file, cJSON **cjson_config)
     FILE* fp = fopen(target_file,"r");
     if(fp == NULL)
     {
-        perror("open file error ");
+        zlog_error(c,"open file error ");
         return false;
     }
 
@@ -313,7 +313,7 @@ static bool file_to_json(const char *target_file, cJSON **cjson_config)
     char * readbuf = (char *)malloc(file_len + 1);
     if(NULL == readbuf)
     {
-        perror("malloc error");
+        zlog_error(c, "malloc error");
         fclose(fp);
         return false;
     }
@@ -323,7 +323,7 @@ static bool file_to_json(const char *target_file, cJSON **cjson_config)
 
     if(bytes_read != file_len)
     {
-        perror("Unable to read full file");
+        zlog_error(c,"Unable to read full file");
         free(readbuf);
         return false;
     }
@@ -333,7 +333,7 @@ static bool file_to_json(const char *target_file, cJSON **cjson_config)
     *cjson_config = cJSON_Parse(readbuf);
     if(*cjson_config == NULL)
     {
-        fprintf(stderr, "Failed to parse JSON\n");
+        zlog_error(c, "Failed to parse JSON");
         free(readbuf);
         return false;
     }
@@ -351,7 +351,7 @@ static bool json_to_file(const char *config_name, const cJSON *cjson_config, cha
     FILE *target_file = fopen(target_file_path , "w");
     if(NULL == target_file)
     {
-        perror("Failed to open the target file");
+        zlog_error(c, "Failed to open the target file");
         free(json_string);
         return false;
     }
@@ -366,7 +366,7 @@ static bool json_to_file(const char *config_name, const cJSON *cjson_config, cha
         {
             if(fsync(fd) != 0)
             {
-                perror("fsync failed");
+                zlog_error(c,"fsync failed");
                 fclose(target_file);
                 free(json_string);
                 return false;
@@ -374,7 +374,7 @@ static bool json_to_file(const char *config_name, const cJSON *cjson_config, cha
         }
         else
         {
-            perror("Failed to get file descriptor");
+            zlog_error(c,"Failed to get file descriptor");
             fclose(target_file);
             free(json_string);
             return false;
@@ -384,7 +384,7 @@ static bool json_to_file(const char *config_name, const cJSON *cjson_config, cha
         return true;
     }else
     {
-        printf("Failed to serialize cJSON object to string.\n");
+        zlog_error(c,"Failed to serialize cJSON object to string.");
         fclose(target_file);
         return false;
     }
@@ -394,16 +394,16 @@ void print_hash_table(file_struct_t * table)
 {
     file_struct_t *s = NULL;
     char *json_str = NULL;
-    printf("\n"
-           "----------------------------------------HASH TABLE-------------------------------------\n");
+    zlog_info(c,"\n"
+           "----------------------------------------HASH TABLE-------------------------------------");
     for (s = table; s != NULL; s = s->hh.next) {
-        printf("config_name: %s\n", s->key);
-        printf("path: %s\n", s->path);
+        printf("config_name: %s", s->key);
+        printf("path: %s", s->path);
         json_str = cJSON_Print(s->value);
-        printf("value:\n%s\n", json_str);
+        printf("value:\n%s", json_str);
         free(json_str);
     }
-    printf("----------------------------------------HASH TABLE-------------------------------------\n\n");
+    zlog_info(c, "----------------------------------------HASH TABLE-------------------------------------\n");
     
 }
 
@@ -450,28 +450,29 @@ void clear_all_hash_table(void)
 
 void callback(int num)
 {
-    printf("callback from owner_num %d\n", num);
+    zlog_info(c,"callback from owner_num %d", num);
 }
 
 
 bool attach(file_struct_t **table, const char *config, int num, void (*callback)(int num))
 {
+    zlog_info(c, "attach %s", config);
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
-        printf("file %s not exist, can't attach\n", config);
+        zlog_warn(c,"file %s not exist, can't attach", config);
         return false;
     }
     else
     {
-        printf("file %s exist, attaching\n", config);
+        zlog_info(c,"file %s exist, attaching", config);
         observer_t *new_owner = (observer_t *)malloc(sizeof(observer_t));
         if(NULL == new_owner)
         {
             //解写锁
             pthread_rwlock_unlock(&s->ownersLock);
-            printf("new_owner malloc failed\n");
+            zlog_error(c,"new_owner malloc failed");
             return false;
         }
         new_owner->callback = callback;
@@ -497,7 +498,7 @@ bool attach(file_struct_t **table, const char *config, int num, void (*callback)
         }
         //解写锁
         pthread_rwlock_unlock(&s->ownersLock);
-        printf("file %s exist, and owner_num %d exist\n", config, num);
+        zlog_info(c,"file %s exist, and owner_num %d exist", config, num);
         return true;
     }
 }
@@ -516,7 +517,7 @@ static observer_t *find_owner(file_struct_t *s, int owner_num)
         head = head->next;
     }
     pthread_rwlock_unlock(&s->ownersLock);
-    printf("owner_num %d does not exist in file %s\n", owner_num, s->key);
+    zlog_info(c,"owner_num %d does not exist in file %s", owner_num, s->key);
     return NULL;
 }
 
@@ -527,7 +528,7 @@ bool detach(file_struct_t **table, const char *config, int num)
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
-        printf("file %s not exist, can't detach\n", config);
+        zlog_warn(c,"file %s not exist, can't detach", config);
         return  false;
     }
     else
@@ -535,10 +536,10 @@ bool detach(file_struct_t **table, const char *config, int num)
         observer_t *finded_owner = find_owner(s,num);
         if (finded_owner == NULL)
         {
-            printf("owner_num %d does not exist in file %s\n", num, config);
+            zlog_warn(c,"owner_num %d does not exist in file %s", num, config);
             return false;
         }
-        printf("file %s exist, detaching\n", config);
+        zlog_info(c,"file %s exist, detaching", config);
         //加写锁
         pthread_rwlock_wrlock(&s->ownersLock);
         if(finded_owner == s->owners)// 处理头节点
@@ -550,7 +551,7 @@ bool detach(file_struct_t **table, const char *config, int num)
             }
             free(finded_owner);
             pthread_rwlock_unlock(&s->ownersLock);
-            printf("owner_num %d is the first owner of file %s\n", num, config);
+            zlog_info(c, "owner_num %d is the first owner of file %s", num, config);
             return true;
         }
         else if(finded_owner->prev != NULL)// 处理中间节点
@@ -562,7 +563,7 @@ bool detach(file_struct_t **table, const char *config, int num)
             }
             free(finded_owner);
             pthread_rwlock_unlock(&s->ownersLock);
-            printf("owner_num %d is the middle owner of file %s\n", num, config);
+            zlog_info(c,"owner_num %d is the middle owner of file %s", num, config);
             return true;
         }
         else if (finded_owner->next == NULL && finded_owner->prev != NULL)
@@ -570,7 +571,7 @@ bool detach(file_struct_t **table, const char *config, int num)
             finded_owner->prev->next = NULL;
             free(finded_owner);
             pthread_rwlock_unlock(&s->ownersLock);
-            printf("owner_num %d is the last owner of file %s\n", num, config);
+            zlog_info(c,"owner_num %d is the last owner of file %s", num, config);
             return true;
             
         }
@@ -579,7 +580,7 @@ bool detach(file_struct_t **table, const char *config, int num)
             //解写锁
             free(finded_owner);
             pthread_rwlock_unlock(&s->ownersLock);
-            printf("Error: Unknown node type\n");
+            zlog_error(c,"Error: Unknown node type");
             return false;
         }
     }
@@ -591,12 +592,12 @@ bool notify(file_struct_t **table, const char *config)
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
-        printf("file %s not exist, can't detach\n", config);
+        zlog_warn(c,"file %s not exist, can't detach", config);
         return  false;
     }
     else
     {
-        printf("file %s exist, notifying\n", config);
+        zlog_info(c,"file %s exist, notifying", config);
         //加读锁
         pthread_rwlock_rdlock(&s->ownersLock);
         observer_t *head = s->owners;
@@ -633,7 +634,7 @@ static char *split(const char *str)
     const char *start = strchr(str, '_'); 
     if (start == NULL)
     {
-        printf("Error: No delimiter found.\n");
+        zlog_error(c,"Error: No delimiter found.");
         return NULL;
     }
 
@@ -641,7 +642,7 @@ static char *split(const char *str)
     char *ret2 = (char *)malloc(len + 1); // 分配足够的内存
     if (ret2 == NULL)
     {
-        printf("Error: Could not allocate memory.\n");
+        zlog_error(c,"Error: Could not allocate memory.");
         return NULL;
     }
 

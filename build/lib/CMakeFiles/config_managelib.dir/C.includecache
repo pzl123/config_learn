@@ -44,6 +44,12 @@ stdio.h
 assert.h
 -
 
+../third_party/zlog/include/zlog.h
+stdarg.h
+-
+stdio.h
+-
+
 /home/zlgmcu/project/config_learn/include/config_manage/src/config_manage.c
 config_manage.h
 /home/zlgmcu/project/config_learn/include/config_manage/src/config_manage.h
@@ -69,4 +75,6 @@ cJSONx.h
 /home/zlgmcu/project/config_learn/include/config_manage/src/cJSONx.h
 utlist.h
 /home/zlgmcu/project/config_learn/include/config_manage/src/utlist.h
+zlog.h
+/home/zlgmcu/project/config_learn/include/config_manage/src/zlog.h
 
