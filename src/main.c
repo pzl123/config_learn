@@ -31,16 +31,41 @@ char *new_message =
 extern file_struct_t *ALL_CONFIG_FILE;
 extern file_struct_t *ALL_DEFAULT_FILE;
 
-void *thread_func(void *str)
+void *thread_func1(void *str)
 {
     cJSON *new1 = NULL; 
     new1 = cJSON_Parse((char *)str); 
     while(1)
     {
+        (void)attach(&ALL_CONFIG_FILE, "config.json", 1, callback);
+        (void)attach(&ALL_CONFIG_FILE, "config.json", 2, callback);
+
+        (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 1, callback);
+        (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 2, callback);
         // printf("thread %ld is running\n", pthread_self());
         set_default("default_config.json", new1);
         // printf("thread %ld is end, set default success\n",pthread_self());
-        // sleep(1);
+        // sleep(5);
+    }
+    cJSON_Delete(new1);
+}
+
+
+void *thread_func2(void *str)
+{
+    cJSON *new1 = NULL; 
+    new1 = cJSON_Parse((char *)str); 
+    while(1)
+    {
+        (void)detach(&ALL_CONFIG_FILE, "config.json", 1);
+        (void)detach(&ALL_CONFIG_FILE, "config.json", 2);
+
+        (void)detach(&ALL_DEFAULT_FILE, "default_config.json", 1);
+        (void)detach(&ALL_DEFAULT_FILE, "default_config.json", 2);
+        // printf("thread %ld is running\n", pthread_self());
+        set_default("default_config.json", new1);
+        // printf("thread %ld is end, set default success\n",pthread_self());
+        // sleep(5);
     }
     cJSON_Delete(new1);
 }
@@ -51,14 +76,10 @@ int main(void)
 
     all_config_init();
 
-    (void)attach(&ALL_CONFIG_FILE, "config.json", 1, callback);
-    (void)attach(&ALL_CONFIG_FILE, "config.json", 2, callback);
 
-    (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 1, callback);
-    attach(&ALL_DEFAULT_FILE, "default_config.json", 2, callback);
 
-    pthread_create(&tid1, NULL, thread_func, (void *)message);
-    pthread_create(&tid2, NULL, thread_func, (void *)new_message);
+    pthread_create(&tid1, NULL, thread_func1, (void *)message);
+    pthread_create(&tid2, NULL, thread_func2, (void *)new_message);
 
     pthread_join(tid1, NULL);
     pthread_join(tid2, NULL);

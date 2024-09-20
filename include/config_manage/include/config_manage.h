@@ -145,7 +145,7 @@ bool get_default(const char *name, cJSON **config);
  * @param config 要删除观察者的config文件
  * @param num 要删除的观察者的编号
  */
-void detach(file_struct_t **table, const char *config, int num);
+bool detach(file_struct_t **table, const char *config, int num);
 
 /**
  * @brief 添加指定config文件的指定观察者
@@ -155,7 +155,7 @@ void detach(file_struct_t **table, const char *config, int num);
  * @param num 要添加的观察者的编号
  * @param callback 添加的观察者的回调函数
  */
-void attach(file_struct_t **table, const char *config, int num, void (*callback)(int num));
+bool attach(file_struct_t **table, const char *config, int num, void (*callback)(int num));
 
 
 /**
@@ -164,7 +164,7 @@ void attach(file_struct_t **table, const char *config, int num, void (*callback)
  * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
  * @param config 要通知的config文件
  */
-void notify(file_struct_t **table, const char *config);
+bool notify(file_struct_t **table, const char *config);
 
 void callback(int num); // 测试回调函数
 

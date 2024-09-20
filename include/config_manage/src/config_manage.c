@@ -27,7 +27,7 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
 static file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name);
 static bool file_to_json(const char *target_file, cJSON **cjson_config);
 static cJSON *json_to_file(const char *config_name, const cJSON *cjson_config,char *PATH);
-void notify(file_struct_t **table, const char *config);
+// void notify(file_struct_t **table, const char *config);
 bool config_init(char *PATH, file_struct_t **table);
 char *split(const char *str);
 
@@ -437,74 +437,92 @@ void callback(int num)
     printf("callback from owner_num %d\n", num);
 }
 
-void attach(file_struct_t **table, const char *config, int num, void (*callback)(int num))
+bool attach(file_struct_t **table, const char *config, int num, void (*callback)(int num))
 {
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
         printf("file %s not exist, can't attach\n", config);
-        return;
+        return false;
     }
     else
     {
         printf("file %s exist, attaching\n", config);
+        //加写锁
+        pthread_rwlock_wrlock(&s->ownersLock);
         for(int i = 0; i < 2; i++)
         {
             if( NULL == s->owners[i])
             {
                 s->owners[i] = (observer_t *)malloc(sizeof(observer_t));
-                if (s->owners[i] == NULL) {
+                if (s->owners[i] == NULL)
+                {
                     fprintf(stderr, "Memory allocation failed\n");
-                    exit(EXIT_FAILURE);
+                    //解写锁
+                    pthread_rwlock_unlock(&s->ownersLock);
+                    return false;
                 }
                 s->owners[i]->callback = callback;
                 s->owners[i]->owner_num = num;
-                return;
+                //解写锁
+                pthread_rwlock_unlock(&s->ownersLock);
+                return true;
             }
+            printf("file %s exist, and owner_num %d exist\n", config, num);
         }
+        //解写锁
+        pthread_rwlock_unlock(&s->ownersLock);
+        return false;
     }
 }
 
-void detach(file_struct_t **table, const char *config, int num)
+bool detach(file_struct_t **table, const char *config, int num)
 {
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
         printf("file %s not exist, can't detach\n", config);
-        return;
+        return  false;
     }
     else
     {
         printf("file %s exist, detaching\n", config);
+        //加写锁
+        pthread_rwlock_wrlock(&s->ownersLock);
         for(int i = 0; i < 2; i++)
         {
-            if( NULL != (*table)->owners[i])
+            if( (NULL != (*table)->owners[i])&&((*table)->owners[i]->owner_num == num))
             {
-                if((*table)->owners[i]->owner_num == num)
-                {
-                    free((*table)->owners[i]);
-                    (*table)->owners[i] = NULL;
-                    return;
-                }
+                free((*table)->owners[i]);
+                (*table)->owners[i] = NULL;
+                //解写锁
+                pthread_rwlock_unlock(&s->ownersLock);
+                return true;
             }
         }
+        printf("file %s exist, but owner_num %d not exist\n", config, num);
+        //解写锁
+        pthread_rwlock_unlock(&s->ownersLock);
+        return false;
     }
 }
 
-void notify(file_struct_t **table, const char *config)
+bool notify(file_struct_t **table, const char *config)
 {
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
         printf("file %s not exist, can't notify\n", config);
-        return;
+        return false;
     }
     else
     {
         printf("file %s exist, notify\n", config);
+        //加读锁
+        pthread_rwlock_rdlock(&s->ownersLock);
         for(int i = 0; i < 2; i++)
         {
             if( NULL != (*table)->owners[i])
@@ -512,6 +530,9 @@ void notify(file_struct_t **table, const char *config)
                 (*table)->owners[i]->callback((*table)->owners[i]->owner_num);
             }
         }
+        //解读锁
+        pthread_rwlock_unlock(&s->ownersLock);
+        return true;
     }
 }
 
