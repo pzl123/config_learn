@@ -83,6 +83,7 @@ MyProject_EXTERNAL_OBJECTS =
 ../bin/MyProject: ../lib/libcJSONxlib.so
 ../bin/MyProject: ../lib/libconfig_managelib.so
 ../bin/MyProject: ../lib/libobserverlib.so
+../bin/MyProject: ../lib/libzlog.so
 ../bin/MyProject: src/CMakeFiles/MyProject.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zlgmcu/project/config_learn/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable ../../bin/MyProject"
 	cd /home/zlgmcu/project/config_learn/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MyProject.dir/link.txt --verbose=$(VERBOSE)

@@ -16,3 +16,4 @@ target_include_directories(observerlib PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/observer/include>
     $<INSTALL_INTERFACE:include>
 )
+
