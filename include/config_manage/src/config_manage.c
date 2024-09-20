@@ -54,6 +54,7 @@ bool set_config(const char *name, const cJSON *config)
         }
         else
         {
+   
             // 加写锁
             pthread_rwlock_wrlock(&s->valueLock);
             cJSON_Delete(s->value);
@@ -61,6 +62,7 @@ bool set_config(const char *name, const cJSON *config)
             json_to_file(s->key, s->value,CONFIG_PATH);
             // 解写锁
             pthread_rwlock_unlock(&s->valueLock);
+
             notify(&ALL_CONFIG_FILE, name); //通知所有者
             return true;
         }
@@ -105,9 +107,13 @@ bool set_default(const char *name, const cJSON *config)
         }
         else
         {
+            // 加写锁
+            pthread_rwlock_wrlock(&s->valueLock);
             cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
             json_to_file(s->key, s->value,DEFAULT_CONFIG_PATH);
+            // 解写锁
+            pthread_rwlock_unlock(&s->valueLock);
 
             char *buffer = split(s->key);
             if(NULL == buffer)
@@ -117,7 +123,7 @@ bool set_default(const char *name, const cJSON *config)
             }
             else
             {
-                set_config(buffer, s->value);
+                set_config(buffer, config);
             }
             notify(&ALL_DEFAULT_FILE, name); //通知所有者
 

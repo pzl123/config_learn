@@ -49,4 +49,8 @@ stdio.h
 -
 dirent.h
 -
+pthread.h
+-
+unistd.h
+-
 
