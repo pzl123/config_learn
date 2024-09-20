@@ -59,6 +59,7 @@ void *thread_func2(void *str)
 {
     cJSON *new1 = NULL; 
     new1 = cJSON_Parse((char *)str); 
+    // new1 = cJSON_Parse(new_message); 
     while(1)
     {
         int i = rand() % 10;
@@ -81,24 +82,39 @@ void *thread_func2(void *str)
 int main(void)
 {
     pthread_t tid1, tid2;
+    cJSON *new1 = NULL; 
+    
+    new1 = cJSON_Parse(message); 
 
     all_config_init();
 
+    (void)attach(&ALL_CONFIG_FILE, "config.json", 1, callback);
+    (void)attach(&ALL_CONFIG_FILE, "config.json", 2, callback);
+    (void)attach(&ALL_CONFIG_FILE, "config.json", 3, callback);
 
+    (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 1, callback);
+    (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 2, callback);
+    (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 3, callback);
 
-    pthread_create(&tid1, NULL, thread_func1, (void *)message);
-    pthread_create(&tid2, NULL, thread_func2, (void *)new_message);
+    set_default("default_config.json", new1);
 
-    pthread_join(tid1, NULL);
-    pthread_join(tid2, NULL);
+    cJSON_Delete(new1);
+    new1 = cJSON_Parse(new_message); 
+    (void)detach(&ALL_DEFAULT_FILE, "default_config.json", 1);
+    set_default("default_config.json", new1);
+    // pthread_create(&tid1, NULL, thread_func1, (void *)message);
+    // pthread_create(&tid2, NULL, thread_func2, (void *)new_message);
+
+    // pthread_join(tid1, NULL);
+    // pthread_join(tid2, NULL);
 
     // get_default("default_config.json", &new1);
     // str = cJSON_Print(new1);
     // printf("%s\n", str); 
     // free(str);
 
-    // cJSON_Delete(new1);
-    // new1 = NULL; // 避免悬空指针
+    cJSON_Delete(new1);
+    new1 = NULL; // 避免悬空指针
 
     // print_hash_table(ALL_CONFIG_FILE);
     // printf("\n");

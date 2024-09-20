@@ -31,6 +31,7 @@ static cJSON *json_to_file(const char *config_name, const cJSON *cjson_config,ch
 // void notify(file_struct_t **table, const char *config);
 bool config_init(char *PATH, file_struct_t **table);
 char *split(const char *str);
+void delete_all_owners(file_struct_t *s);
 
 /**
  * ----------------------------------------------------------------------------------------------------------------
@@ -401,18 +402,8 @@ void clear_hash_table(file_struct_t *table)
     HASH_ITER(hh, table, current_user, tmp)
     {
         // 清除所有用户
-        DL_FOREACH_SAFE(current_user->owners,elt,tmp2)
-        {
-            DL_DELETE(current_user->owners, elt);
-        }	
+        delete_all_owners(current_user);
 
-        // for(int i = 0; i < 2; i++)
-        // {
-        //     if (current_user->owners[i] != NULL)
-        //     {
-        //         free(current_user->owners[i]);
-        //     }
-        // }
         //销毁锁
         (void)pthread_rwlock_destroy(&current_user->valueLock);
         (void)pthread_rwlock_destroy(&current_user->ownersLock);
@@ -602,7 +593,17 @@ bool notify(file_struct_t **table, const char *config)
     
 }
 
-
+//删除所有节点
+void delete_all_owners(file_struct_t *s) {
+    pthread_rwlock_wrlock(&s->ownersLock);
+    observer_t *head = s->owners;
+    while (head != NULL) {
+        observer_t *temp = head;
+        head = head->next;
+        free(temp);
+    }
+    s->owners = NULL;
+}
 
 
 char *split(const char *str)

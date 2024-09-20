@@ -101,6 +101,21 @@ void traverse_owners(file_struct_t **table) {
     pthread_rwlock_unlock(&s->ownersLock);
 }
 
+
+//删除所有节点
+void delete_all_owners(file_struct_t **table) {
+    file_struct_t *s = *table;
+    pthread_rwlock_wrlock(&s->ownersLock);
+    observer_t *head = s->owners;
+    while (head != NULL) {
+        observer_t *temp = head;
+        head = head->next;
+        free(temp);
+    }
+    s->owners = NULL;
+}
+
+
 void *thread_func1(void *arg)
 {
     while (!exit_flag) {
