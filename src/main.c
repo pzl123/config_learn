@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <pthread.h>
- #include <unistd.h>
+#include <unistd.h>
 
 
 char *message =
@@ -102,6 +102,8 @@ int main(void)
     new1 = cJSON_Parse(new_message); 
     (void)detach(&ALL_DEFAULT_FILE, "default_config.json", 1);
     set_default("default_config.json", new1);
+
+
     // pthread_create(&tid1, NULL, thread_func1, (void *)message);
     // pthread_create(&tid2, NULL, thread_func2, (void *)new_message);
 

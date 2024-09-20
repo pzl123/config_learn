@@ -168,6 +168,13 @@ bool attach(file_struct_t **table, const char *config, int num, void (*callback)
  */
 bool notify(file_struct_t **table, const char *config);
 
+/**
+ * @brief 删除指定config文件的所有观察者
+ * 
+ * @param s 指定config文件
+ */
+void delete_all_owners(file_struct_t *s);
+
 void callback(int num); // 测试回调函数
 
 

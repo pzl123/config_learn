@@ -24,14 +24,14 @@ file_struct_t *ALL_DEFAULT_FILE = NULL;
 
 
 
-void add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config);
+static bool add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config);
 static file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name);
 static bool file_to_json(const char *target_file, cJSON **cjson_config);
-static cJSON *json_to_file(const char *config_name, const cJSON *cjson_config,char *PATH);
+static bool json_to_file(const char *config_name, const cJSON *cjson_config, char *PATH);
 // void notify(file_struct_t **table, const char *config);
-bool config_init(char *PATH, file_struct_t **table);
-char *split(const char *str);
-void delete_all_owners(file_struct_t *s);
+static bool config_init(char *PATH, file_struct_t **table);
+static char *split(const char *str);
+static observer_t *find_owner(file_struct_t *s, int owner_num);
 
 /**
  * ----------------------------------------------------------------------------------------------------------------
@@ -64,7 +64,6 @@ bool set_config(const char *name, const cJSON *config)
             json_to_file(s->key, s->value,CONFIG_PATH);
             // 解写锁
             pthread_rwlock_unlock(&s->valueLock);
-
             notify(&ALL_CONFIG_FILE, name); //通知所有者
             return true;
         }
@@ -102,11 +101,7 @@ bool set_default(const char *name, const cJSON *config)
     }
     else
     {   
-        // printf("------------------------------------%ld----------------------------------------\n",pthread_self());
-        // printf("s->value : %p\n",s->value);
-        // printf("config : %p\n",config);
-        // printf("------------------------------------%ld----------------------------------------\n",pthread_self());
-        // 加写锁
+         // 加写锁
         pthread_rwlock_wrlock(&s->valueLock);
         if(cJSON_Compare(s->value, config, true))
         {
@@ -116,9 +111,13 @@ bool set_default(const char *name, const cJSON *config)
         }
         else
         {
-
             cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
+            if(NULL == s->value)
+            {
+                pthread_rwlock_unlock(&s->valueLock);
+                return false;
+            }
             json_to_file(s->key, s->value,DEFAULT_CONFIG_PATH);
             // 解写锁
             pthread_rwlock_unlock(&s->valueLock);
@@ -161,7 +160,7 @@ bool get_default(const char *name, cJSON **config)
     }
 }
 
-void add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config) 
+static bool add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config) 
 {
     file_struct_t *s = NULL;
     HASH_FIND_STR(*table,config_name,s);
@@ -170,8 +169,8 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         s = (file_struct_t*)malloc(sizeof(file_struct_t));
         if (NULL == s)
         {
-            perror("malloc error\n");
-            return ;
+            printf("malloc error\n");
+            return false;
         }
         strncpy(s->key,config_name,strlen(config_name));
         s->key[strlen(config_name)] = '\0';
@@ -182,35 +181,37 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         s->value = cJSON_Duplicate(cjson_config, 1);
         if (s->value == NULL)
         {
-            perror("Failed to duplicate cJSON object\n");
+            printf("Failed to duplicate cJSON object\n");
+            free(s);
+            return false;
         }
 
-        // 初始化该表的所有者
-        // for(int i =0;i<2;i++)
-        // {
-        //     s->owners[i] = NULL;
-        // }
+        // 初始化配置的观察者结构体
         s->owners = NULL;
 
         HASH_ADD_STR(*table, key, s);
+
+        // 初始化读写锁
+        if (pthread_rwlock_init(&(s->valueLock), NULL) != 0)
+        {
+            perror("Failed to initialize valueLock");
+            free(s);
+            return false;
+        }
+
+        if (pthread_rwlock_init(&(s->ownersLock), NULL) != 0)
+        {
+            perror("Failed to initialize ownersLock");
+            pthread_rwlock_destroy(&(s->valueLock)); // 清理 valueLock
+            free(s);
+            return false;
+        }
+        return true;
     }
     else
     {
         printf("file already exits in hash table\n ");
-    }
-
-    // 初始化读写锁
-    if (pthread_rwlock_init(&(s->valueLock), NULL) != 0) {
-        perror("Failed to initialize valueLock");
-        free(s);
-        return;
-    }
-
-    if (pthread_rwlock_init(&(s->ownersLock), NULL) != 0) {
-        perror("Failed to initialize ownersLock");
-        pthread_rwlock_destroy(&(s->valueLock)); // 清理 valueLock
-        free(s);
-        return;
+        return true;
     }
 
 }
@@ -234,7 +235,7 @@ bool all_config_init(void)
     return true;
 }
 
-bool config_init(char *PATH, file_struct_t **table)
+static bool config_init(char *PATH, file_struct_t **table)
 {
     struct dirent *file  = NULL;
     DIR *dp = opendir(PATH);
@@ -265,7 +266,10 @@ bool config_init(char *PATH, file_struct_t **table)
             cJSON *cjson_config = NULL;
             if (file_to_json(dest_path, &cjson_config))
             {
-                add_config_name(table,file->d_name, cjson_config);
+                if(add_config_name(table,file->d_name, cjson_config))
+                {
+                    printf("Successfully loaded JSON from %s\n", dest_path);
+                }
                 files_found++;
                 cJSON_Delete(cjson_config);
             }
@@ -286,10 +290,10 @@ bool config_init(char *PATH, file_struct_t **table)
     return true;
 }
 
-bool file_to_json(const char *target_file, cJSON **cjson_config)
+static bool file_to_json(const char *target_file, cJSON **cjson_config)
 {
     FILE* fp = fopen(target_file,"r");
-    if (fp == NULL)
+    if(fp == NULL)
     {
         perror("open file error ");
         return false;
@@ -300,14 +304,14 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     (void)fseek(fp,0,SEEK_SET);
 
 
-    if (file_len <= 0)
+    if(file_len <= 0)
     {
         fclose(fp);
         return false;
     }
 
     char * readbuf = (char *)malloc(file_len + 1);
-    if (NULL == readbuf)
+    if(NULL == readbuf)
     {
         perror("malloc error");
         fclose(fp);
@@ -317,7 +321,7 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     size_t bytes_read = fread(readbuf, 1, file_len, fp);
     fclose(fp);
 
-    if (bytes_read != file_len)
+    if(bytes_read != file_len)
     {
         perror("Unable to read full file");
         free(readbuf);
@@ -327,7 +331,7 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     readbuf[file_len] = '\0';
 
     *cjson_config = cJSON_Parse(readbuf);
-    if (*cjson_config == NULL)
+    if(*cjson_config == NULL)
     {
         fprintf(stderr, "Failed to parse JSON\n");
         free(readbuf);
@@ -338,34 +342,51 @@ bool file_to_json(const char *target_file, cJSON **cjson_config)
     return true;
 }
 
-cJSON *json_to_file(const char *config_name, const cJSON *cjson_config, char *PATH)
+static bool json_to_file(const char *config_name, const cJSON *cjson_config, char *PATH)
 {
     char *json_string = cJSON_Print(cjson_config);
     char target_file_path[MAX_PATH_LEN] = {0};
     snprintf(target_file_path, sizeof(target_file_path), "%s%s", PATH, config_name);
 
     FILE *target_file = fopen(target_file_path , "w");
-    if (NULL == target_file)
+    if(NULL == target_file)
     {
         perror("Failed to open the target file");
+        free(json_string);
+        return false;
     }
 
-    if (json_string != NULL) {
+    if(json_string != NULL)
+    {
         fwrite(json_string, sizeof(char), strlen(json_string), target_file);
 
         fflush(target_file);
         int fd = fileno(target_file);
-        if (fd != -1) {
-            if (fsync(fd) != 0) {
+        if(fd != -1)
+        {
+            if(fsync(fd) != 0)
+            {
                 perror("fsync failed");
+                fclose(target_file);
+                free(json_string);
+                return false;
             }
-        } else {
-            perror("Failed to get file descriptor");
         }
-
+        else
+        {
+            perror("Failed to get file descriptor");
+            fclose(target_file);
+            free(json_string);
+            return false;
+        }
+        fclose(target_file);
         free(json_string);
-    }else {
+        return true;
+    }else
+    {
         printf("Failed to serialize cJSON object to string.\n");
+        fclose(target_file);
+        return false;
     }
 }
 
@@ -386,7 +407,7 @@ void print_hash_table(file_struct_t * table)
     
 }
 
-file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name)
+static file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name)
 {
     file_struct_t *s;
     HASH_FIND_STR(dorc, config_name, s);
@@ -397,8 +418,6 @@ void clear_hash_table(file_struct_t *table)
 {
     file_struct_t *current_user;
     file_struct_t *tmp;
-    observer_t *elt, *tmp2;
-
     HASH_ITER(hh, table, current_user, tmp)
     {
         // 清除所有用户
@@ -594,19 +613,22 @@ bool notify(file_struct_t **table, const char *config)
 }
 
 //删除所有节点
-void delete_all_owners(file_struct_t *s) {
+void delete_all_owners(file_struct_t *s)
+{
     pthread_rwlock_wrlock(&s->ownersLock);
     observer_t *head = s->owners;
-    while (head != NULL) {
+    while (head != NULL)
+    {
         observer_t *temp = head;
         head = head->next;
         free(temp);
     }
     s->owners = NULL;
+    pthread_rwlock_unlock(&s->ownersLock);
 }
 
 
-char *split(const char *str)
+static char *split(const char *str)
 {
     const char *start = strchr(str, '_'); 
     if (start == NULL)
@@ -630,31 +652,3 @@ char *split(const char *str)
     return ret2;
 }
 
-
-
-/**
- * ----------------------------------------------------------------------------------------------------------------
- * 下面是自定义的链表基础操作
- * ----------------------------------------------------------------------------------------------------------------
- */
-
-
-/**
- * @brief: 遍历链表 找到想要的即返回
- * 
- * @param {observer_t} *head
- * @param {int} num 想要的标识符
- */
-static bool list_traverse(observer_t *head, int num)
-{
-    observer_t *tmp = NULL;
-    if(NULL != head)
-    {
-        head = head->next;
-        if(num == head->owner_num)
-        {
-            tmp = head;
-            return true;
-        }
-    }
-}
