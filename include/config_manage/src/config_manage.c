@@ -11,6 +11,7 @@
 
 #include "cJSON.h"
 #include "cJSONx.h"
+#include "utlist.h"
 
 
 
@@ -184,10 +185,11 @@ void add_config_name(file_struct_t **table, const char *config_name, const cJSON
         }
 
         // 初始化该表的所有者
-        for(int i =0;i<2;i++)
-        {
-            s->owners[i] = NULL;
-        }
+        // for(int i =0;i<2;i++)
+        // {
+        //     s->owners[i] = NULL;
+        // }
+        s->owners = NULL;
 
         HASH_ADD_STR(*table, key, s);
     }
@@ -235,17 +237,16 @@ bool config_init(char *PATH, file_struct_t **table)
 {
     struct dirent *file  = NULL;
     DIR *dp = opendir(PATH);
-
-    if (dp == NULL)
+    if(dp == NULL)
     {
         perror("opendir");
         return false;
     }
     int files_found = 0;
 
-    while ((file = readdir(dp)) != NULL)
+    while((file = readdir(dp)) != NULL)
     {
-        if (strncmp(file->d_name, ".", 1) == 0)
+        if(strncmp(file->d_name, ".", 1) == 0)
             continue;
         char dest_path[MAX_PATH_LEN] = {0};
         (void)snprintf(dest_path, sizeof(dest_path), "%s%s", PATH, file->d_name);
@@ -395,18 +396,23 @@ void clear_hash_table(file_struct_t *table)
 {
     file_struct_t *current_user;
     file_struct_t *tmp;
+    observer_t *elt, *tmp2;
 
-    file_struct_t *temp = NULL;
     HASH_ITER(hh, table, current_user, tmp)
     {
         // 清除所有用户
-        for(int i = 0; i < 2; i++)
+        DL_FOREACH_SAFE(current_user->owners,elt,tmp2)
         {
-            if (current_user->owners[i] != NULL)
-            {
-                free(current_user->owners[i]);
-            }
-        }
+            DL_DELETE(current_user->owners, elt);
+        }	
+
+        // for(int i = 0; i < 2; i++)
+        // {
+        //     if (current_user->owners[i] != NULL)
+        //     {
+        //         free(current_user->owners[i]);
+        //     }
+        // }
         //销毁锁
         (void)pthread_rwlock_destroy(&current_user->valueLock);
         (void)pthread_rwlock_destroy(&current_user->ownersLock);
@@ -437,6 +443,7 @@ void callback(int num)
     printf("callback from owner_num %d\n", num);
 }
 
+
 bool attach(file_struct_t **table, const char *config, int num, void (*callback)(int num))
 {
     file_struct_t *s = NULL;
@@ -449,33 +456,60 @@ bool attach(file_struct_t **table, const char *config, int num, void (*callback)
     else
     {
         printf("file %s exist, attaching\n", config);
+        observer_t *new_owner = (observer_t *)malloc(sizeof(observer_t));
+        if(NULL == new_owner)
+        {
+            //解写锁
+            pthread_rwlock_unlock(&s->ownersLock);
+            printf("new_owner malloc failed\n");
+            return false;
+        }
+        new_owner->callback = callback;
+        new_owner->owner_num = num;
+        new_owner->next = NULL;
+        new_owner->prev = NULL;
+
         //加写锁
         pthread_rwlock_wrlock(&s->ownersLock);
-        for(int i = 0; i < 2; i++)
+        if( NULL == s->owners)
+        {   
+            s->owners = new_owner;
+        }
+        else
         {
-            if( NULL == s->owners[i])
+            observer_t *head = s->owners;
+            while(head->next != NULL)
             {
-                s->owners[i] = (observer_t *)malloc(sizeof(observer_t));
-                if (s->owners[i] == NULL)
-                {
-                    fprintf(stderr, "Memory allocation failed\n");
-                    //解写锁
-                    pthread_rwlock_unlock(&s->ownersLock);
-                    return false;
-                }
-                s->owners[i]->callback = callback;
-                s->owners[i]->owner_num = num;
-                //解写锁
-                pthread_rwlock_unlock(&s->ownersLock);
-                return true;
+                head = head->next;
             }
-            printf("file %s exist, and owner_num %d exist\n", config, num);
+            head->next = new_owner;
+            new_owner->prev = head;
         }
         //解写锁
         pthread_rwlock_unlock(&s->ownersLock);
-        return false;
+        printf("file %s exist, and owner_num %d exist\n", config, num);
+        return true;
     }
 }
+
+static observer_t *find_owner(file_struct_t *s, int owner_num)
+{
+    pthread_rwlock_rdlock(&s->ownersLock);
+    observer_t *head = s->owners;
+    while(head != NULL)
+    {
+        if(head->owner_num == owner_num)
+        {
+            pthread_rwlock_unlock(&s->ownersLock);
+            return head;
+        }
+        head = head->next;
+    }
+    pthread_rwlock_unlock(&s->ownersLock);
+    printf("owner_num %d does not exist in file %s\n", owner_num, s->key);
+    return NULL;
+}
+
 
 bool detach(file_struct_t **table, const char *config, int num)
 {
@@ -488,24 +522,56 @@ bool detach(file_struct_t **table, const char *config, int num)
     }
     else
     {
+        observer_t *finded_owner = find_owner(s,num);
+        if (finded_owner == NULL)
+        {
+            printf("owner_num %d does not exist in file %s\n", num, config);
+            return false;
+        }
         printf("file %s exist, detaching\n", config);
         //加写锁
         pthread_rwlock_wrlock(&s->ownersLock);
-        for(int i = 0; i < 2; i++)
-        {
-            if( (NULL != (*table)->owners[i])&&((*table)->owners[i]->owner_num == num))
+        if(finded_owner == s->owners)// 处理头节点
+        { 
+            s->owners = finded_owner->next;
+            if(s->owners != NULL)
             {
-                free((*table)->owners[i]);
-                (*table)->owners[i] = NULL;
-                //解写锁
-                pthread_rwlock_unlock(&s->ownersLock);
-                return true;
+                s->owners->prev = NULL;
             }
+            free(finded_owner);
+            pthread_rwlock_unlock(&s->ownersLock);
+            printf("owner_num %d is the first owner of file %s\n", num, config);
+            return true;
         }
-        printf("file %s exist, but owner_num %d not exist\n", config, num);
-        //解写锁
-        pthread_rwlock_unlock(&s->ownersLock);
-        return false;
+        else if(finded_owner->prev != NULL)// 处理中间节点
+        {
+            finded_owner->prev->next = finded_owner->next;
+            if(finded_owner->next != NULL)
+            {
+                finded_owner->next->prev = finded_owner->prev;
+            }
+            free(finded_owner);
+            pthread_rwlock_unlock(&s->ownersLock);
+            printf("owner_num %d is the middle owner of file %s\n", num, config);
+            return true;
+        }
+        else if (finded_owner->next == NULL && finded_owner->prev != NULL)
+        {
+            finded_owner->prev->next = NULL;
+            free(finded_owner);
+            pthread_rwlock_unlock(&s->ownersLock);
+            printf("owner_num %d is the last owner of file %s\n", num, config);
+            return true;
+            
+        }
+        else
+        {
+            //解写锁
+            free(finded_owner);
+            pthread_rwlock_unlock(&s->ownersLock);
+            printf("Error: Unknown node type\n");
+            return false;
+        }
     }
 }
 
@@ -515,25 +581,25 @@ bool notify(file_struct_t **table, const char *config)
     HASH_FIND_STR(*table, config, s);
     if(s == NULL)
     {
-        printf("file %s not exist, can't notify\n", config);
-        return false;
+        printf("file %s not exist, can't detach\n", config);
+        return  false;
     }
     else
     {
-        printf("file %s exist, notify\n", config);
+        printf("file %s exist, notifying\n", config);
         //加读锁
         pthread_rwlock_rdlock(&s->ownersLock);
-        for(int i = 0; i < 2; i++)
+        observer_t *head = s->owners;
+        while(head != NULL)
         {
-            if( NULL != (*table)->owners[i])
-            {
-                (*table)->owners[i]->callback((*table)->owners[i]->owner_num);
-            }
+            head->callback(head->owner_num);
+            head = head->next;
         }
         //解读锁
         pthread_rwlock_unlock(&s->ownersLock);
         return true;
     }
+    
 }
 
 
@@ -561,4 +627,33 @@ char *split(const char *str)
     ret2[len] = '\0'; 
 
     return ret2;
+}
+
+
+
+/**
+ * ----------------------------------------------------------------------------------------------------------------
+ * 下面是自定义的链表基础操作
+ * ----------------------------------------------------------------------------------------------------------------
+ */
+
+
+/**
+ * @brief: 遍历链表 找到想要的即返回
+ * 
+ * @param {observer_t} *head
+ * @param {int} num 想要的标识符
+ */
+static bool list_traverse(observer_t *head, int num)
+{
+    observer_t *tmp = NULL;
+    if(NULL != head)
+    {
+        head = head->next;
+        if(num == head->owner_num)
+        {
+            tmp = head;
+            return true;
+        }
+    }
 }

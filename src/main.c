@@ -36,16 +36,20 @@ void *thread_func1(void *str)
     cJSON *new1 = NULL; 
     new1 = cJSON_Parse((char *)str); 
     while(1)
-    {
-        (void)attach(&ALL_CONFIG_FILE, "config.json", 1, callback);
-        (void)attach(&ALL_CONFIG_FILE, "config.json", 2, callback);
+    {   
+        int i = rand() % 10;
+        int j = rand() % 10;
+        (void)attach(&ALL_CONFIG_FILE, "config.json", i, callback);
+        (void)attach(&ALL_CONFIG_FILE, "config.json", j, callback);
 
-        (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 1, callback);
-        (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 2, callback);
+        (void)attach(&ALL_DEFAULT_FILE, "default_config.json", i, callback);
+        (void)attach(&ALL_DEFAULT_FILE, "default_config.json", j, callback);
         // printf("thread %ld is running\n", pthread_self());
         set_default("default_config.json", new1);
         // printf("thread %ld is end, set default success\n",pthread_self());
-        // sleep(5);
+        sleep(1);
+        time_t now = time(NULL);
+        printf("-------------------------------time is %ld -----attach id %ld---------------------------------------------------\n",now, pthread_self());
     }
     cJSON_Delete(new1);
 }
@@ -57,15 +61,19 @@ void *thread_func2(void *str)
     new1 = cJSON_Parse((char *)str); 
     while(1)
     {
-        (void)detach(&ALL_CONFIG_FILE, "config.json", 1);
-        (void)detach(&ALL_CONFIG_FILE, "config.json", 2);
+        int i = rand() % 10;
+        int j = rand() % 10;
+        (void)detach(&ALL_CONFIG_FILE, "config.json", i);
+        (void)detach(&ALL_CONFIG_FILE, "config.json", j);
 
-        (void)detach(&ALL_DEFAULT_FILE, "default_config.json", 1);
-        (void)detach(&ALL_DEFAULT_FILE, "default_config.json", 2);
+        (void)detach(&ALL_DEFAULT_FILE, "default_config.json", i);
+        (void)detach(&ALL_DEFAULT_FILE, "default_config.json", j);
         // printf("thread %ld is running\n", pthread_self());
         set_default("default_config.json", new1);
         // printf("thread %ld is end, set default success\n",pthread_self());
-        // sleep(5);
+        sleep(1);
+        time_t now = time(NULL);
+        printf("-------------------------------time is %ld -----detach id %ld---------------------------------------------------\n",now, pthread_self());
     }
     cJSON_Delete(new1);
 }

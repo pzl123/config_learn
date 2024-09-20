@@ -67,4 +67,6 @@ cJSON.h
 /home/zlgmcu/project/config_learn/include/config_manage/src/cJSON.h
 cJSONx.h
 /home/zlgmcu/project/config_learn/include/config_manage/src/cJSONx.h
+utlist.h
+/home/zlgmcu/project/config_learn/include/config_manage/src/utlist.h
 

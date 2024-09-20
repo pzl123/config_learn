@@ -27,9 +27,11 @@ extern "C"
  * @owner_num 拥有者编号
  * @callback 回调函数
  */
-typedef struct{
+typedef struct observer_list{
     void (*callback)(int num);
     int owner_num;
+    struct observer_list *prev;
+    struct observer_list *next;
 } observer_t;
 
 
@@ -40,7 +42,7 @@ typedef struct{
  * @key 文件名
  * @value 文件内容
  * @valueLock 读写锁
- * @owners 拥有者
+ * @owners 拥有者,是一个双向链表
  * @ownersLock 拥有者读写锁
  * @hh uthash hash handle
  */
@@ -50,7 +52,7 @@ typedef struct
     char key[100];
     cJSON *value;
     pthread_rwlock_t valueLock;
-    observer_t *owners[2]; // 存储拥有者
+    observer_t *owners; // 存储拥有者
     pthread_rwlock_t ownersLock;
     UT_hash_handle hh;
 } file_struct_t;
@@ -148,7 +150,7 @@ bool get_default(const char *name, cJSON **config);
 bool detach(file_struct_t **table, const char *config, int num);
 
 /**
- * @brief 添加指定config文件的指定观察者
+ * @brief 添加指定config文件的指定观察者, 从owners链表中尾添加
  * 
  * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
  * @param config 要添加观察者的config文件

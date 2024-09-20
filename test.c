@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <time.h>
+#include <unistd.h>
 
 typedef struct observer_list {
     int owner_num;
@@ -14,6 +16,7 @@ typedef struct {
 } file_struct_t;
 
 file_struct_t *A = NULL;
+volatile int exit_flag = 0; // 全局标志用于控制线程退出
 
 // 尾部添加观察者
 void add_owner(file_struct_t **table, int owner_num) {
@@ -65,22 +68,28 @@ void delete_owner(file_struct_t **table, observer_t *owner) {
 
     if (owner == s->owners) { // 处理头节点
         s->owners = owner->next;
-    }
-
-    if (owner->prev != NULL) {
+        if (s->owners != NULL) {
+            s->owners->prev = NULL;
+        }
+        free(owner);
+    } else if (owner->prev != NULL) { // 处理中间节点
         owner->prev->next = owner->next;
+        if (owner->next != NULL) {
+            owner->next->prev = owner->prev;
+        }
+        free(owner);
+    } else if (owner->next == NULL && owner->prev != NULL) { // 处理尾节点
+        owner->prev->next = NULL;
+        free(owner);
+    } else {
+        free(owner);
+        printf("Error: Unknown node type\n");
     }
-
-    if (owner->next != NULL) {
-        owner->next->prev = owner->prev;
-    }
-
-    free(owner);
 
     pthread_rwlock_unlock(&s->ownersLock);
 }
 
-//遍历所有节点
+// 遍历所有节点
 void traverse_owners(file_struct_t **table) {
     file_struct_t *s = *table;
     pthread_rwlock_rdlock(&s->ownersLock);
@@ -89,16 +98,55 @@ void traverse_owners(file_struct_t **table) {
         printf("owner_num: %d\n", head->owner_num);
         head = head->next;
     }
+    pthread_rwlock_unlock(&s->ownersLock);
 }
 
+void *thread_func1(void *arg)
+{
+    while (!exit_flag) {
+        int i = rand() % 10;
+        add_owner(&A, i);
+        printf("owners add owner_num %d\n", i);
+        time_t now = time(NULL);
+        printf("-------------------------------time is %ld -----attach id %ld---------------------------------------------------\n", now, pthread_self());
+        // sleep(1);
+    }
+    return NULL;
+}
 
+void *thread_func2(void *arg)
+{
+    while (!exit_flag) {
+        int i = rand() % 10;
+        observer_t *owner = find_owner(&A, i);
+        if (owner) {
+            printf("owners delete owner_num %d\n", owner->owner_num);
+            delete_owner(&A, owner);
+        }
+        time_t now = time(NULL);
+        printf("-------------------------------time is %ld -----detach id %ld---------------------------------------------------\n", now, pthread_self());
+        // sleep(1);
+    }
+    return NULL;
+}
 
+void *thread_func3(void *arg)
+{
+    file_struct_t *s = arg;
+    while (!exit_flag) {
+        traverse_owners(&s);
+        time_t now = time(NULL);
+        printf("-------------------------------time is %ld -----traverse id %ld---------------------------------------------------\n", now, pthread_self());
+        // sleep(1);
+    }
+    return NULL;
+}
 
 int main()
 {
+    pthread_t thread1, thread2, thread3;
     A = (file_struct_t *)malloc(sizeof(file_struct_t));
-    if(!A)
-    {
+    if (!A) {
         printf("Memory allocation for file_struct_t failed.\n");
         return 1;
     }
@@ -121,11 +169,25 @@ int main()
     // 删除节点
     delete_owner(&A, found);
     traverse_owners(&A);
+
+    // 创建线程
+    pthread_create(&thread1, NULL, thread_func1, NULL);
+    pthread_create(&thread2, NULL, thread_func2, NULL);
+    pthread_create(&thread3, NULL, thread_func3, A);
+
+    // 等待一段时间后设置退出标志
+    sleep(100); // 假设等待10秒后停止线程
+    exit_flag = 1;
+
+    // 等待线程结束
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+    pthread_join(thread3, NULL);
+
     // 示例代码，展示如何销毁锁和释放内存
     pthread_rwlock_destroy(&A->ownersLock);
     observer_t *current = A->owners;
-    while(current != NULL)
-    {
+    while (current != NULL) {
         observer_t *next = current->next;
         free(current);
         current = next;
