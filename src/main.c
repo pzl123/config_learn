@@ -37,10 +37,10 @@ void *thread_func(void *str)
     new1 = cJSON_Parse((char *)str); 
     while(1)
     {
-        printf("thread %ld is running\n", pthread_self());
+        // printf("thread %ld is running\n", pthread_self());
         set_default("default_config.json", new1);
-        printf("thread %ld is end, set default success\n",pthread_self());
-        sleep(1);
+        // printf("thread %ld is end, set default success\n",pthread_self());
+        // sleep(1);
     }
     cJSON_Delete(new1);
 }

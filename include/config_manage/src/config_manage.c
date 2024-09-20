@@ -47,16 +47,16 @@ bool set_config(const char *name, const cJSON *config)
     }
     else
     {
+        // 加写锁
+        pthread_rwlock_wrlock(&s->valueLock);
         if(cJSON_Compare(s->value, config, true))
         {
+            pthread_rwlock_unlock(&s->valueLock);
             printf("Same, no need to modify.\n");
             return false;
         }
         else
         {
-   
-            // 加写锁
-            pthread_rwlock_wrlock(&s->valueLock);
             cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
             json_to_file(s->key, s->value,CONFIG_PATH);
@@ -99,16 +99,22 @@ bool set_default(const char *name, const cJSON *config)
         return false;
     }
     else
-    {
+    {   
+        // printf("------------------------------------%ld----------------------------------------\n",pthread_self());
+        // printf("s->value : %p\n",s->value);
+        // printf("config : %p\n",config);
+        // printf("------------------------------------%ld----------------------------------------\n",pthread_self());
+        // 加写锁
+        pthread_rwlock_wrlock(&s->valueLock);
         if(cJSON_Compare(s->value, config, true))
         {
+            pthread_rwlock_unlock(&s->valueLock);
             printf("Same default, no need to modify.\n");
             return false;
         }
         else
         {
-            // 加写锁
-            pthread_rwlock_wrlock(&s->valueLock);
+
             cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
             json_to_file(s->key, s->value,DEFAULT_CONFIG_PATH);
@@ -143,8 +149,12 @@ bool get_default(const char *name, cJSON **config)
     }
     else
     {
+        // 加读锁
+        pthread_rwlock_rdlock(&s->valueLock);
         cJSON_Delete(*config);
         *config = cJSON_Duplicate(s->value, 1);
+        // 解读锁
+        pthread_rwlock_unlock(&s->valueLock);
         return true;
     }
 }
