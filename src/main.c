@@ -9,28 +9,9 @@
 
 #include "zlog.h"
 
-zlog_category_t *c;
-
-int myzlog_init()
-{
-    // rc = zlog_init("./zlog.conf");
-    int rc = zlog_init("/home/zlgmcu/project/config_learn/bin/zlog.conf");
-    if(rc)
-    {
-        printf("init failed\n");
-        return -1;
-    }
- 
-    c = zlog_get_category("my_cat");
-    if(!c)
-    {
-        printf("get cat fail\n");
-        zlog_fini();
-        return -2;
-    }
 
 
-}
+#define ZLOG_INI_CONF "/home/zlgmcu/project/config_learn/bin/zlog.conf"
 
 
 char *message =
@@ -53,8 +34,26 @@ char *new_message =
     \"Software_version\": 12345678 \
 }";
 
+char *new_message1 =
+"{ \
+    \"time\":\"202409040821\", \
+    \"Software_version\": 2233445566 \
+}";
+
+
 extern file_struct_t *ALL_CONFIG_FILE;
 extern file_struct_t *ALL_DEFAULT_FILE;
+
+
+void callback1(cJSON *old_value, cJSON *new_value)
+{
+    callback(old_value, new_value);
+}
+
+void callback2(cJSON *old_value, cJSON *new_value)
+{
+    callback(old_value, new_value);
+}
 
 void *thread_func1(void *str)
 {
@@ -64,14 +63,9 @@ void *thread_func1(void *str)
     {   
         int i = rand() % 10;
         int j = rand() % 10;
-        (void)attach(&ALL_CONFIG_FILE, "config.json", i, callback);
-        (void)attach(&ALL_CONFIG_FILE, "config.json", j, callback);
-
-        (void)attach(&ALL_DEFAULT_FILE, "default_config.json", i, callback);
-        (void)attach(&ALL_DEFAULT_FILE, "default_config.json", j, callback);
-        // printf("thread %ld is running\n", pthread_self());
-        set_default("default_config.json", new1);
-        // printf("thread %ld is end, set default success\n",pthread_self());
+        (void)attach("config.json", callback1);
+        (void)attach("config.json", callback2);
+        set_config("config.json", new1);
         sleep(1);
         time_t now = time(NULL);
         printf("-------------------------------time is %ld -----attach id %ld---------------------------------------------------\n",now, pthread_self());
@@ -89,14 +83,9 @@ void *thread_func2(void *str)
     {
         int i = rand() % 10;
         int j = rand() % 10;
-        (void)detach(&ALL_CONFIG_FILE, "config.json", i);
-        (void)detach(&ALL_CONFIG_FILE, "config.json", j);
-
-        (void)detach(&ALL_DEFAULT_FILE, "default_config.json", i);
-        (void)detach(&ALL_DEFAULT_FILE, "default_config.json", j);
-        // printf("thread %ld is running\n", pthread_self());
-        set_default("default_config.json", new1);
-        // printf("thread %ld is end, set default success\n",pthread_self());
+        (void)detach("config.json", callback1);
+        (void)detach("config.json", callback2);
+        set_config("config.json", new1);
         sleep(1);
         time_t now = time(NULL);
         printf("-------------------------------time is %ld -----detach id %ld---------------------------------------------------\n",now, pthread_self());
@@ -104,43 +93,48 @@ void *thread_func2(void *str)
     cJSON_Delete(new1);
 }
 
+
+
 int main(void)
 {
-    myzlog_init();
+    printf("main func\n");
+    int ret = zlog_init(ZLOG_INI_CONF);
+    if (ret != 0)
+    {
+        printf("zlog_init failed!\n");
+        (void)fprintf(stderr, "zlog_init failed!\n");
+        return ret;
+    }
+    ret = dzlog_set_category("pcu");
+    if (ret != 0)
+    {
+        printf("dzlog_set_category failed!\n");
+        zlog_fini();
+        return ret;
+    }
+    dzlog_info("******************** PCU START ********************");
+
 
     pthread_t tid1, tid2;
     cJSON *new1 = NULL; 
     
-    new1 = cJSON_Parse(message); 
+    new1 = cJSON_Parse(new_message1); 
 
     all_config_init();
 
-    (void)attach(&ALL_CONFIG_FILE, "config.json", 1, callback);
-    (void)attach(&ALL_CONFIG_FILE, "config.json", 2, callback);
-    (void)attach(&ALL_CONFIG_FILE, "config.json", 3, callback);
+    (void)attach("config", callback1);
+    (void)attach("config", callback2);
 
-    (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 1, callback);
-    (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 2, callback);
-    (void)attach(&ALL_DEFAULT_FILE, "default_config.json", 3, callback);
-
-    set_default("default_config.json", new1);
+    set_config("config", new1);
+    (void)detach("config", callback1);
 
     cJSON_Delete(new1);
-    new1 = cJSON_Parse(new_message); 
-    (void)detach(&ALL_DEFAULT_FILE, "default_config.json", 1);
-    set_default("default_config.json", new1);
-    
-    // zlog_info(c, "-------------------------------hello, zlog--------------------------------------");
-    // zlog_debug(c, "-------------------------------hello, zlog--------------------------------------");
-    // zlog_notice(c, "-------------------------------hello, zlog--------------------------------------");
-    // zlog_warn(c, "-------------------------------hello, zlog--------------------------------------");
-    // zlog_error(c, "-------------------------------hello, zlog--------------------------------------");
-    // zlog_fatal(c, "-------------------------------hello, zlog--------------------------------------");
+    new1 = cJSON_Parse(new_message);
+    set_config("config", new1);
 
 
-    // zlog_debug("my_cat", "set default success");
-    // pthread_create(&tid1, NULL, thread_func1, (void *)message);
-    // pthread_create(&tid2, NULL, thread_func2, (void *)new_message);
+    // pthread_create(&tid1, NULL, thread_func1, (void *)new_message);
+    // pthread_create(&tid2, NULL, thread_func2, (void *)new_message1);
 
     // pthread_join(tid1, NULL);
     // pthread_join(tid2, NULL);

@@ -28,8 +28,7 @@ extern "C"
  * @callback 回调函数
  */
 typedef struct observer_list{
-    void (*callback)(int num);
-    int owner_num;
+    void (*callback)(cJSON *old_value, cJSON *new_value);
     struct observer_list *prev;
     struct observer_list *next;
 } observer_t;
@@ -51,9 +50,9 @@ typedef struct
     char path[100];
     char key[100];
     cJSON *value;
-    pthread_rwlock_t valueLock;
-    observer_t *owners; // 存储拥有者
-    pthread_rwlock_t ownersLock;
+    pthread_rwlock_t value_lock;
+    observer_t *owners;
+    pthread_rwlock_t owners_lock;
     UT_hash_handle hh;
 } file_struct_t;
 
@@ -69,13 +68,6 @@ typedef struct
  * @brief 初始化配置文件
  */
 bool all_config_init(void);
-
-/**
- * @brief 指定hash table 打印
- *
- * @param table 指定的表头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- */
-void print_hash_table(file_struct_t * table);
 
 /**
  * @brief 清空所有hash table
@@ -136,46 +128,28 @@ bool get_default(const char *name, cJSON **config);
 
 /**
  * ----------------------------------------------------------------------------------------------------------
- * 观察者函数
+ * 通知函数
  * ----------------------------------------------------------------------------------------------------------
  */
 
 /**
- * @brief 删除指定config文件的指定观察者
+ * @brief 删除指定config文件的指定拥有者
  * 
  * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- * @param config 要删除观察者的config文件
- * @param num 要删除的观察者的编号
+ * @param config 要删除拥有者的config文件
+ * @param num 要删除的拥有者的编号
  */
-bool detach(file_struct_t **table, const char *config, int num);
+bool detach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_value));
 
 /**
- * @brief 添加指定config文件的指定观察者, 从owners链表中尾添加
+ * @brief 添加指定config文件的指定拥有者, 从owners链表中尾添加
  * 
- * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- * @param config 要添加观察者的config文件
- * @param num 要添加的观察者的编号
- * @param callback 添加的观察者的回调函数
+ * @param config 要添加拥有者的config文件
+ * @param callback 添加的拥有者的回调函数
  */
-bool attach(file_struct_t **table, const char *config, int num, void (*callback)(int num));
+bool attach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_value));
 
 
-/**
- * @brief 通知指定config文件的所有观察者
- * 
- * @param table 指定hash table 头 ALL_CONFIG_FILE or ALL_DEFAULT_FILE 配置 或 默认配置
- * @param config 要通知的config文件
- */
-bool notify(file_struct_t **table, const char *config);
-
-/**
- * @brief 删除指定config文件的所有观察者
- * 
- * @param s 指定config文件
- */
-void delete_all_owners(file_struct_t *s);
-
-void callback(int num); // 测试回调函数
 
 
 #ifdef __cplusplus
