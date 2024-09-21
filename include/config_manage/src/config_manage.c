@@ -22,7 +22,6 @@
 
 #define CONFIG_PATH "./../config_file_dir/config/"
 #define DEFAULT_CONFIG_PATH "./../config_file_dir/default/"
-#define MAX_PATH_LEN (1024)
 
 typedef struct cb_list {
     on_config_change cb;
@@ -72,12 +71,20 @@ bool set_config(const char *name, const cJSON *config)
         dzlog_info("name or config is NULL");
         return false;
     }
-    char config_name [100];
-    (void)snprintf(config_name, sizeof(config_name), "%s%s", name, ".json");
+    int len = strlen(name) + strlen(".json")+1;
+    char *config_name = malloc(len);
+    if(NULL == config_name)
+    {
+        dzlog_info("malloc failed");
+        return false;
+    }
+    memset(config_name, 0, len);
+    (void)snprintf(config_name, len, "%s%s", name, ".json");
     config_manage_t *s =find_config_item(g_config_manage_t, config_name);
     if (NULL == s)
     {
         dzlog_info("no such config %s in path %s",config_name,CONFIG_PATH);
+        free(config_name);
         return false;
     }
     else
@@ -88,13 +95,14 @@ bool set_config(const char *name, const cJSON *config)
         {
             (void)pthread_rwlock_unlock(&s->value_lock);
             dzlog_info("Same, no need to modify.");
+            free(config_name);
             return false;
         }
         else
         {
             if(notify_owner(config_name, s->value, (cJSON *)config))
             {
-                dzlog_debug("config %s changed", config_name);
+                dzlog_debug("memory file %s changed", config_name);
             }
             else
             {
@@ -105,7 +113,7 @@ bool set_config(const char *name, const cJSON *config)
             (void)write_memory_to_file(s->name, s->value,CONFIG_PATH);
             // 解写锁
             (void)pthread_rwlock_unlock(&s->value_lock);
-            
+            free(config_name);
             return true;
         }
     }
@@ -229,6 +237,7 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
         return false;
     }
     config_manage_t *s = NULL;
+    int len = 0;
     HASH_FIND_STR(*table,config_name,s);
     if (NULL == s)
     {
@@ -238,14 +247,24 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
             dzlog_info("malloc error");
             return false;
         }
-        s->name = (char*)malloc(strlen(config_name) + 1);
+
+        s->name =strdup(config_name);
         if (NULL == s->name)
         {
             free(s);
             dzlog_info("malloc error");
             return false;
         }
-        s->path = (char*)malloc(MAX_PATH_LEN);
+        char *config_path_flag = strstr(config_name, "default");
+        if(NULL == config_path_flag)
+        {
+            len = strlen(CONFIG_PATH) + strlen(config_name) + 1;
+        }
+        else
+        {
+            len = strlen(DEFAULT_CONFIG_PATH) + strlen(config_name) + 1;
+        }
+        s->path = (char*)malloc(len);
         if (NULL == s->path)
         {
             free(s->name);
@@ -253,12 +272,8 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
             dzlog_info("malloc error");
             return false;
         }
-        (void)strncpy(s->name,config_name,strlen(config_name));
-        s->name[strlen(config_name)] = '\0';
-        char dest_path[MAX_PATH_LEN] = {0};
-        (void)snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, config_name);
-        (void)strncpy(s->path,dest_path,strlen(dest_path));
-        s->path[strlen(dest_path)] = '\0';
+        (void)snprintf(s->path, len, "%s%s", config_path_flag? DEFAULT_CONFIG_PATH : CONFIG_PATH, config_name);
+
         s->value = cJSON_Duplicate(cjson_config, 1);
         if (s->value == NULL)
         {
@@ -295,6 +310,7 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
             free(s);
             return false;
         }
+
         return true;
     }
     else
@@ -333,6 +349,8 @@ static bool config_hash_init(char *path, config_manage_t **table)
     }
     struct dirent *file  = NULL;
     int files_found = 0;
+    int len = 0;
+    char *dest_path = NULL;
     DIR *dp = opendir(path);
     if(NULL == dp)
     {
@@ -344,8 +362,10 @@ static bool config_hash_init(char *path, config_manage_t **table)
     {
         if(strncmp(file->d_name, ".", 1) == 0)
             continue;
-        char dest_path[MAX_PATH_LEN] = {0};
-        (void)snprintf(dest_path, sizeof(dest_path), "%s%s", path, file->d_name);
+        len = strlen(path) + strlen(file->d_name) + 1;
+        dest_path = (char *)malloc(len);  
+        (void)snprintf(dest_path, len, "%s%s", path, file->d_name);
+        dzlog_debug("---------------------------------------------------dest_path is %s", dest_path);
         dzlog_debug("file_name is %s", file->d_name);
 
 
@@ -355,6 +375,7 @@ static bool config_hash_init(char *path, config_manage_t **table)
         {
             dzlog_error("stat error");
             (void)closedir(dp);
+            free(dest_path);
             return false;
         }
 
@@ -371,6 +392,7 @@ static bool config_hash_init(char *path, config_manage_t **table)
                 {
                     dzlog_error("Failed to load JSON from %s", dest_path);
                     (void)closedir(dp);
+                    free(dest_path);
                     return false;
                 }
                 files_found++;
@@ -379,16 +401,19 @@ static bool config_hash_init(char *path, config_manage_t **table)
             else
             {
                 (void)closedir(dp);
+                free(dest_path);
                 dzlog_error("Failed to load or parse JSON from %s", dest_path);
                 return false;
             }
         }
+        free(dest_path);
     }
     (void)closedir(dp);
 
     if (files_found == 0)
     {
         dzlog_error("No files in the target directory");
+        free(dest_path);
         return false;
     }
 
@@ -452,16 +477,17 @@ static bool read_file_to_memory(const char *target_file, cJSON **cjson_config)
     return true;
 }
 
-static bool write_memory_to_file(const char *config_name, const cJSON *cjson_config, char *PATH)
+static bool write_memory_to_file(const char *config_name, const cJSON *cjson_config, char *path)
 {
-    if(NULL == config_name || NULL == cjson_config || NULL == PATH)
+    if(NULL == config_name || NULL == cjson_config || NULL == path)
     {
-        dzlog_info("config_name or cjson_config or PATH is NULL");
+        dzlog_info("config_name or cjson_config or path is NULL");
         return false;
     }
+    int len = strlen(config_name) + strlen(path) + 1;
     char *json_string = cJSON_Print(cjson_config);
-    char target_file_path[MAX_PATH_LEN] = {0};
-    (void)snprintf(target_file_path, sizeof(target_file_path), "%s%s", PATH, config_name);
+    char *target_file_path= (char *)malloc(len);
+    (void)snprintf(target_file_path, len, "%s%s", path, config_name);
 
     FILE *target_file = fopen(target_file_path , "w");
     if(NULL == target_file)
@@ -470,7 +496,8 @@ static bool write_memory_to_file(const char *config_name, const cJSON *cjson_con
         free(json_string);
         return false;
     }
-
+    free(target_file_path);
+    
     if(NULL != json_string)
     {
         (void)fwrite(json_string, sizeof(char), strlen(json_string), target_file);
