@@ -15,39 +15,66 @@
 #include "zlog.h"
 
 
+// /* 配置文件路径 */
+// #define CONFIG_PATH "/mnt/data/config/current"
+// /* 默认配置文件路径 */
+// #define DEFAULT_CONFIG_PATH "/mnt/data/config/default"
+
+#define CONFIG_PATH "./../config_file_dir/config/"
+#define DEFAULT_CONFIG_PATH "./../config_file_dir/default/"
+#define MAX_PATH_LEN (1024)
+
+typedef struct cb_list {
+    on_config_change cb;
+    struct cb_list *prev;
+    struct cb_list *next;
+} cb_list_t;
+
+
+typedef struct
+{
+    char *path;   /* 配置文件路径 */
+    char *name;   /* 配置表名 */
+    cJSON *value; /* 配置 */
+    pthread_rwlock_t value_lock;
+
+    cb_list_t *owners;
+    pthread_rwlock_t owners_lock;
+
+    UT_hash_handle hh;
+} config_manage_t;
+
+
+static config_manage_t *g_config_manage_t = NULL;
+static config_manage_t *g_default_config_manage_t = NULL;
+
+static bool config_hash_init(char *PATH, config_manage_t **table);
+
+static bool read_file_to_memory(const char *target_file, cJSON **cjson_config);
+static bool write_memory_to_file(const char *config_name, const cJSON *cjson_config, char *PATH);
+
+static bool add_config_item(config_manage_t **table, const char *config_name, const cJSON *cjson_config);
+static config_manage_t *find_config_item(config_manage_t *dorc, const char *config_name);
 
 
 
-file_struct_t *ALL_CONFIG_FILE = NULL;
-file_struct_t *ALL_DEFAULT_FILE = NULL;
-extern zlog_category_t *c;
+static bool notify_owner(const char *config, cJSON *old_value, cJSON *new_value);
+static cb_list_t *find_owner(config_manage_t *s, on_config_change cb);
+static void delete_all_owners(config_manage_t *s);
 
-
-
-static bool add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config);
-static file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name);
-static bool file_to_json(const char *target_file, cJSON **cjson_config);
-static bool json_to_file(const char *config_name, const cJSON *cjson_config, char *PATH);
-// void notify(file_struct_t **table, const char *config);
-static bool config_init(char *PATH, file_struct_t **table);
-static char *split(const char *str);
-static observer_t *find_owner(file_struct_t *s, void (*callback)(cJSON *old_value, cJSON *new_value));
-bool notify(const char *config,cJSON *old_value, cJSON *new_value);
-void delete_all_owners(file_struct_t *s);
-void callback(cJSON *old_cjson, cJSON *new_cjson);
-void print_hash_table(file_struct_t * table);
-/**
- * ----------------------------------------------------------------------------------------------------------------
- * 下面是配置文件模块的函数实现
- * ----------------------------------------------------------------------------------------------------------------
- */
+static void printf_config(config_manage_t * table);
+static char *split_str(const char *str);
 
 bool set_config(const char *name, const cJSON *config)
 {
+    if(NULL == name || NULL == config)
+    {
+        dzlog_info("name or config is NULL");
+        return false;
+    }
     char config_name [100];
     (void)snprintf(config_name, sizeof(config_name), "%s%s", name, ".json");
-    dzlog_info("config_name is %s\n", config_name);
-    file_struct_t *s =find_config_name(ALL_CONFIG_FILE, config_name);
+    config_manage_t *s =find_config_item(g_config_manage_t, config_name);
     if (NULL == s)
     {
         dzlog_info("no such config %s in path %s",config_name,CONFIG_PATH);
@@ -56,21 +83,28 @@ bool set_config(const char *name, const cJSON *config)
     else
     {
         // 加写锁
-        pthread_rwlock_wrlock(&s->value_lock);
+        (void)pthread_rwlock_wrlock(&s->value_lock);
         if(cJSON_Compare(s->value, config, true))
         {
-            pthread_rwlock_unlock(&s->value_lock);
+            (void)pthread_rwlock_unlock(&s->value_lock);
             dzlog_info("Same, no need to modify.");
             return false;
         }
         else
         {
-            notify(config_name, s->value, (cJSON *)config); //通知，文件以改变
+            if(notify_owner(config_name, s->value, (cJSON *)config))
+            {
+                dzlog_debug("config %s changed", config_name);
+            }
+            else
+            {
+                dzlog_info("notify falied, config %s changed", config_name);
+            }
             cJSON_Delete(s->value);
             s->value = cJSON_Duplicate(config, 1);
-            json_to_file(s->key, s->value,CONFIG_PATH);
+            (void)write_memory_to_file(s->name, s->value,CONFIG_PATH);
             // 解写锁
-            pthread_rwlock_unlock(&s->value_lock);
+            (void)pthread_rwlock_unlock(&s->value_lock);
             
             return true;
         }
@@ -80,39 +114,53 @@ bool set_config(const char *name, const cJSON *config)
 
 bool get_config(const char *name, cJSON **config)
 {
-    file_struct_t *s = find_config_name(ALL_CONFIG_FILE, name);
+    if(NULL == name || NULL == config)
+    {
+        dzlog_info("name or config is NULL");
+        return false;
+    }
+    char config_name [100];
+    (void)snprintf(config_name, sizeof(config_name), "%s%s", name, ".json");
+    config_manage_t *s =find_config_item(g_config_manage_t, config_name);
     if (NULL == s)
     {
-        dzlog_info("no such default config %s in path %s",name,DEFAULT_CONFIG_PATH);
+        dzlog_info("no such default config %s in path %s",config_name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
     {   
         // 加读锁
-        pthread_rwlock_rdlock(&s->value_lock);
+        (void)pthread_rwlock_rdlock(&s->value_lock);
         cJSON_Delete(*config);
         *config = cJSON_Duplicate(s->value, 1);
         // 解读锁
-        pthread_rwlock_unlock(&s->value_lock);
+        (void)pthread_rwlock_unlock(&s->value_lock);
         return true;
     }
 }
 
-bool set_default(const char *name, const cJSON *config)
+bool set_default_config(const char *name, const cJSON *config)
 {
-    file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);
+    if(NULL == name || NULL == config)
+    {
+        dzlog_info("name or config is NULL");
+        return false;
+    }
+    char config_name [100];
+    (void)snprintf(config_name, sizeof(config_name), "%s%s", name, ".json");
+    config_manage_t *s =find_config_item(g_config_manage_t, config_name);
     if (NULL == s)
     {
-        dzlog_info("no such default config %s in path %s",name,DEFAULT_CONFIG_PATH);
+        dzlog_info("no such default config %s in path %s",config_name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
     {   
          // 加写锁
-        pthread_rwlock_wrlock(&s->value_lock);
+        (void)pthread_rwlock_wrlock(&s->value_lock);
         if(cJSON_Compare(s->value, config, true))
         {
-            pthread_rwlock_unlock(&s->value_lock);
+            (void)pthread_rwlock_unlock(&s->value_lock);
             dzlog_info("Same default, no need to modify.");
             return false;
         }
@@ -122,22 +170,22 @@ bool set_default(const char *name, const cJSON *config)
             s->value = cJSON_Duplicate(config, 1);
             if(NULL == s->value)
             {
-                pthread_rwlock_unlock(&s->value_lock);
+                (void)pthread_rwlock_unlock(&s->value_lock);
                 return false;
             }
-            json_to_file(s->key, s->value,DEFAULT_CONFIG_PATH);
+            (void)write_memory_to_file(s->name, s->value,DEFAULT_CONFIG_PATH);
             // 解写锁
-            pthread_rwlock_unlock(&s->value_lock);
+            (void)pthread_rwlock_unlock(&s->value_lock);
 
-            char *buffer = split(s->key);
+            char *buffer = split_str(s->name);
             if(NULL == buffer)
             {
-                dzlog_info("split error");
+                dzlog_info("split_str error");
                 return false;
             }
             else
             {
-                set_config(buffer, config);
+                (void)set_config(buffer, config);
             }
 
             free(buffer);
@@ -146,48 +194,77 @@ bool set_default(const char *name, const cJSON *config)
     }
 }
 
-bool get_default(const char *name, cJSON **config)
+bool get_default_config(const char *name, cJSON **config)
 {
-    file_struct_t *s = find_config_name(ALL_DEFAULT_FILE, name);
+    if(NULL == name || NULL == config)
+    {
+        dzlog_info("name or config is NULL");
+        return false;
+    }
+    char config_name [100];
+    (void)snprintf(config_name, sizeof(config_name), "%s%s", name, ".json");
+    config_manage_t *s =find_config_item(g_config_manage_t, config_name);
     if (NULL == s)
     {
-        dzlog_info("no such default config %s in path %s",name,DEFAULT_CONFIG_PATH);
+        dzlog_info("no such default config %s in path %s",config_name,DEFAULT_CONFIG_PATH);
         return false;
     }
     else
     {
         // 加读锁
-        pthread_rwlock_rdlock(&s->value_lock);
+        (void)pthread_rwlock_rdlock(&s->value_lock);
         cJSON_Delete(*config);
         *config = cJSON_Duplicate(s->value, 1);
         // 解读锁
-        pthread_rwlock_unlock(&s->value_lock);
+        (void)pthread_rwlock_unlock(&s->value_lock);
         return true;
     }
 }
 
-static bool add_config_name(file_struct_t **table, const char *config_name, const cJSON *cjson_config) 
+static bool add_config_item(config_manage_t **table, const char *config_name, const cJSON *cjson_config) 
 {
-    file_struct_t *s = NULL;
+    if(NULL == table || NULL == config_name || NULL == cjson_config)
+    {
+        dzlog_info("table or config_name or cjson_config is NULL");
+        return false;
+    }
+    config_manage_t *s = NULL;
     HASH_FIND_STR(*table,config_name,s);
     if (NULL == s)
     {
-        s = (file_struct_t*)malloc(sizeof(file_struct_t));
+        s = (config_manage_t*)malloc(sizeof(config_manage_t));
         if (NULL == s)
         {
             dzlog_info("malloc error");
             return false;
         }
-        strncpy(s->key,config_name,strlen(config_name));
-        s->key[strlen(config_name)] = '\0';
+        s->name = (char*)malloc(strlen(config_name) + 1);
+        if (NULL == s->name)
+        {
+            free(s);
+            dzlog_info("malloc error");
+            return false;
+        }
+        s->path = (char*)malloc(MAX_PATH_LEN);
+        if (NULL == s->path)
+        {
+            free(s->name);
+            free(s);
+            dzlog_info("malloc error");
+            return false;
+        }
+        (void)strncpy(s->name,config_name,strlen(config_name));
+        s->name[strlen(config_name)] = '\0';
         char dest_path[MAX_PATH_LEN] = {0};
-        snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, config_name);
-        strncpy(s->path,dest_path,strlen(dest_path));
+        (void)snprintf(dest_path, sizeof(dest_path), "%s%s", CONFIG_PATH, config_name);
+        (void)strncpy(s->path,dest_path,strlen(dest_path));
         s->path[strlen(dest_path)] = '\0';
         s->value = cJSON_Duplicate(cjson_config, 1);
         if (s->value == NULL)
         {
             dzlog_info("Failed to duplicate cJSON object");
+            free(s->name);
+            free(s->path);
             free(s);
             return false;
         }
@@ -195,12 +272,15 @@ static bool add_config_name(file_struct_t **table, const char *config_name, cons
         // 初始化配置的观察者结构体
         s->owners = NULL;
 
-        HASH_ADD_STR(*table, key, s);
+        HASH_ADD_STR(*table, name, s);
 
         // 初始化读写锁
         if (pthread_rwlock_init(&(s->value_lock), NULL) != 0)
         {
             dzlog_info("Failed to initialize valueLock");
+            free(s->name);
+            free(s->path);
+            cJSON_Delete(s->value);
             free(s);
             return false;
         }
@@ -209,6 +289,9 @@ static bool add_config_name(file_struct_t **table, const char *config_name, cons
         {
             dzlog_info("Failed to initialize ownersLock");
             pthread_rwlock_destroy(&(s->value_lock)); // 清理 valueLock
+            free(s->name);
+            free(s->path);
+            cJSON_Delete(s->value);
             free(s);
             return false;
         }
@@ -222,17 +305,17 @@ static bool add_config_name(file_struct_t **table, const char *config_name, cons
 
 }
 
-bool all_config_init(void)
+bool config_init(void)
 {
     int ret = 0;
-    ret = config_init(CONFIG_PATH, &ALL_CONFIG_FILE);
+    ret = config_hash_init(CONFIG_PATH, &g_config_manage_t);
     if (ret == 0)
     {
         dzlog_info("Failed to initialize config");
         return false;
     }
     
-    ret = config_init(DEFAULT_CONFIG_PATH, &ALL_DEFAULT_FILE);
+    ret = config_hash_init(DEFAULT_CONFIG_PATH, &g_default_config_manage_t);
     if (ret == 0)
     {
         dzlog_info("Failed to initialize default config");
@@ -241,67 +324,85 @@ bool all_config_init(void)
     return true;
 }
 
-static bool config_init(char *PATH, file_struct_t **table)
+static bool config_hash_init(char *path, config_manage_t **table)
 {
+    if(NULL == table || NULL == path)
+    {
+        dzlog_info("table or path is NULL 1");
+        return false;
+    }
     struct dirent *file  = NULL;
-    DIR *dp = opendir(PATH);
-    if(dp == NULL)
+    int files_found = 0;
+    DIR *dp = opendir(path);
+    if(NULL == dp)
     {
         dzlog_info("opendir");
         return false;
     }
-    int files_found = 0;
 
-    while((file = readdir(dp)) != NULL)
+    while(NULL != (file = readdir(dp)))
     {
         if(strncmp(file->d_name, ".", 1) == 0)
             continue;
         char dest_path[MAX_PATH_LEN] = {0};
-        (void)snprintf(dest_path, sizeof(dest_path), "%s%s", PATH, file->d_name);
-        printf("file_name is %s\n", file->d_name);
+        (void)snprintf(dest_path, sizeof(dest_path), "%s%s", path, file->d_name);
+        dzlog_debug("file_name is %s", file->d_name);
 
 
         struct stat buf;
-        memset(&buf, 0, sizeof(buf));
-        if (stat(dest_path, &buf) != 0)
+        (void)memset(&buf, 0, sizeof(buf));
+        if (0 != stat(dest_path, &buf))
         {
-            dzlog_info("stat error");
+            dzlog_error("stat error");
+            (void)closedir(dp);
             return false;
         }
 
         if (S_ISREG(buf.st_mode))
         {
             cJSON *cjson_config = NULL;
-            if (file_to_json(dest_path, &cjson_config))
+            if (read_file_to_memory(dest_path, &cjson_config))
             {
-                if(add_config_name(table,file->d_name, cjson_config))
+                if(add_config_item(table,file->d_name, cjson_config))
                 {
-                    dzlog_info("Successfully loaded JSON from %s", dest_path);
+                    dzlog_debug("Successfully loaded JSON from %s", dest_path);
+                }
+                else
+                {
+                    dzlog_error("Failed to load JSON from %s", dest_path);
+                    (void)closedir(dp);
+                    return false;
                 }
                 files_found++;
                 cJSON_Delete(cjson_config);
             }
             else
             {
-                dzlog_info("Failed to load or parse JSON from %s", dest_path);
+                (void)closedir(dp);
+                dzlog_error("Failed to load or parse JSON from %s", dest_path);
+                return false;
             }
         }
     }
-    closedir(dp);
+    (void)closedir(dp);
 
     if (files_found == 0)
     {
-        dzlog_info("No files in the target directory");
+        dzlog_error("No files in the target directory");
         return false;
     }
 
     return true;
 }
 
-static bool file_to_json(const char *target_file, cJSON **cjson_config)
+static bool read_file_to_memory(const char *target_file, cJSON **cjson_config)
 {
+    if(NULL == target_file || NULL == cjson_config)
+    {
+        dzlog_info("target_file or cjson_config is NULL");
+    }
     FILE* fp = fopen(target_file,"r");
-    if(fp == NULL)
+    if(NULL == fp)
     {
         dzlog_info("open file error ");
         return false;
@@ -314,7 +415,8 @@ static bool file_to_json(const char *target_file, cJSON **cjson_config)
 
     if(file_len <= 0)
     {
-        fclose(fp);
+        (void)fclose(fp);
+        dzlog_info("file len is 0");
         return false;
     }
 
@@ -322,12 +424,12 @@ static bool file_to_json(const char *target_file, cJSON **cjson_config)
     if(NULL == readbuf)
     {
         dzlog_info("malloc error");
-        fclose(fp);
+        (void)fclose(fp);
         return false;
     }
 
     size_t bytes_read = fread(readbuf, 1, file_len, fp);
-    fclose(fp);
+    (void)fclose(fp);
 
     if(bytes_read != file_len)
     {
@@ -350,11 +452,16 @@ static bool file_to_json(const char *target_file, cJSON **cjson_config)
     return true;
 }
 
-static bool json_to_file(const char *config_name, const cJSON *cjson_config, char *PATH)
+static bool write_memory_to_file(const char *config_name, const cJSON *cjson_config, char *PATH)
 {
+    if(NULL == config_name || NULL == cjson_config || NULL == PATH)
+    {
+        dzlog_info("config_name or cjson_config or PATH is NULL");
+        return false;
+    }
     char *json_string = cJSON_Print(cjson_config);
     char target_file_path[MAX_PATH_LEN] = {0};
-    snprintf(target_file_path, sizeof(target_file_path), "%s%s", PATH, config_name);
+    (void)snprintf(target_file_path, sizeof(target_file_path), "%s%s", PATH, config_name);
 
     FILE *target_file = fopen(target_file_path , "w");
     if(NULL == target_file)
@@ -364,18 +471,18 @@ static bool json_to_file(const char *config_name, const cJSON *cjson_config, cha
         return false;
     }
 
-    if(json_string != NULL)
+    if(NULL != json_string)
     {
-        fwrite(json_string, sizeof(char), strlen(json_string), target_file);
+        (void)fwrite(json_string, sizeof(char), strlen(json_string), target_file);
 
-        fflush(target_file);
+        (void)fflush(target_file);
         int fd = fileno(target_file);
         if(fd != -1)
         {
             if(fsync(fd) != 0)
             {
                 dzlog_info("fsync failed");
-                fclose(target_file);
+                (void)fclose(target_file);
                 free(json_string);
                 return false;
             }
@@ -383,29 +490,34 @@ static bool json_to_file(const char *config_name, const cJSON *cjson_config, cha
         else
         {
             dzlog_info("Failed to get file descriptor");
-            fclose(target_file);
+            (void)fclose(target_file);
             free(json_string);
             return false;
         }
-        fclose(target_file);
+        (void)fclose(target_file);
         free(json_string);
         return true;
     }else
     {
         dzlog_info("Failed to serialize cJSON object to string.");
-        fclose(target_file);
+        (void)fclose(target_file);
         return false;
     }
 }
 
-void print_hash_table(file_struct_t * table)
+static void printf_config(config_manage_t * table)
 {
-    file_struct_t *s = NULL;
+    if(NULL == table)
+    {
+        dzlog_info("table is NULL");
+        return;
+    }
+    config_manage_t *s = NULL;
     char *json_str = NULL;
     dzlog_info("\n"
            "----------------------------------------HASH TABLE-------------------------------------");
     for (s = table; s != NULL; s = s->hh.next) {
-        dzlog_info("config_name: %s", s->key);
+        dzlog_info("config_name: %s", s->name);
         dzlog_info("path: %s", s->path);
         json_str = cJSON_Print(s->value);
         dzlog_info("value:\n%s", json_str);
@@ -415,19 +527,33 @@ void print_hash_table(file_struct_t * table)
     
 }
 
-static file_struct_t *find_config_name(file_struct_t *dorc, const char *config_name)
+static config_manage_t *find_config_item(config_manage_t *dorc, const char *config_name)
 {
-    file_struct_t *s;
+    if(NULL == dorc || NULL == config_name)
+    {
+        dzlog_info("dorc or config_name is NULL");
+        return NULL;
+    }
+    config_manage_t *s;
     HASH_FIND_STR(dorc, config_name, s);
     return s;
 }
 
-void clear_hash_table(file_struct_t *table)
+void clear_hash_table(config_manage_t *table)
 {
-    file_struct_t *current_user;
-    file_struct_t *tmp;
+    if(NULL == table)
+    {
+        dzlog_info("table is NULL");
+        return;
+    }
+    config_manage_t *current_user;
+    config_manage_t *tmp;
     HASH_ITER(hh, table, current_user, tmp)
     {
+        free(current_user->name);
+        free(current_user->path);
+        cJSON_Delete(current_user->value);
+
         // 清除所有用户
         delete_all_owners(current_user);
 
@@ -436,75 +562,61 @@ void clear_hash_table(file_struct_t *table)
         (void)pthread_rwlock_destroy(&current_user->owners_lock);
         //清除表单
         HASH_DEL(table, current_user);  /* delete it (users advances to next) */
-        cJSON_Delete(current_user->value);
+        
         free(current_user);             /* free it */
     }
 }
 
 
 
-void clear_all_hash_table(void)
+void config_clear(void)
 {
-    clear_hash_table(ALL_CONFIG_FILE);
-    clear_hash_table(ALL_DEFAULT_FILE);
-}
-
-/**
- * ----------------------------------------------------------------------------------------------------------------
- * 下面是通知机制
- * ----------------------------------------------------------------------------------------------------------------
- */
-
-
-void callback(cJSON *old_cjson, cJSON *new_cjson)
-{
-    char *str = cJSON_Print(new_cjson);
-    dzlog_info("old_cjson: %s",str);
-    free(str);
-    str = cJSON_Print(new_cjson);
-    dzlog_info("new_cjson: %s",str);
-    free(str);
+    clear_hash_table(g_config_manage_t);
+    clear_hash_table(g_default_config_manage_t);
 }
 
 
-bool attach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_value))
+
+bool config_attach(const char *name, on_config_change cb)
 {
+    if(NULL == name || NULL == cb)
+    {
+        dzlog_error("name or cb is NULL");
+        return false;
+    }
     dzlog_debug("attach %s", name);
     char config_name [100];
     (void)snprintf(config_name, sizeof(config_name), "%s%s", name, ".json");
-    dzlog_info("config_name is %s\n", config_name);
 
-    file_struct_t *s = NULL;
-    HASH_FIND_STR(ALL_CONFIG_FILE, config_name, s);
+    config_manage_t *s = NULL;
+    HASH_FIND_STR(g_config_manage_t, config_name, s);
     if(s == NULL)
     {
-        dzlog_info("file %s not exist, can't attach", config_name);
+        dzlog_error("file %s not exist, can't attach", config_name);
         return false;
     }
     else
     {
-        dzlog_info("file %s exist, attaching", config_name);
-        observer_t *new_owner = (observer_t *)malloc(sizeof(observer_t));
+        dzlog_debug("file %s exist, attaching", config_name);
+        cb_list_t *new_owner = (cb_list_t *)malloc(sizeof(cb_list_t));
         if(NULL == new_owner)
         {
-            //解写锁
-            pthread_rwlock_unlock(&s->owners_lock);
-            dzlog_info("new_owner malloc failed");
+            dzlog_error("new_owner malloc failed");
             return false;
         }
-        new_owner->callback = callback;
+        new_owner->cb = cb;
         new_owner->next = NULL;
         new_owner->prev = NULL;
 
         //加写锁
-        pthread_rwlock_wrlock(&s->owners_lock);
+        (void)pthread_rwlock_wrlock(&s->owners_lock);
         if( NULL == s->owners)
         {   
             s->owners = new_owner;
         }
         else
         {
-            observer_t *head = s->owners;
+            cb_list_t *head = s->owners;
             while(head->next != NULL)
             {
                 head = head->next;
@@ -513,36 +625,45 @@ bool attach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_valu
             new_owner->prev = head;
         }
         //解写锁
-        pthread_rwlock_unlock(&s->owners_lock);
+        (void)pthread_rwlock_unlock(&s->owners_lock);
         return true;
     }
 }
 
-static observer_t *find_owner(file_struct_t *s, void (*callback)(cJSON *old_value, cJSON *new_value))
+static cb_list_t *find_owner(config_manage_t *s, on_config_change cb)
 {
-    pthread_rwlock_rdlock(&s->owners_lock);
-    observer_t *head = s->owners;
+    if(NULL == s || NULL == cb)
+    {
+        dzlog_error("s or cb is NULL");
+        return NULL;
+    }
+    (void)pthread_rwlock_rdlock(&s->owners_lock);
+    cb_list_t *head = s->owners;
     while(head != NULL)
     {
-        if(head->callback == callback)
+        if(head->cb == cb)
         {
-            pthread_rwlock_unlock(&s->owners_lock);
+            (void)pthread_rwlock_unlock(&s->owners_lock);
             return head;
         }
         head = head->next;
     }
-    pthread_rwlock_unlock(&s->owners_lock);
+    (void)pthread_rwlock_unlock(&s->owners_lock);
     return NULL;
 }
 
 
-bool detach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_value))
+bool config_detach(const char *name, on_config_change cb)
 {
+    if(NULL == name || NULL == cb)
+    {
+        dzlog_error("name or cb is NULL");
+        return false;
+    }
     char config_name [100];
     (void)snprintf(config_name, sizeof(config_name), "%s%s", name, ".json");
-    dzlog_info("config_name is %s\n", config_name);
-    file_struct_t *s = NULL;
-    HASH_FIND_STR(ALL_CONFIG_FILE, config_name, s);
+    config_manage_t *s = NULL;
+    HASH_FIND_STR(g_config_manage_t, config_name, s);
     if(s == NULL)
     {
         dzlog_info("file %s not exist, can't detach", config_name);
@@ -550,15 +671,14 @@ bool detach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_valu
     }
     else
     {
-        observer_t *finded_owner = find_owner(s,callback);
+        cb_list_t *finded_owner = find_owner(s,cb);
         if (finded_owner == NULL)
         {
-            dzlog_info("callback %p does not exist in file %s", callback, config_name);
+            dzlog_info("cb %p does not exist in file %s", cb, config_name);
             return false;
         }
-        dzlog_info("file %s exist, detaching", config_name);
         //加写锁
-        pthread_rwlock_wrlock(&s->owners_lock);
+        (void)pthread_rwlock_wrlock(&s->owners_lock);
         if(finded_owner == s->owners)// 处理头节点
         { 
             s->owners = finded_owner->next;
@@ -567,7 +687,7 @@ bool detach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_valu
                 s->owners->prev = NULL;
             }
             free(finded_owner);
-            pthread_rwlock_unlock(&s->owners_lock);
+            (void)pthread_rwlock_unlock(&s->owners_lock);
             return true;
         }
         else if(finded_owner->prev != NULL)// 处理中间节点
@@ -578,14 +698,14 @@ bool detach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_valu
                 finded_owner->next->prev = finded_owner->prev;
             }
             free(finded_owner);
-            pthread_rwlock_unlock(&s->owners_lock);
+            (void)pthread_rwlock_unlock(&s->owners_lock);
             return true;
         }
         else if (finded_owner->next == NULL && finded_owner->prev != NULL)
         {
             finded_owner->prev->next = NULL;
             free(finded_owner);
-            pthread_rwlock_unlock(&s->owners_lock);
+            (void)pthread_rwlock_unlock(&s->owners_lock);
             return true;
             
         }
@@ -593,17 +713,22 @@ bool detach(const char *name, void (*callback)(cJSON *old_value, cJSON *new_valu
         {
             //解写锁
             free(finded_owner);
-            pthread_rwlock_unlock(&s->owners_lock);
+            (void)pthread_rwlock_unlock(&s->owners_lock);
             dzlog_info("Error: Unknown node type");
             return false;
         }
     }
 }
 
-bool notify(const char *config, cJSON *old_value, cJSON *new_value)
+static bool notify_owner(const char *config, cJSON *old_value, cJSON *new_value)
 {
-    file_struct_t *s = NULL;
-    HASH_FIND_STR(ALL_CONFIG_FILE, config, s);
+    if(NULL == config || NULL == old_value || NULL == new_value)
+    {
+        dzlog_error("config or old_value or new_value is NULL");
+        return false;
+    }
+    config_manage_t *s = NULL;
+    HASH_FIND_STR(g_config_manage_t, config, s);
     if(s == NULL)
     {
         dzlog_info("file %s not exist, can't detach", config);
@@ -611,40 +736,49 @@ bool notify(const char *config, cJSON *old_value, cJSON *new_value)
     }
     else
     {
-        dzlog_info("file %s exist, notifying", config);
         //加读锁
-        pthread_rwlock_rdlock(&s->owners_lock);
-        observer_t *head = s->owners;
+        (void)pthread_rwlock_rdlock(&s->owners_lock);
+        cb_list_t *head = s->owners;
         while(head != NULL)
         {
-            head->callback(old_value, new_value);
+            head->cb(old_value, new_value);
             head = head->next;
         }
         //解读锁
-        pthread_rwlock_unlock(&s->owners_lock);
+        (void)pthread_rwlock_unlock(&s->owners_lock);
         return true;
     }
     
 }
 
 //删除所有节点
-void delete_all_owners(file_struct_t *s)
+static void delete_all_owners(config_manage_t *s)
 {
-    pthread_rwlock_wrlock(&s->owners_lock);
-    observer_t *head = s->owners;
+    if(s == NULL)
+    {
+        dzlog_info("Error: s is NULL");
+        return;
+    }
+    (void)pthread_rwlock_wrlock(&s->owners_lock);
+    cb_list_t *head = s->owners;
     while (head != NULL)
     {
-        observer_t *temp = head;
+        cb_list_t *temp = head;
         head = head->next;
         free(temp);
     }
     s->owners = NULL;
-    pthread_rwlock_unlock(&s->owners_lock);
+    (void)pthread_rwlock_unlock(&s->owners_lock);
 }
 
 
-static char *split(const char *str)
+static char *split_str(const char *str)
 {
+    if(NULL == str)
+    {
+        dzlog_info("Error: str is NULL");
+        return NULL;
+    }
     const char *start = strchr(str, '_'); 
     if (start == NULL)
     {

@@ -41,18 +41,25 @@ char *new_message1 =
 }";
 
 
-extern file_struct_t *ALL_CONFIG_FILE;
-extern file_struct_t *ALL_DEFAULT_FILE;
 
-
-void callback1(cJSON *old_value, cJSON *new_value)
+void callback1(cJSON *old_cjson, cJSON *new_cjson)
 {
-    callback(old_value, new_value);
+    char *str = cJSON_Print(new_cjson);
+    dzlog_info("old_cjson: %s",str);
+    free(str);
+    str = cJSON_Print(new_cjson);
+    dzlog_info("new_cjson: %s",str);
+    free(str);
 }
 
-void callback2(cJSON *old_value, cJSON *new_value)
+void callback2(cJSON *old_cjson, cJSON *new_cjson)
 {
-    callback(old_value, new_value);
+    char *str = cJSON_Print(new_cjson);
+    dzlog_info("old_cjson: %s",str);
+    free(str);
+    str = cJSON_Print(new_cjson);
+    dzlog_info("new_cjson: %s",str);
+    free(str);
 }
 
 void *thread_func1(void *str)
@@ -63,8 +70,8 @@ void *thread_func1(void *str)
     {   
         int i = rand() % 10;
         int j = rand() % 10;
-        (void)attach("config.json", callback1);
-        (void)attach("config.json", callback2);
+        (void)config_attach("config.json", callback1);
+        (void)config_attach("config.json", callback2);
         set_config("config.json", new1);
         sleep(1);
         time_t now = time(NULL);
@@ -83,8 +90,8 @@ void *thread_func2(void *str)
     {
         int i = rand() % 10;
         int j = rand() % 10;
-        (void)detach("config.json", callback1);
-        (void)detach("config.json", callback2);
+        (void)config_detach("config.json", callback1);
+        (void)config_detach("config.json", callback2);
         set_config("config.json", new1);
         sleep(1);
         time_t now = time(NULL);
@@ -120,13 +127,13 @@ int main(void)
     
     new1 = cJSON_Parse(new_message1); 
 
-    all_config_init();
+    config_init();
 
-    (void)attach("config", callback1);
-    (void)attach("config", callback2);
+    (void)config_attach("config", callback1);
+    (void)config_attach("config", callback2);
 
     set_config("config", new1);
-    (void)detach("config", callback1);
+    (void)config_detach("config", callback1);
 
     cJSON_Delete(new1);
     new1 = cJSON_Parse(new_message);
@@ -150,7 +157,7 @@ int main(void)
     // print_hash_table(ALL_CONFIG_FILE);
     // printf("\n");
     // print_hash_table(ALL_DEFAULT_FILE);
-    clear_all_hash_table();
+    config_clear();
 
     zlog_fini();
     return 0;
