@@ -13,7 +13,7 @@ extern "C"
 {
 #endif /* __cplusplus */
 
-
+/* 配置变更回调 */
 typedef void (*on_config_change)(cJSON *old_value, cJSON *new_value);
 
 /**

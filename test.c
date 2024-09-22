@@ -157,7 +157,7 @@ void *thread_func3(void *arg)
     return NULL;
 }
 
-int main()
+int test1(void)
 {
     pthread_t thread1, thread2, thread3;
     A = (file_struct_t *)malloc(sizeof(file_struct_t));
@@ -208,6 +208,26 @@ int main()
         current = next;
     }
     free(A);
+    return 0;
+}
 
+int func(int *a)
+{
+    printf("func a %p",a);
+    return 0;
+}
+
+int test2(void)
+{
+    int b = 10;
+    printf("test1 b %p\n", &b);
+    int *a = &b;
+    func(a);
+    return 0;
+}
+
+int main()
+{
+    test2();
     return 0;
 }

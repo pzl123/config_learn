@@ -828,3 +828,120 @@ static char *split_str(const char *str)
     return ret2;
 }
 
+
+
+
+
+
+
+
+
+/*****************************队列***********************************/
+
+typedef struct queue
+{
+    int *data;
+    int head;
+    int tail;
+    int size;
+    pthread_mutex_t mutex; //互斥锁
+    pthread_cond_t cond;   //条件变量
+}QUEUE;
+
+void queue_init(QUEUE *q, int size)
+{
+    q->data = (int *)malloc(sizeof(int) * size);
+    q->head = 0;
+    q->tail = 0;
+    q->size = size;
+    pthread_mutex_init(&q->mutex, NULL);
+    pthread_cond_init(&q->cond, NULL);
+}
+
+void queue_destroy(QUEUE *q)
+{
+    free(q->data);
+    pthread_mutex_destroy(&q->mutex);
+    pthread_cond_destroy(&q->cond);
+}
+
+bool queue_is_empty(QUEUE *q)
+{
+    return q->head == q->tail;
+}
+
+bool queue_is_full(QUEUE *q)
+{
+    return (q->tail + 1) % q->size == q->head;
+}
+
+bool queue_push(QUEUE *q, int value)
+{
+    pthread_mutex_lock(&q->mutex);
+    if(queue_is_full(q))
+    {
+        dzlog_debug("Error: queue is full");
+        pthread_mutex_unlock(&q->mutex);
+        return false;
+    }
+    q->data[q->tail] = value;
+    q->tail = (q->tail + 1) % q->size;
+    pthread_cond_signal(&q->cond);
+    pthread_mutex_unlock(&q->mutex);
+    return true;
+}
+
+bool queue_pop(QUEUE *q, int *value)
+{
+    pthread_mutex_lock(&q->mutex);
+    while(queue_is_empty(q))
+    {
+        dzlog_debug("Error: queue is empty");
+        pthread_cond_wait(&q->cond, &q->mutex);
+    }
+    *value = q->data[q->head];
+    q->head = (q->head + 1) % q->size;
+    pthread_mutex_unlock(&q->mutex);
+    return true;
+}
+
+void *comsummer(void *arg)
+{
+    // dzlog_debug("comsummer queue address: %p", arg);
+    QUEUE *q = (QUEUE *)arg;
+    int value;
+    while(1)
+    {
+        queue_pop(q, &value);
+        dzlog_debug("pthread_id is %ld, pop value: %d",pthread_self(), value);
+        sleep(1);
+    }
+}
+void *producer(void *arg)
+{
+    // dzlog_debug("producer queue address: %p", arg);
+    QUEUE *q = (QUEUE *)arg;
+    int value = 0;
+    while(1)
+    {
+        value = rand() % 100;
+        dzlog_debug("pthread_id is %ld, push value: %d",pthread_self(), value);
+        queue_push(q, value);
+        sleep(1);
+    }
+}
+
+void test_queue(void)
+{
+    QUEUE q;
+    queue_init(&q, 2);
+    // dzlog_debug("queue address: %p", &q);
+    pthread_t tid1, tid2;
+    pthread_create(&tid1, NULL, producer, &q);
+    pthread_create(&tid2, NULL, comsummer, &q);
+
+    pthread_join(tid1, NULL);
+    pthread_join(tid2, NULL);
+
+    queue_destroy(&q);
+}

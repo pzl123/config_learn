@@ -104,7 +104,6 @@ void *thread_func2(void *str)
 
 int main(void)
 {
-    printf("main func\n");
     int ret = zlog_init(ZLOG_INI_CONF);
     if (ret != 0)
     {
@@ -122,10 +121,10 @@ int main(void)
     dzlog_info("******************** PCU START ********************");
 
 
-    pthread_t tid1, tid2;
-    cJSON *new1 = NULL; 
+    // pthread_t tid1, tid2;
+    // cJSON *new1 = NULL; 
     
-    new1 = cJSON_Parse(new_message1); 
+    cJSON *new1 = cJSON_Parse(new_message1); 
 
     config_init();
 
@@ -140,25 +139,25 @@ int main(void)
     set_config("config", new1);
 
 
-    // pthread_create(&tid1, NULL, thread_func1, (void *)new_message);
-    // pthread_create(&tid2, NULL, thread_func2, (void *)new_message1);
+    // // pthread_create(&tid1, NULL, thread_func1, (void *)new_message);
+    // // pthread_create(&tid2, NULL, thread_func2, (void *)new_message1);
 
-    // pthread_join(tid1, NULL);
-    // pthread_join(tid2, NULL);
+    // // pthread_join(tid1, NULL);
+    // // pthread_join(tid2, NULL);
 
-    // get_default("default_config.json", &new1);
-    // str = cJSON_Print(new1);
-    // printf("%s\n", str); 
-    // free(str);
+    // // get_default("default_config.json", &new1);
+    // // str = cJSON_Print(new1);
+    // // printf("%s\n", str); 
+    // // free(str);
 
     cJSON_Delete(new1);
     new1 = NULL; // 避免悬空指针
 
-    // print_hash_table(ALL_CONFIG_FILE);
-    // printf("\n");
-    // print_hash_table(ALL_DEFAULT_FILE);
-    config_clear();
-
+    // // print_hash_table(ALL_CONFIG_FILE);
+    // // printf("\n");
+    // // print_hash_table(ALL_DEFAULT_FILE);
+    // config_clear();
+    // test_queue();
     zlog_fini();
     return 0;
 }
