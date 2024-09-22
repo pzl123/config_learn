@@ -20,8 +20,8 @@
 // /* 默认配置文件路径 */
 // #define DEFAULT_CONFIG_PATH "/mnt/data/config/default"
 
-#define CONFIG_PATH "./../config_file_dir/config/"
-#define DEFAULT_CONFIG_PATH "./../config_file_dir/default/"
+#define CONFIG_PATH "./../config_file_dir/config"
+#define DEFAULT_CONFIG_PATH "./../config_file_dir/default"
 
 
 typedef struct cb_list {
@@ -117,9 +117,9 @@ bool set_config(const char *name, const cJSON *config)
 
         s->name = strdup(config_name);
         s->value = cJSON_Duplicate(default_s->value, 1);
-        int32_t s_path_len = strlen(CONFIG_PATH) + strlen(s->name) + 1;
+        int32_t s_path_len = strlen(CONFIG_PATH) + strlen(s->name) + 2;
         s->path = (char *)malloc(s_path_len);
-        (void)snprintf(s->path, s_path_len, "%s%s", CONFIG_PATH, s->name);
+        (void)snprintf(s->path, s_path_len+1, "%s/%s", CONFIG_PATH, s->name);
         s->owners = NULL;
         HASH_ADD_STR(g_config_manage_t, name, s);
 
@@ -240,7 +240,7 @@ bool set_default_config(const char *name, const cJSON *config)
 {
     if(NULL == name || NULL == config)
     {
-        dzlog_info("name or config is NULL, set default config failed");
+        dzlog_error("name or config is NULL, set default config failed");
         return false;
     }
 
@@ -256,7 +256,7 @@ bool set_default_config(const char *name, const cJSON *config)
     config_manage_t *s =find_config_item(g_default_config_manage_t, default_config_name);
     if (NULL == s)//default 不存在则创建
     {
-        dzlog_info("default config %s not exist, create it", default_config_name);
+        dzlog_debug("default config %s not exist, create it", default_config_name);
         s = (config_manage_t *)malloc(sizeof(config_manage_t));
         if(NULL == s)
         {
@@ -267,9 +267,9 @@ bool set_default_config(const char *name, const cJSON *config)
 
         s->name = strdup(default_config_name);
         s->value = cJSON_Duplicate(config, 1);
-        int32_t len = strlen(DEFAULT_CONFIG_PATH) + strlen(default_config_name) + 1;
+        int32_t len = strlen(DEFAULT_CONFIG_PATH) + strlen(default_config_name) + 2;
         s->path = (char *)malloc(len);
-        (void)snprintf(s->path, len, "%s%s", DEFAULT_CONFIG_PATH, default_config_name);
+        (void)snprintf(s->path, len, "%s/%s", DEFAULT_CONFIG_PATH, default_config_name);
         (void)pthread_rwlock_init(&s->value_lock, NULL);
         (void)pthread_rwlock_init(&s->owners_lock, NULL);
         HASH_ADD_STR(g_default_config_manage_t, name, s);
@@ -304,7 +304,7 @@ bool set_default_config(const char *name, const cJSON *config)
             char *buffer = split_str(s->name);
             if(NULL == buffer)
             {
-                dzlog_info("split_str error");
+                dzlog_error("split_str error");
                 return false;
             }
             else
@@ -322,7 +322,7 @@ bool get_default_config(const char *name, cJSON **config)
 {
     if(NULL == name || NULL == config)
     {
-        dzlog_info("name or config is NULL, get default config failed");
+        dzlog_error("name or config is NULL, get default config failed");
         return false;
     }
 
@@ -330,7 +330,7 @@ bool get_default_config(const char *name, cJSON **config)
     char *config_name = (char *)malloc(len);
     if(NULL == config_name)
     {
-        dzlog_info("default config name %s malloc failed", name);
+        dzlog_error("default config name %s malloc failed", name);
         return false;
     }
     (void)snprintf(config_name, sizeof(config_name), "%s%s", name, ".json");
@@ -338,7 +338,7 @@ bool get_default_config(const char *name, cJSON **config)
     config_manage_t *s =find_config_item(g_config_manage_t, config_name);
     if (NULL == s)
     {
-        dzlog_info("no such default config %s in path %s", config_name, DEFAULT_CONFIG_PATH);
+        dzlog_error("no such default config %s in path %s", config_name, DEFAULT_CONFIG_PATH);
         free(config_name);
         return false;
     }
@@ -383,11 +383,11 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
         char *config_path_flag = strstr(config_name, "default");
         if(NULL == config_path_flag)
         {
-            len = strlen(CONFIG_PATH) + strlen(config_name) + 1;
+            len = strlen(CONFIG_PATH) + strlen(config_name) + 2;
         }
         else
         {
-            len = strlen(DEFAULT_CONFIG_PATH) + strlen(config_name) + 1;
+            len = strlen(DEFAULT_CONFIG_PATH) + strlen(config_name) + 2;
         }
         s->path = (char*)malloc(len);
         if (NULL == s->path)
@@ -397,12 +397,12 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
             dzlog_error("path s->%s malloc error", config_path_flag? DEFAULT_CONFIG_PATH : CONFIG_PATH);
             return false;
         }
-        (void)snprintf(s->path, len, "%s%s", config_path_flag? DEFAULT_CONFIG_PATH : CONFIG_PATH, config_name);
+        (void)snprintf(s->path, len, "%s/%s", config_path_flag? DEFAULT_CONFIG_PATH : CONFIG_PATH, config_name);
 
         s->value = cJSON_Duplicate(cjson_config, 1);
         if (s->value == NULL)
         {
-            dzlog_info("Failed to duplicate cJSON object");
+            dzlog_error("Failed to duplicate cJSON object");
             free(s->name);
             free(s->path);
             free(s);
@@ -417,7 +417,7 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
         // 初始化读写锁
         if (pthread_rwlock_init(&(s->value_lock), NULL) != 0)
         {
-            dzlog_info("Failed to initialize valueLock");
+            dzlog_error("Failed to initialize valueLock");
             free(s->name);
             free(s->path);
             cJSON_Delete(s->value);
@@ -427,7 +427,7 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
 
         if (pthread_rwlock_init(&(s->owners_lock), NULL) != 0)
         {
-            dzlog_info("Failed to initialize ownersLock");
+            dzlog_error("Failed to initialize ownersLock");
             pthread_rwlock_destroy(&(s->value_lock)); // 清理 valueLock
             free(s->name);
             free(s->path);
@@ -440,7 +440,7 @@ static bool add_config_item(config_manage_t **table, const char *config_name, co
     }
     else
     {
-        dzlog_info("file already exits in hash table");
+        dzlog_error("file already exits in hash table");
         return true;
     }
 
@@ -452,14 +452,14 @@ bool config_init(void)
     ret = config_hash_init(CONFIG_PATH, &g_config_manage_t);
     if (ret == 0)
     {
-        dzlog_info("Failed to initialize config");
+        dzlog_error("Failed to initialize config");
         return false;
     }
     
     ret = config_hash_init(DEFAULT_CONFIG_PATH, &g_default_config_manage_t);
     if (ret == 0)
     {
-        dzlog_info("Failed to initialize default config");
+        dzlog_error("Failed to initialize default config");
         return false;
     }
     return true;
@@ -488,14 +488,14 @@ static bool config_hash_init(char *path, config_manage_t **table)
         {
             continue;
         }
-        int32_t len = strlen(path) + strlen(file->d_name) + 1;
+        int32_t len = strlen(path) + strlen(file->d_name) + 2;
         char *dest_path = (char *)malloc(len);
         if (NULL == dest_path)
         {
             dzlog_warn("dest_path %s malloc error", file->d_name);
             continue;
         }
-        (void)snprintf(dest_path, len, "%s%s", path, file->d_name);
+        (void)snprintf(dest_path, len, "%s/%s", path, file->d_name);
 
         struct stat buf;
         (void)memset(&buf, 0, sizeof(buf));
@@ -592,7 +592,7 @@ static bool read_file_to_memory(const char *target_file, cJSON **cjson_config)
     *cjson_config = cJSON_Parse(readbuf);
     if(*cjson_config == NULL)
     {
-        dzlog_info("Failed to parse %s JSON", target_file);
+        dzlog_error("Failed to parse %s JSON", target_file);
         free(readbuf);
         return false;
     }
@@ -608,7 +608,7 @@ static bool write_memory_to_file(const char *config_name, const cJSON *cjson_con
         dzlog_error("config_name or cjson_config or path is NULL in write_memory_to_file");
         return false;
     }
-    int32_t len = strlen(config_name) + strlen(path) + 1;
+    int32_t len = strlen(config_name) + strlen(path) + 2;
     char *json_string = cJSON_Print(cjson_config);
     char *target_file_path= (char *)malloc(len);
     if(NULL == target_file_path)
@@ -617,7 +617,7 @@ static bool write_memory_to_file(const char *config_name, const cJSON *cjson_con
         free(json_string);
         return false;
     }
-    (void)snprintf(target_file_path, len, "%s%s", path, config_name);
+    (void)snprintf(target_file_path, len, "%s/%s", path, config_name);
 
     FILE *target_file = fopen(target_file_path , "w");
     if(NULL == target_file)
@@ -646,7 +646,7 @@ static bool write_memory_to_file(const char *config_name, const cJSON *cjson_con
         }
         else
         {
-            dzlog_info("Failed to get file %s descriptor", config_name);
+            dzlog_error("Failed to get file %s descriptor", config_name);
             (void)fclose(target_file);
             free(json_string);
             return false;
@@ -656,7 +656,7 @@ static bool write_memory_to_file(const char *config_name, const cJSON *cjson_con
         return true;
     }else
     {
-        dzlog_info("Failed to serialize %s cJSON object to string.", config_name);
+        dzlog_error("Failed to serialize %s cJSON object to string.", config_name);
         (void)fclose(target_file);
         return false;
     }
@@ -671,16 +671,16 @@ static void printf_config(config_manage_t * table)
     }
     config_manage_t *s = NULL;
     char *json_str = NULL;
-    dzlog_info("----------------------------------------HASH TABLE-------------------------------------");
+    dzlog_debug("----------------------------------------HASH TABLE-------------------------------------");
     for (s = table; s != NULL; s = s->hh.next)
     {
-        dzlog_info("path: %s", s->path);
-        dzlog_info("config_name: %s", s->name);
+        dzlog_debug("path: %s", s->path);
+        dzlog_debug("config_name: %s", s->name);
         json_str = cJSON_Print(s->value);
-        dzlog_info("value:\n%s", json_str);
+        dzlog_debug("value:\n%s", json_str);
         free(json_str);
     }
-    dzlog_info("----------------------------------------HASH TABLE-------------------------------------\n");
+    dzlog_debug("----------------------------------------HASH TABLE-------------------------------------\n");
     
 }
 
@@ -878,7 +878,7 @@ bool config_detach(const char *name, on_config_change cb)
         {
             free(finded_owner);
             (void)pthread_rwlock_unlock(&s->owners_lock);
-            dzlog_info("Error: Unknown node type");
+            dzlog_error("Error: Unknown node type");
             return false;
         }
     }
@@ -938,13 +938,13 @@ static char *split_str(const char *str)
 {
     if(NULL == str)
     {
-        dzlog_info("Error: str is NULL in split_str");
+        dzlog_error("Error: str is NULL in split_str");
         return NULL;
     }
     const char *start = strchr(str, '_'); 
     if (start == NULL)
     {
-        dzlog_info("Error: No delimiter found.");
+        dzlog_error("Error: No delimiter found.");
         return NULL;
     }
 
@@ -952,7 +952,7 @@ static char *split_str(const char *str)
     char *ret2 = (char *)malloc(len + 1); // 分配足够的内存
     if (ret2 == NULL)
     {
-        dzlog_info("Error: Could not allocate memory.");
+        dzlog_error("Error: Could not allocate memory.");
         return NULL;
     }
 
@@ -961,122 +961,4 @@ static char *split_str(const char *str)
     ret2[len] = '\0'; 
 
     return ret2;
-}
-
-
-
-
-
-
-
-
-
-/*****************************队列***********************************/
-
-typedef struct queue
-{
-    int32_t *data;
-    int32_t head;
-    int32_t tail;
-    int32_t size;
-    pthread_mutex_t mutex; //互斥锁
-    pthread_cond_t cond;   //条件变量
-}QUEUE;
-
-void queue_init(QUEUE *q, int32_t size)
-{
-    q->data = (int32_t *)malloc(sizeof(int32_t) * size);
-    q->head = 0;
-    q->tail = 0;
-    q->size = size;
-    pthread_mutex_init(&q->mutex, NULL);
-    pthread_cond_init(&q->cond, NULL);
-}
-
-void queue_destroy(QUEUE *q)
-{
-    free(q->data);
-    pthread_mutex_destroy(&q->mutex);
-    pthread_cond_destroy(&q->cond);
-}
-
-bool queue_is_empty(QUEUE *q)
-{
-    return q->head == q->tail;
-}
-
-bool queue_is_full(QUEUE *q)
-{
-    return (q->tail + 1) % q->size == q->head;
-}
-
-bool queue_push(QUEUE *q, int32_t value)
-{
-    pthread_mutex_lock(&q->mutex);
-    if(queue_is_full(q))
-    {
-        dzlog_debug("Error: queue is full");
-        pthread_mutex_unlock(&q->mutex);
-        return false;
-    }
-    q->data[q->tail] = value;
-    q->tail = (q->tail + 1) % q->size;
-    pthread_cond_signal(&q->cond);
-    pthread_mutex_unlock(&q->mutex);
-    return true;
-}
-
-bool queue_pop(QUEUE *q, int32_t *value)
-{
-    pthread_mutex_lock(&q->mutex);
-    while(queue_is_empty(q))
-    {
-        dzlog_debug("Error: queue is empty");
-        pthread_cond_wait(&q->cond, &q->mutex);
-    }
-    *value = q->data[q->head];
-    q->head = (q->head + 1) % q->size;
-    pthread_mutex_unlock(&q->mutex);
-    return true;
-}
-
-void *comsummer(void *arg)
-{
-    // dzlog_debug("comsummer queue address: %p", arg);
-    QUEUE *q = (QUEUE *)arg;
-    int32_t value;
-    while(1)
-    {
-        queue_pop(q, &value);
-        dzlog_debug("pthread_id is %ld, pop value: %d",pthread_self(), value);
-        sleep(1);
-    }
-}
-void *producer(void *arg)
-{
-    // dzlog_debug("producer queue address: %p", arg);
-    QUEUE *q = (QUEUE *)arg;
-    int32_t value = 0;
-    while(1)
-    {
-        value = rand() % 100;
-        dzlog_debug("pthread_id is %ld, push value: %d",pthread_self(), value);
-        queue_push(q, value);
-        sleep(1);
-    }
-}
-
-void test_queue(void)
-{
-    QUEUE q;
-    queue_init(&q, 2);
-    // dzlog_debug("queue address: %p", &q);
-    pthread_t tid1, tid2;
-    pthread_create(&tid1, NULL, producer, &q);
-    pthread_create(&tid2, NULL, comsummer, &q);
-
-    pthread_join(tid1, NULL);
-    pthread_join(tid2, NULL);
-
-    queue_destroy(&q);
 }

@@ -83,6 +83,8 @@ bool config_attach(const char *name, on_config_change cb);
  */
 bool config_detach(const char *name, on_config_change cb);
 
+
+void test_queue(void);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

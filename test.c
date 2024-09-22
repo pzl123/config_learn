@@ -4,6 +4,8 @@
 #include <time.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdbool.h>
+#include <stdint.h>
 
 typedef struct observer_list {
     int owner_num;
@@ -221,8 +223,239 @@ int test2(void)
     printf("%s\n", j);
 }
 
+int removeElement(int* nums, int numsSize, int val)
+{
+    int k = 0, i = 0;
+    for(i = 0; i < numsSize; i++)
+    {
+        if(nums[i] != val)
+        {
+            nums[k++] = nums[i];
+        }
+    }
+    return k;
+}
+
+int removeDuplicates(int* nums, int numsSize)
+{
+    int k = 1, i = 1;
+    for(i = 0; i < numsSize; i++)
+    {
+        if(nums[i-1] != nums[i])
+        {
+            nums[k++] = nums[i];
+        }
+    }
+    return k;
+}
+
+
+
+/*****************************队列***********************************/// Task definition
+// Task definition
+typedef struct task
+{
+    void (*func)(void *arg);
+    void *arg;
+} TASK_t;
+
+// Queue structure for tasks
+typedef struct queue
+{
+    TASK_t *task;
+    int32_t head;
+    int32_t tail;
+    int32_t size;
+    pthread_mutex_t queue_mutex;
+    pthread_cond_t queue_cond;
+} QUEUE_t;
+
+// Thread pool structure
+typedef struct taskqueue
+{
+    QUEUE_t *queue;
+    pthread_t thread_id[4]; // Assuming you need 4 worker threads
+} TASKQUEUE_t;
+
+// Function prototypes
+void task_queue_init(QUEUE_t *q, int32_t size);
+void queue_destroy(QUEUE_t *q);
+bool queue_is_empty(const QUEUE_t *q);
+bool queue_is_full(const QUEUE_t *q);
+bool queue_push(QUEUE_t *q, const TASK_t *task);
+bool queue_pop(QUEUE_t *q, TASK_t *task);
+void *worker(void *arg);
+void taskqueue_init(TASKQUEUE_t *q, int queue_size);
+void taskqueue_destroy(TASKQUEUE_t *q);
+void submit_task(TASKQUEUE_t *q, void (*func)(void *), void *arg);
+void example_task(void *arg);
+
+void task_queue_init(QUEUE_t *q, int32_t size)
+{
+    q->task = (TASK_t *)malloc(sizeof(TASK_t) * size);
+    if (!q->task) {
+        perror("Failed to allocate memory for task array");
+        exit(EXIT_FAILURE);
+    }
+    q->head = 0;
+    q->tail = 0;
+    q->size = size;
+    pthread_mutex_init(&q->queue_mutex, NULL);
+    pthread_cond_init(&q->queue_cond, NULL);
+}
+
+void queue_destroy(QUEUE_t *q)
+{
+    // Free the allocated memory
+    free(q->task);
+    pthread_mutex_destroy(&q->queue_mutex);
+    pthread_cond_destroy(&q->queue_cond);
+}
+
+bool queue_is_empty(const QUEUE_t *q)
+{
+    return q->head == q->tail;
+}
+
+bool queue_is_full(const QUEUE_t *q)
+{
+    return (q->tail + 1) % q->size == q->head;
+}
+
+bool queue_push(QUEUE_t *q, const TASK_t *task)
+{
+    pthread_mutex_lock(&q->queue_mutex);
+    if (queue_is_full(q))
+    {
+        printf("Error: queue is full\n");
+        pthread_mutex_unlock(&q->queue_mutex);
+        return false;
+    }
+
+    q->task[q->tail] = *task;
+
+    q->tail = (q->tail + 1) % q->size;
+
+    pthread_cond_signal(&q->queue_cond);
+    pthread_mutex_unlock(&q->queue_mutex);
+    return true;
+}
+
+bool queue_pop(QUEUE_t *q, TASK_t *task)
+{
+    pthread_mutex_lock(&q->queue_mutex);
+    while (queue_is_empty(q))
+    {
+        printf("Error: queue is empty\n");
+        pthread_cond_wait(&q->queue_cond, &q->queue_mutex);
+    }
+
+    *task = q->task[q->head];
+    q->head = (q->head + 1) % q->size;
+
+    pthread_mutex_unlock(&q->queue_mutex);
+    return true;
+}
+
+void *worker(void *arg)
+{
+    TASKQUEUE_t *q = (TASKQUEUE_t *)arg;
+    TASK_t task;
+    while (1)
+    {
+        queue_pop(q->queue, &task);
+        if (task.func != NULL)
+        {
+            task.func(task.arg);
+        }
+        else
+        {
+            break; 
+        }
+    }
+    return NULL;
+}
+
+void taskqueue_init(TASKQUEUE_t *q, int queue_size)
+{
+    q->queue = malloc(sizeof(QUEUE_t)); // Allocate memory for queue
+    if (!q->queue) {
+        perror("Failed to allocate memory for queue");
+        exit(EXIT_FAILURE);
+    }
+    task_queue_init(q->queue, queue_size); // Initialize the queue
+
+    for (int i = 0; i < 4; i++) {
+        pthread_create(&q->thread_id[i], NULL, worker, q);
+    }
+}
+
+void taskqueue_destroy(TASKQUEUE_t *q)
+{
+    TASK_t stop_task = {NULL, NULL};
+    for (int i = 0; i <= 4; i++) {
+        queue_push(q->queue, &stop_task);
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (pthread_join(q->thread_id[i], NULL) != 0)
+        {
+            perror("Failed to join thread");
+        }
+    }
+    
+    queue_destroy(q->queue);
+
+    free(q->queue);
+}
+
+void submit_task(TASKQUEUE_t *q, void (*func)(void *), void *arg)
+{
+    TASK_t task = {func, arg};
+    queue_push(q->queue, &task);
+}
+
+void example_task(void *arg)
+{
+    if (arg == NULL) {
+        printf("Warning: arg is NULL!\n");
+        return;
+    }
+    
+    int32_t value  = *(int32_t *)arg;
+    
+    printf("pthread_id %ld, pop task value is %d\n", (long)pthread_self(), value);
+    sleep(1);
+}
+
+void test_queue()
+{
+    TASKQUEUE_t q;
+    int queue_size = 10; 
+
+    taskqueue_init(&q, queue_size); 
+
+    // Test the task queue
+    while (1)
+    {
+        int32_t a;
+        printf("Enter a number (or 0 to exit): ");
+        scanf("%d", &a);
+
+        if (a == 0)
+        {
+            break;
+        }
+
+        submit_task(&q, example_task, (void *)&a);
+    }
+
+    taskqueue_destroy(&q); 
+}
+
 int main()
 {
-    test2();
+    // test2();
+    test_queue();
     return 0;
 }

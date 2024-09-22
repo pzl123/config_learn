@@ -123,41 +123,42 @@ int main(void)
     // pthread_t tid1, tid2;
     // cJSON *new1 = NULL; 
     
-    cJSON *new1 = cJSON_Parse(new_message1); 
+    // cJSON *new1 = cJSON_Parse(new_message1); 
 
-    config_init();
+    // config_init();
 
-    (void)config_attach("config", callback1);
-    (void)config_attach("config", callback2);
+    // (void)config_attach("config", callback1);
+    // (void)config_attach("config", callback2);
 
-    set_config("config", new1);
-    (void)config_detach("config", callback1);
+    // set_config("config", new1);
+    // (void)config_detach("config", callback1);
 
-    cJSON_Delete(new1);
-    new1 = cJSON_Parse(new_message);
-    set_config("config", new1);
+    // cJSON_Delete(new1);
+    // new1 = cJSON_Parse(new_message);
+    // set_config("config", new1);
 
-    set_default_config("default_cde", new1);
-    set_config("cde", new1);
-    // // pthread_create(&tid1, NULL, thread_func1, (void *)new_message);
-    // // pthread_create(&tid2, NULL, thread_func2, (void *)new_message1);
+    // set_default_config("default_cde", new1);
+    // set_config("cde", new1);
+    // // // pthread_create(&tid1, NULL, thread_func1, (void *)new_message);
+    // // // pthread_create(&tid2, NULL, thread_func2, (void *)new_message1);
 
-    // // pthread_join(tid1, NULL);
-    // // pthread_join(tid2, NULL);
+    // // // pthread_join(tid1, NULL);
+    // // // pthread_join(tid2, NULL);
 
-    // // get_default("default_config.json", &new1);
-    // // str = cJSON_Print(new1);
-    // // printf("%s\n", str); 
-    // // free(str);
+    // // // get_default("default_config.json", &new1);
+    // // // str = cJSON_Print(new1);
+    // // // printf("%s\n", str); 
+    // // // free(str);
 
-    cJSON_Delete(new1);
-    new1 = NULL; // 避免悬空指针
+    // cJSON_Delete(new1);
+    // new1 = NULL; // 避免悬空指针
 
     // // print_hash_table(ALL_CONFIG_FILE);
     // // printf("\n");
     // // print_hash_table(ALL_DEFAULT_FILE);
     // config_clear();
     // test_queue();
+    test_queue();
     zlog_fini();
     return 0;
 }
