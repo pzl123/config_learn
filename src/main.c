@@ -68,8 +68,8 @@ void *thread_func1(void *str)
     new1 = cJSON_Parse((char *)str); 
     while(1)
     {   
-        int i = rand() % 10;
-        int j = rand() % 10;
+        int32_t i = rand() % 10;
+        int32_t j = rand() % 10;
         (void)config_attach("config.json", callback1);
         (void)config_attach("config.json", callback2);
         set_config("config.json", new1);
@@ -88,8 +88,8 @@ void *thread_func2(void *str)
     // new1 = cJSON_Parse(new_message); 
     while(1)
     {
-        int i = rand() % 10;
-        int j = rand() % 10;
+        int32_t i = rand() % 10;
+        int32_t j = rand() % 10;
         (void)config_detach("config.json", callback1);
         (void)config_detach("config.json", callback2);
         set_config("config.json", new1);
@@ -101,10 +101,9 @@ void *thread_func2(void *str)
 }
 
 
-
 int main(void)
 {
-    int ret = zlog_init(ZLOG_INI_CONF);
+    int32_t ret = zlog_init(ZLOG_INI_CONF);
     if (ret != 0)
     {
         printf("zlog_init failed!\n");
@@ -138,7 +137,8 @@ int main(void)
     new1 = cJSON_Parse(new_message);
     set_config("config", new1);
 
-
+    set_default_config("default_cde", new1);
+    set_config("cde", new1);
     // // pthread_create(&tid1, NULL, thread_func1, (void *)new_message);
     // // pthread_create(&tid2, NULL, thread_func2, (void *)new_message1);
 

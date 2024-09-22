@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <time.h>
 #include <unistd.h>
+#include <string.h>
 
 typedef struct observer_list {
     int owner_num;
@@ -211,19 +212,13 @@ int test1(void)
     return 0;
 }
 
-int func(int *a)
-{
-    printf("func a %p",a);
-    return 0;
-}
-
 int test2(void)
 {
-    int b = 10;
-    printf("test1 b %p\n", &b);
-    int *a = &b;
-    func(a);
-    return 0;
+    int i = 10;
+    char *j = (char *)malloc(10);
+    strcpy(j, "123456789");
+    j[10] = '\0';
+    printf("%s\n", j);
 }
 
 int main()
