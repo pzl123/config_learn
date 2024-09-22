@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../third-party/cJSON/include/cJSON.h
+stddef.h
+-
+
+../third-party/cJSONx/include/cJSONx.h
+stdbool.h
+-
+cJSON.h
+../third-party/cJSONx/include/cJSON.h
+
+/home/zlgmcu/project/config_learn/third-party/cJSONx/src/cJSONx.c
+limits.h
+-
+stddef.h
+-
+stdlib.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+cJSONx.h
+/home/zlgmcu/project/config_learn/third-party/cJSONx/src/cJSONx.h
+

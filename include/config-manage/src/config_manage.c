@@ -24,7 +24,8 @@
 #define DEFAULT_CONFIG_PATH "./../config-file-dir/default"
 
 
-typedef struct cb_list {
+typedef struct cb_list
+{
     on_config_change cb;
     struct cb_list *prev;
     struct cb_list *next;

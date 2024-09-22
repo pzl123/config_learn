@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/observer/include/observer.h
+
+/home/zlgmcu/project/config_learn/include/observer/src/observer.c
+observer.h
+/home/zlgmcu/project/config_learn/include/observer/src/observer.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+

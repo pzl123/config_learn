@@ -2,7 +2,7 @@
 
 # Add your custom library
 add_library(config_managelib SHARED
-    ${PROJECT_SOURCE_DIR}/include/config_manage/src/config_manage.c
+    ${PROJECT_SOURCE_DIR}/include/config-manage/src/config_manage.c
 )
 target_include_directories(config_managelib PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/config/include>

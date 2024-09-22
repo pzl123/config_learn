@@ -13,14 +13,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 # 包含头文件
 include_directories(
-    ${PROJECT_SOURCE_DIR}/include/config_manage/include
+    ${PROJECT_SOURCE_DIR}/include/config-manage/include
     ${PROJECT_SOURCE_DIR}/include/observer/include
     ${PROJECT_SOURCE_DIR}/include/uthash/include
-    ${PROJECT_SOURCE_DIR}/third_party/cJSON/include
-    ${PROJECT_SOURCE_DIR}/third_party/cJSONx/include
-    ${PROJECT_SOURCE_DIR}/third_party/uthash/include
-    ${PROJECT_SOURCE_DIR}/third_party/uthash/include
-    ${PROJECT_SOURCE_DIR}/third_party/zlog/include
+    ${PROJECT_SOURCE_DIR}/third-party/cJSON/include
+    ${PROJECT_SOURCE_DIR}/third-party/cJSONx/include
+    ${PROJECT_SOURCE_DIR}/third-party/uthash/include
+    ${PROJECT_SOURCE_DIR}/third-party/uthash/include
+    ${PROJECT_SOURCE_DIR}/third-party/zlog/include
 )
 
 # 设置编译选项
@@ -32,5 +32,5 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize=leak")
 add_subdirectory(src)
 add_subdirectory(lib)
 add_subdirectory(include)
-add_subdirectory(third_party)
+add_subdirectory(third-party)
 # target_link_libraries()
