@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC  -fsanitize=address -fsanitize=leak -g  -shared -Wl,-soname,libcJSONlib.so -o ../../lib/libcJSONlib.so CMakeFiles/cJSONlib.dir/cJSON/src/cJSON.c.o 

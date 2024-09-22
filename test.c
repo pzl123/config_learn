@@ -252,14 +252,12 @@ int removeDuplicates(int* nums, int numsSize)
 
 
 /*****************************队列***********************************/// Task definition
-// Task definition
 typedef struct task
 {
     void (*func)(void *arg);
     void *arg;
 } TASK_t;
 
-// Queue structure for tasks
 typedef struct queue
 {
     TASK_t *task;
@@ -270,14 +268,13 @@ typedef struct queue
     pthread_cond_t queue_cond;
 } QUEUE_t;
 
-// Thread pool structure
+
 typedef struct taskqueue
 {
     QUEUE_t *queue;
-    pthread_t thread_id[4]; // Assuming you need 4 worker threads
+    pthread_t thread_id[4]; 
 } TASKQUEUE_t;
 
-// Function prototypes
 void task_queue_init(QUEUE_t *q, int32_t size);
 void queue_destroy(QUEUE_t *q);
 bool queue_is_empty(const QUEUE_t *q);
@@ -378,12 +375,12 @@ void *worker(void *arg)
 
 void taskqueue_init(TASKQUEUE_t *q, int queue_size)
 {
-    q->queue = malloc(sizeof(QUEUE_t)); // Allocate memory for queue
+    q->queue = malloc(sizeof(QUEUE_t));
     if (!q->queue) {
         perror("Failed to allocate memory for queue");
         exit(EXIT_FAILURE);
     }
-    task_queue_init(q->queue, queue_size); // Initialize the queue
+    task_queue_init(q->queue, queue_size);
 
     for (int i = 0; i < 4; i++) {
         pthread_create(&q->thread_id[i], NULL, worker, q);
@@ -435,7 +432,6 @@ void test_queue()
 
     taskqueue_init(&q, queue_size); 
 
-    // Test the task queue
     while (1)
     {
         int32_t a;

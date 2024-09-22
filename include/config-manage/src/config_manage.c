@@ -20,8 +20,8 @@
 // /* 默认配置文件路径 */
 // #define DEFAULT_CONFIG_PATH "/mnt/data/config/default"
 
-#define CONFIG_PATH "./../config_file_dir/config"
-#define DEFAULT_CONFIG_PATH "./../config_file_dir/default"
+#define CONFIG_PATH "./../config-file-dir/config"
+#define DEFAULT_CONFIG_PATH "./../config-file-dir/default"
 
 
 typedef struct cb_list {

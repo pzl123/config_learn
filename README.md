@@ -1,57 +1,75 @@
-# 这是一个学习cmake案例
+# 配置管理
+将系统配置做成json文件，通过json文件进行配置管理，方便配置的修改和扩展。
 
 项目管理架构如下
 ```
 MyProject/
+├── a.out
+├── bin
+│   ├── MyProject
+│   └── zlog.conf
+├── build
 ├── CMakeLists.txt
-├── third_party/
-|   ├── cJSON/  # 单个库的目录
-│   |   ├── src/       # 第三方库的源代码
-│   |   |   └── cJSON.c
-│   │   ├── include/   # 第三方库的头文件
-│   |   |   └── cJSON.h
-|   |
-|   ├── cJSONx/  
-│   |   ├── src/       
-│   |   |   └── cJSON.c
-│   │   ├── include/ 
-│   |   |   └── cJSONx.h
-|   | 
-|   ├── uthash/  
-│   |   ├── src/       
-│   │   ├── include/ 
-│   |   |   └── uthash.h
-|
-├── config/
-│         └── config.json
-│         └── default_config.json
-├── src/
-│      ├── main.c
-|      ├── CMakeLists.txt
-|
-|      
-|
-├── lib/
-|      ├── CMakeLists.txt
-|
-│      
-├── include/
-|      ├── config/
-│      |   ├── src/       
-│      |   |   ├── config_manage.c
-│      │   ├── include/ 
-│      |   |   └── config_manage.h
-|      |
-|      ├── observer/
-│      |   ├── src/       
-│      |   |   ├── observer.c
-│      │   ├── include/ 
-│      |   |   └── observer.h
-|      |
-|      ├── uthash/       
-│      │   ├── include/ 
-│              └── observer.h
-|                   
+├── config-file-dir
+│   ├── config
+│   │   ├── cde.json
+│   │   └── config.json
+│   └── default
+│       ├── default_cde.json
+│       └── default_config.json
+├── include
+│   ├── CMakeLists.txt
+│   ├── config-manage
+│   │   ├── include
+│   │   │   └── config_manage.h
+│   │   └── src
+│   │       └── config_manage.c
+│   └── observer
+│       ├── include
+│       │   └── observer.h
+│       └── src
+│           └── observer.c
+├── lib
+│   ├── CMakeLists.txt
+│   ├── libcJSONlib.so
+│   ├── libcJSONxlib.so
+│   ├── libconfig_managelib.so
+│   ├── libobserverlib.so
+│   ├── libzlog.so -> libzlog.so.1
+│   ├── libzlog.so.1 -> libzlog.so.1.2
+│   └── libzlog.so.1.2
+├── src
+│   ├── CMakeLists.txt
+│   ├── main.c
+│   └── zlog.conf
+├── test
+├── test.c
+├── third-party
+│   ├── cJSON
+│   │   ├── include
+│   │   │   └── cJSON.h
+│   │   └── src
+│   │       └── cJSON.c
+│   ├── cJSONx
+│   │   ├── include
+│   │   │   └── cJSONx.h
+│   │   └── src
+│   │       └── cJSONx.c
+│   ├── CMakeLists.txt
+│   ├── uthash
+│   │   └── include
+│   │       ├── utarray.h
+│   │       ├── uthash.h
+│   │       ├── utlist.h
+│   │       ├── utringbuffer.h
+│   │       ├── utstack.h
+│   │       └── utstring.h
+│   └── zlog
+│       └── include
+│           └── zlog.h
+└── web
+│   └── abc.json    
+├── README.md         
 ```
 
 运行项目如下：
