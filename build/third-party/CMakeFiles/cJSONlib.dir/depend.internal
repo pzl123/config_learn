@@ -3,4 +3,4 @@
 
 third-party/CMakeFiles/cJSONlib.dir/cJSON/src/cJSON.c.o
  ../third-party/cJSON/include/cJSON.h
- /home/zlgmcu/project/config_learn/third-party/cJSON/src/cJSON.c
+ /home/zlgmcu/project/config-learn/third-party/cJSON/src/cJSON.c

@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zlgmcu/project/config_learn
+CMAKE_SOURCE_DIR = /home/zlgmcu/project/config-learn
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zlgmcu/project/config_learn/build
+CMAKE_BINARY_DIR = /home/zlgmcu/project/config-learn/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,6 +79,17 @@ install/local/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
 	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # Special rule for the target install
 install: preinstall
@@ -113,27 +124,16 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # The main all target
 all: cmake_check_build_system
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles /home/zlgmcu/project/config_learn/build/src/CMakeFiles/progress.marks
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 0
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config-learn/build/CMakeFiles /home/zlgmcu/project/config-learn/build/src/CMakeFiles/progress.marks
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config-learn/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,22 +143,37 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
+src/CMakeFiles/pcu.fcgi.dir/rule:
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/pcu.fcgi.dir/rule
+.PHONY : src/CMakeFiles/pcu.fcgi.dir/rule
+
+# Convenience name for target.
+pcu.fcgi: src/CMakeFiles/pcu.fcgi.dir/rule
+
+.PHONY : pcu.fcgi
+
+# fast build rule for target.
+pcu.fcgi/fast:
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f src/CMakeFiles/pcu.fcgi.dir/build.make src/CMakeFiles/pcu.fcgi.dir/build
+.PHONY : pcu.fcgi/fast
+
+# Convenience name for target.
 src/CMakeFiles/MyProject.dir/rule:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/MyProject.dir/rule
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/MyProject.dir/rule
 .PHONY : src/CMakeFiles/MyProject.dir/rule
 
 # Convenience name for target.
@@ -168,8 +183,35 @@ MyProject: src/CMakeFiles/MyProject.dir/rule
 
 # fast build rule for target.
 MyProject/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/build
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/build
 .PHONY : MyProject/fast
+
+fcgi/fcgi_main.o: fcgi/fcgi_main.c.o
+
+.PHONY : fcgi/fcgi_main.o
+
+# target to build an object file
+fcgi/fcgi_main.c.o:
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f src/CMakeFiles/pcu.fcgi.dir/build.make src/CMakeFiles/pcu.fcgi.dir/fcgi/fcgi_main.c.o
+.PHONY : fcgi/fcgi_main.c.o
+
+fcgi/fcgi_main.i: fcgi/fcgi_main.c.i
+
+.PHONY : fcgi/fcgi_main.i
+
+# target to preprocess a source file
+fcgi/fcgi_main.c.i:
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f src/CMakeFiles/pcu.fcgi.dir/build.make src/CMakeFiles/pcu.fcgi.dir/fcgi/fcgi_main.c.i
+.PHONY : fcgi/fcgi_main.c.i
+
+fcgi/fcgi_main.s: fcgi/fcgi_main.c.s
+
+.PHONY : fcgi/fcgi_main.s
+
+# target to generate assembly for a file
+fcgi/fcgi_main.c.s:
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f src/CMakeFiles/pcu.fcgi.dir/build.make src/CMakeFiles/pcu.fcgi.dir/fcgi/fcgi_main.c.s
+.PHONY : fcgi/fcgi_main.c.s
 
 main.o: main.c.o
 
@@ -177,7 +219,7 @@ main.o: main.c.o
 
 # target to build an object file
 main.c.o:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.o
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.o
 .PHONY : main.c.o
 
 main.i: main.c.i
@@ -186,7 +228,7 @@ main.i: main.c.i
 
 # target to preprocess a source file
 main.c.i:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.i
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.i
 .PHONY : main.c.i
 
 main.s: main.c.s
@@ -195,7 +237,7 @@ main.s: main.c.s
 
 # target to generate assembly for a file
 main.c.s:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.s
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f src/CMakeFiles/MyProject.dir/build.make src/CMakeFiles/MyProject.dir/main.c.s
 .PHONY : main.c.s
 
 # Help Target
@@ -206,11 +248,15 @@ help:
 	@echo "... depend"
 	@echo "... install/strip"
 	@echo "... install/local"
+	@echo "... edit_cache"
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... edit_cache"
+	@echo "... pcu.fcgi"
 	@echo "... MyProject"
+	@echo "... fcgi/fcgi_main.o"
+	@echo "... fcgi/fcgi_main.i"
+	@echo "... fcgi/fcgi_main.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
@@ -225,6 +271,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

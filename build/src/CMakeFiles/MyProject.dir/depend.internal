@@ -5,7 +5,9 @@ src/CMakeFiles/MyProject.dir/main.c.o
  ../include/config-manage/include/config_manage.h
  ../include/observer/include/observer.h
  ../third-party/cJSON/include/cJSON.h
+ ../third-party/fcgi/include/fcgi_stdio.h
+ ../third-party/fcgi/include/fcgiapp.h
  ../third-party/uthash/include/uthash.h
  ../third-party/uthash/include/utlist.h
  ../third-party/zlog/include/zlog.h
- /home/zlgmcu/project/config_learn/src/main.c
+ /home/zlgmcu/project/config-learn/src/main.c

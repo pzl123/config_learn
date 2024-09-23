@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zlgmcu/project/config_learn
+CMAKE_SOURCE_DIR = /home/zlgmcu/project/config-learn
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zlgmcu/project/config_learn/build
+CMAKE_BINARY_DIR = /home/zlgmcu/project/config-learn/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -126,9 +126,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles /home/zlgmcu/project/config_learn/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config-learn/build/CMakeFiles /home/zlgmcu/project/config-learn/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config-learn/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -155,6 +155,19 @@ preinstall/fast:
 depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+#=============================================================================
+# Target rules for targets named pcu.fcgi
+
+# Build rule for target.
+pcu.fcgi: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pcu.fcgi
+.PHONY : pcu.fcgi
+
+# fast build rule for target.
+pcu.fcgi/fast:
+	$(MAKE) -f src/CMakeFiles/pcu.fcgi.dir/build.make src/CMakeFiles/pcu.fcgi.dir/build
+.PHONY : pcu.fcgi/fast
 
 #=============================================================================
 # Target rules for targets named MyProject
@@ -233,6 +246,7 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... pcu.fcgi"
 	@echo "... MyProject"
 	@echo "... observerlib"
 	@echo "... config_managelib"

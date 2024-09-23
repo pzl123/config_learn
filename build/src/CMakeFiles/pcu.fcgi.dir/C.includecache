@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../third-party/fcgi/include/fcgi_stdio.h
+stdio.h
+-
+sys/types.h
+-
+fcgiapp.h
+../third-party/fcgi/include/fcgiapp.h
+
+../third-party/fcgi/include/fcgiapp.h
+stdarg.h
+-
+varargs.h
+-
+
+/home/zlgmcu/project/config-learn/src/fcgi/fcgi_main.c
+fcgi_main.h
+/home/zlgmcu/project/config-learn/src/fcgi/fcgi_main.h
+fcgi_stdio.h
+/home/zlgmcu/project/config-learn/src/fcgi/fcgi_stdio.h
+
+/home/zlgmcu/project/config-learn/src/fcgi/fcgi_main.h
+stdint.h
+-
+

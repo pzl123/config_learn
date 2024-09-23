@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zlgmcu/project/config_learn
+CMAKE_SOURCE_DIR = /home/zlgmcu/project/config-learn
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zlgmcu/project/config_learn/build
+CMAKE_BINARY_DIR = /home/zlgmcu/project/config-learn/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -126,14 +126,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles /home/zlgmcu/project/config_learn/build/lib/CMakeFiles/progress.marks
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 0
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config-learn/build/CMakeFiles /home/zlgmcu/project/config-learn/build/lib/CMakeFiles/progress.marks
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config-learn/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/clean
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,22 +143,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 lib/CMakeFiles/observerlib.dir/rule:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/observerlib.dir/rule
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/observerlib.dir/rule
 .PHONY : lib/CMakeFiles/observerlib.dir/rule
 
 # Convenience name for target.
@@ -168,12 +168,12 @@ observerlib: lib/CMakeFiles/observerlib.dir/rule
 
 # fast build rule for target.
 observerlib/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/build
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/build
 .PHONY : observerlib/fast
 
 # Convenience name for target.
 lib/CMakeFiles/config_managelib.dir/rule:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/config_managelib.dir/rule
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/config_managelib.dir/rule
 .PHONY : lib/CMakeFiles/config_managelib.dir/rule
 
 # Convenience name for target.
@@ -183,7 +183,7 @@ config_managelib: lib/CMakeFiles/config_managelib.dir/rule
 
 # fast build rule for target.
 config_managelib/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/build
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/build
 .PHONY : config_managelib/fast
 
 __/include/config-manage/src/config_manage.o: __/include/config-manage/src/config_manage.c.o
@@ -192,7 +192,7 @@ __/include/config-manage/src/config_manage.o: __/include/config-manage/src/confi
 
 # target to build an object file
 __/include/config-manage/src/config_manage.c.o:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config-manage/src/config_manage.c.o
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config-manage/src/config_manage.c.o
 .PHONY : __/include/config-manage/src/config_manage.c.o
 
 __/include/config-manage/src/config_manage.i: __/include/config-manage/src/config_manage.c.i
@@ -201,7 +201,7 @@ __/include/config-manage/src/config_manage.i: __/include/config-manage/src/confi
 
 # target to preprocess a source file
 __/include/config-manage/src/config_manage.c.i:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config-manage/src/config_manage.c.i
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config-manage/src/config_manage.c.i
 .PHONY : __/include/config-manage/src/config_manage.c.i
 
 __/include/config-manage/src/config_manage.s: __/include/config-manage/src/config_manage.c.s
@@ -210,7 +210,7 @@ __/include/config-manage/src/config_manage.s: __/include/config-manage/src/confi
 
 # target to generate assembly for a file
 __/include/config-manage/src/config_manage.c.s:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config-manage/src/config_manage.c.s
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f lib/CMakeFiles/config_managelib.dir/build.make lib/CMakeFiles/config_managelib.dir/__/include/config-manage/src/config_manage.c.s
 .PHONY : __/include/config-manage/src/config_manage.c.s
 
 __/include/observer/src/observer.o: __/include/observer/src/observer.c.o
@@ -219,7 +219,7 @@ __/include/observer/src/observer.o: __/include/observer/src/observer.c.o
 
 # target to build an object file
 __/include/observer/src/observer.c.o:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.o
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.o
 .PHONY : __/include/observer/src/observer.c.o
 
 __/include/observer/src/observer.i: __/include/observer/src/observer.c.i
@@ -228,7 +228,7 @@ __/include/observer/src/observer.i: __/include/observer/src/observer.c.i
 
 # target to preprocess a source file
 __/include/observer/src/observer.c.i:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.i
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.i
 .PHONY : __/include/observer/src/observer.c.i
 
 __/include/observer/src/observer.s: __/include/observer/src/observer.c.s
@@ -237,7 +237,7 @@ __/include/observer/src/observer.s: __/include/observer/src/observer.c.s
 
 # target to generate assembly for a file
 __/include/observer/src/observer.c.s:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.s
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f lib/CMakeFiles/observerlib.dir/build.make lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.s
 .PHONY : __/include/observer/src/observer.c.s
 
 # Help Target
@@ -271,6 +271,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

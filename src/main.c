@@ -1,5 +1,6 @@
 #include "config_manage.h"
 #include "observer.h"
+// #include "fcgi/fcgi_main.h"
 
 
 #include <stdio.h>
@@ -8,10 +9,10 @@
 #include <unistd.h>
 
 #include "zlog.h"
+#include "fcgi_stdio.h"
 
 
-
-#define ZLOG_INI_CONF "/home/zlgmcu/project/config_learn/bin/zlog.conf"
+#define ZLOG_INI_CONF "/home/zlgmcu/project/config-learn/bin/zlog.conf"
 
 
 char *message =
@@ -100,7 +101,6 @@ void *thread_func2(void *str)
     cJSON_Delete(new1);
 }
 
-
 int main(void)
 {
     int32_t ret = zlog_init(ZLOG_INI_CONF);
@@ -119,7 +119,6 @@ int main(void)
     }
     dzlog_info("******************** PCU START ********************");
 
-
     pthread_t tid1, tid2;
     cJSON *new1 = cJSON_Parse(new_message1); 
     
@@ -135,8 +134,8 @@ int main(void)
     new1 = cJSON_Parse(new_message);
     set_config("config", new1);
 
-    // set_default_config("default_cde", new1);
-    // set_config("cde", new1);
+    set_default_config("default_cde", new1);
+    set_config("cde", new1);
     // // // pthread_create(&tid1, NULL, thread_func1, (void *)new_message);
     // // // pthread_create(&tid2, NULL, thread_func2, (void *)new_message1);
 
@@ -155,7 +154,6 @@ int main(void)
     // // printf("\n");
     // // print_hash_table(ALL_DEFAULT_FILE);
     config_clear();
-
 
     zlog_fini();
     return 0;

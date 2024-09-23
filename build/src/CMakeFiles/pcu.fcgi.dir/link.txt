@@ -1,0 +1,1 @@
+/usr/bin/cc  -fsanitize=address -fsanitize=leak -g   CMakeFiles/pcu.fcgi.dir/fcgi/fcgi_main.c.o  -o ../../bin/pcu.fcgi  ../../lib/libfcgi.a 

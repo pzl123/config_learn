@@ -1,4 +1,4 @@
-# Install script for directory: /home/zlgmcu/project/config_learn/third-party
+# Install script for directory: /home/zlgmcu/project/config-learn/third-party
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

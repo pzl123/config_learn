@@ -16,7 +16,7 @@ stdbool.h
 cJSON.h
 ../third-party/cJSONx/include/cJSON.h
 
-/home/zlgmcu/project/config_learn/third-party/cJSONx/src/cJSONx.c
+/home/zlgmcu/project/config-learn/third-party/cJSONx/src/cJSONx.c
 limits.h
 -
 stddef.h
@@ -30,5 +30,5 @@ stdlib.h
 string.h
 -
 cJSONx.h
-/home/zlgmcu/project/config_learn/third-party/cJSONx/src/cJSONx.h
+/home/zlgmcu/project/config-learn/third-party/cJSONx/src/cJSONx.h
 

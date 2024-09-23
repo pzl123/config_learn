@@ -10,7 +10,7 @@
 stddef.h
 -
 
-/home/zlgmcu/project/config_learn/third-party/cJSON/src/cJSON.c
+/home/zlgmcu/project/config-learn/third-party/cJSON/src/cJSON.c
 string.h
 -
 stdio.h
@@ -28,5 +28,5 @@ float.h
 locale.h
 -
 cJSON.h
-/home/zlgmcu/project/config_learn/third-party/cJSON/src/cJSON.h
+/home/zlgmcu/project/config-learn/third-party/cJSON/src/cJSON.h
 

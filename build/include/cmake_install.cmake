@@ -1,4 +1,4 @@
-# Install script for directory: /home/zlgmcu/project/config_learn/include
+# Install script for directory: /home/zlgmcu/project/config-learn/include
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,6 +38,6 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/zlgmcu/project/config_learn/include" FILES_MATCHING REGEX "/[^/]*\\.h$")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/zlgmcu/project/config-learn/include" FILES_MATCHING REGEX "/[^/]*\\.h$")
 endif()
 

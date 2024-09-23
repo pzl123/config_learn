@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zlgmcu/project/config_learn
+CMAKE_SOURCE_DIR = /home/zlgmcu/project/config-learn
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/zlgmcu/project/config_learn/build
+CMAKE_BINARY_DIR = /home/zlgmcu/project/config-learn/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -126,14 +126,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles /home/zlgmcu/project/config_learn/build/third-party/CMakeFiles/progress.marks
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config_learn/build/CMakeFiles 0
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config-learn/build/CMakeFiles /home/zlgmcu/project/config-learn/build/third-party/CMakeFiles/progress.marks
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zlgmcu/project/config-learn/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/clean
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,22 +143,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/preinstall
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/preinstall
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 third-party/CMakeFiles/cJSONxlib.dir/rule:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/CMakeFiles/cJSONxlib.dir/rule
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/CMakeFiles/cJSONxlib.dir/rule
 .PHONY : third-party/CMakeFiles/cJSONxlib.dir/rule
 
 # Convenience name for target.
@@ -168,12 +168,12 @@ cJSONxlib: third-party/CMakeFiles/cJSONxlib.dir/rule
 
 # fast build rule for target.
 cJSONxlib/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONxlib.dir/build.make third-party/CMakeFiles/cJSONxlib.dir/build
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONxlib.dir/build.make third-party/CMakeFiles/cJSONxlib.dir/build
 .PHONY : cJSONxlib/fast
 
 # Convenience name for target.
 third-party/CMakeFiles/cJSONlib.dir/rule:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/CMakeFiles/cJSONlib.dir/rule
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f CMakeFiles/Makefile2 third-party/CMakeFiles/cJSONlib.dir/rule
 .PHONY : third-party/CMakeFiles/cJSONlib.dir/rule
 
 # Convenience name for target.
@@ -183,7 +183,7 @@ cJSONlib: third-party/CMakeFiles/cJSONlib.dir/rule
 
 # fast build rule for target.
 cJSONlib/fast:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONlib.dir/build.make third-party/CMakeFiles/cJSONlib.dir/build
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONlib.dir/build.make third-party/CMakeFiles/cJSONlib.dir/build
 .PHONY : cJSONlib/fast
 
 cJSON/src/cJSON.o: cJSON/src/cJSON.c.o
@@ -192,7 +192,7 @@ cJSON/src/cJSON.o: cJSON/src/cJSON.c.o
 
 # target to build an object file
 cJSON/src/cJSON.c.o:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONlib.dir/build.make third-party/CMakeFiles/cJSONlib.dir/cJSON/src/cJSON.c.o
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONlib.dir/build.make third-party/CMakeFiles/cJSONlib.dir/cJSON/src/cJSON.c.o
 .PHONY : cJSON/src/cJSON.c.o
 
 cJSON/src/cJSON.i: cJSON/src/cJSON.c.i
@@ -201,7 +201,7 @@ cJSON/src/cJSON.i: cJSON/src/cJSON.c.i
 
 # target to preprocess a source file
 cJSON/src/cJSON.c.i:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONlib.dir/build.make third-party/CMakeFiles/cJSONlib.dir/cJSON/src/cJSON.c.i
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONlib.dir/build.make third-party/CMakeFiles/cJSONlib.dir/cJSON/src/cJSON.c.i
 .PHONY : cJSON/src/cJSON.c.i
 
 cJSON/src/cJSON.s: cJSON/src/cJSON.c.s
@@ -210,7 +210,7 @@ cJSON/src/cJSON.s: cJSON/src/cJSON.c.s
 
 # target to generate assembly for a file
 cJSON/src/cJSON.c.s:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONlib.dir/build.make third-party/CMakeFiles/cJSONlib.dir/cJSON/src/cJSON.c.s
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONlib.dir/build.make third-party/CMakeFiles/cJSONlib.dir/cJSON/src/cJSON.c.s
 .PHONY : cJSON/src/cJSON.c.s
 
 cJSONx/src/cJSONx.o: cJSONx/src/cJSONx.c.o
@@ -219,7 +219,7 @@ cJSONx/src/cJSONx.o: cJSONx/src/cJSONx.c.o
 
 # target to build an object file
 cJSONx/src/cJSONx.c.o:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONxlib.dir/build.make third-party/CMakeFiles/cJSONxlib.dir/cJSONx/src/cJSONx.c.o
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONxlib.dir/build.make third-party/CMakeFiles/cJSONxlib.dir/cJSONx/src/cJSONx.c.o
 .PHONY : cJSONx/src/cJSONx.c.o
 
 cJSONx/src/cJSONx.i: cJSONx/src/cJSONx.c.i
@@ -228,7 +228,7 @@ cJSONx/src/cJSONx.i: cJSONx/src/cJSONx.c.i
 
 # target to preprocess a source file
 cJSONx/src/cJSONx.c.i:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONxlib.dir/build.make third-party/CMakeFiles/cJSONxlib.dir/cJSONx/src/cJSONx.c.i
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONxlib.dir/build.make third-party/CMakeFiles/cJSONxlib.dir/cJSONx/src/cJSONx.c.i
 .PHONY : cJSONx/src/cJSONx.c.i
 
 cJSONx/src/cJSONx.s: cJSONx/src/cJSONx.c.s
@@ -237,7 +237,7 @@ cJSONx/src/cJSONx.s: cJSONx/src/cJSONx.c.s
 
 # target to generate assembly for a file
 cJSONx/src/cJSONx.c.s:
-	cd /home/zlgmcu/project/config_learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONxlib.dir/build.make third-party/CMakeFiles/cJSONxlib.dir/cJSONx/src/cJSONx.c.s
+	cd /home/zlgmcu/project/config-learn/build && $(MAKE) -f third-party/CMakeFiles/cJSONxlib.dir/build.make third-party/CMakeFiles/cJSONxlib.dir/cJSONx/src/cJSONx.c.s
 .PHONY : cJSONx/src/cJSONx.c.s
 
 # Help Target
@@ -271,6 +271,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/zlgmcu/project/config_learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/zlgmcu/project/config-learn/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

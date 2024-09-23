@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/zlgmcu/project/config_learn/src/main.c" "/home/zlgmcu/project/config_learn/build/src/CMakeFiles/MyProject.dir/main.c.o"
+  "/home/zlgmcu/project/config-learn/src/main.c" "/home/zlgmcu/project/config-learn/build/src/CMakeFiles/MyProject.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -17,15 +17,16 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "../third-party/cJSONx/include"
   "../third-party/uthash/include"
   "../third-party/zlog/include"
+  "../third-party/fcgi/include"
   "../include/config/include"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/zlgmcu/project/config_learn/build/third-party/CMakeFiles/cJSONlib.dir/DependInfo.cmake"
-  "/home/zlgmcu/project/config_learn/build/third-party/CMakeFiles/cJSONxlib.dir/DependInfo.cmake"
-  "/home/zlgmcu/project/config_learn/build/lib/CMakeFiles/config_managelib.dir/DependInfo.cmake"
-  "/home/zlgmcu/project/config_learn/build/lib/CMakeFiles/observerlib.dir/DependInfo.cmake"
+  "/home/zlgmcu/project/config-learn/build/third-party/CMakeFiles/cJSONlib.dir/DependInfo.cmake"
+  "/home/zlgmcu/project/config-learn/build/third-party/CMakeFiles/cJSONxlib.dir/DependInfo.cmake"
+  "/home/zlgmcu/project/config-learn/build/lib/CMakeFiles/config_managelib.dir/DependInfo.cmake"
+  "/home/zlgmcu/project/config-learn/build/lib/CMakeFiles/observerlib.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

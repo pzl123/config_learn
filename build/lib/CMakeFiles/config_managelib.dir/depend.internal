@@ -8,4 +8,4 @@ lib/CMakeFiles/config_managelib.dir/__/include/config-manage/src/config_manage.c
  ../third-party/uthash/include/uthash.h
  ../third-party/uthash/include/utlist.h
  ../third-party/zlog/include/zlog.h
- /home/zlgmcu/project/config_learn/include/config-manage/src/config_manage.c
+ /home/zlgmcu/project/config-learn/include/config-manage/src/config_manage.c

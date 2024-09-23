@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/zlgmcu/project/config_learn/include/observer/src/observer.c" "/home/zlgmcu/project/config_learn/build/lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.o"
+  "/home/zlgmcu/project/config-learn/include/observer/src/observer.c" "/home/zlgmcu/project/config-learn/build/lib/CMakeFiles/observerlib.dir/__/include/observer/src/observer.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
@@ -22,6 +22,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
   "../third-party/cJSONx/include"
   "../third-party/uthash/include"
   "../third-party/zlog/include"
+  "../third-party/fcgi/include"
   )
 
 # Targets to which this target links.

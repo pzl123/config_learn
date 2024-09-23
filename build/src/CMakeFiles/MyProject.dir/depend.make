@@ -4,6 +4,8 @@
 src/CMakeFiles/MyProject.dir/main.c.o: ../include/config-manage/include/config_manage.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../include/observer/include/observer.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../third-party/cJSON/include/cJSON.h
+src/CMakeFiles/MyProject.dir/main.c.o: ../third-party/fcgi/include/fcgi_stdio.h
+src/CMakeFiles/MyProject.dir/main.c.o: ../third-party/fcgi/include/fcgiapp.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../third-party/uthash/include/uthash.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../third-party/uthash/include/utlist.h
 src/CMakeFiles/MyProject.dir/main.c.o: ../third-party/zlog/include/zlog.h

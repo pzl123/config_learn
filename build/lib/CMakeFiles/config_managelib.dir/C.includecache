@@ -50,9 +50,9 @@ stdarg.h
 stdio.h
 -
 
-/home/zlgmcu/project/config_learn/include/config-manage/src/config_manage.c
+/home/zlgmcu/project/config-learn/include/config-manage/src/config_manage.c
 config_manage.h
-/home/zlgmcu/project/config_learn/include/config-manage/src/config_manage.h
+/home/zlgmcu/project/config-learn/include/config-manage/src/config_manage.h
 stdio.h
 -
 stdlib.h
@@ -70,11 +70,11 @@ unistd.h
 pthread.h
 -
 cJSON.h
-/home/zlgmcu/project/config_learn/include/config-manage/src/cJSON.h
+/home/zlgmcu/project/config-learn/include/config-manage/src/cJSON.h
 cJSONx.h
-/home/zlgmcu/project/config_learn/include/config-manage/src/cJSONx.h
+/home/zlgmcu/project/config-learn/include/config-manage/src/cJSONx.h
 utlist.h
-/home/zlgmcu/project/config_learn/include/config-manage/src/utlist.h
+/home/zlgmcu/project/config-learn/include/config-manage/src/utlist.h
 zlog.h
-/home/zlgmcu/project/config_learn/include/config-manage/src/zlog.h
+/home/zlgmcu/project/config-learn/include/config-manage/src/zlog.h
 

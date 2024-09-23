@@ -1,1 +1,140 @@
 2024-09-23 08:52:29: (server.c.1943) server started (lighttpd/1.4.77-devel-lighttpd-1.4.76-55-gb41e5220)
+2024-09-23 09:01:53: (server.c.1943) server started (lighttpd/1.4.77-devel-lighttpd-1.4.76-55-gb41e5220)
+2024-09-23 11:06:30: (server.c.1943) server started (lighttpd/1.4.77-devel-lighttpd-1.4.76-55-gb41e5220)
+2024-09-23 11:07:09: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:07:09: (gw_backend.c.272) got proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:07:09: (gw_backend.c.352) released proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:12:24: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:12:24: (gw_backend.c.272) got proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:12:24: (gw_backend.c.352) released proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:12:25: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:12:25: (gw_backend.c.272) got proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:12:25: (gw_backend.c.352) released proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:12:25: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:12:25: (gw_backend.c.272) got proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:12:25: (gw_backend.c.352) released proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:17:51: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:17:51: (gw_backend.c.272) got proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:17:51: (gw_backend.c.352) released proc: pid: 958463 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:19:02: (server.c.1943) server started (lighttpd/1.4.77-devel-lighttpd-1.4.76-55-gb41e5220)
+2024-09-23 11:19:27: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:19:27: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:19:27: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:36:38: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:36:38: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:36:38: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:36:44: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:36:44: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:36:44: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:36:50: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:36:50: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:36:50: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:39:06: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:39:06: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:39:06: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:39:11: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:39:11: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:39:11: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:39:19: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:39:19: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:39:19: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:39:29: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:39:29: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:39:29: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:39:29: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:39:29: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:39:29: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:39:56: (server.c.1943) server started (lighttpd/1.4.77-devel-lighttpd-1.4.76-55-gb41e5220)
+2024-09-23 11:40:02: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:40:02: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:40:02: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:40:04: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:40:04: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:40:04: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:40:13: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:40:13: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:40:13: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:40:24: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:40:24: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:40:24: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:40:57: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:40:57: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:40:57: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:40:59: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:40:59: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:40:59: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:41:10: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:41:10: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:41:10: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:41:10: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:41:10: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:41:10: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:43:24: (server.c.1943) server started (lighttpd/1.4.77-devel-lighttpd-1.4.76-55-gb41e5220)
+2024-09-23 11:43:28: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:43:28: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:43:28: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:43:29: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:43:29: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:43:29: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:43:29: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:43:29: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:43:29: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:43:29: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:43:29: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:43:29: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:43:29: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:43:29: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:43:29: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:44:30: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:44:30: (gw_backend.c.288) establishing connection failed: socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0: Connection refused
+2024-09-23 11:44:30: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:44:30: (gw_backend.c.971) all handlers for /index.html? on / are down.
+2024-09-23 11:44:32: (gw_backend.c.365) gw-server re-enabled: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0  0 /home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket
+2024-09-23 11:44:34: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:44:34: (gw_backend.c.288) establishing connection failed: socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0: Connection refused
+2024-09-23 11:44:34: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:44:34: (gw_backend.c.971) all handlers for /index.html? on / are down.
+2024-09-23 11:44:36: (gw_backend.c.365) gw-server re-enabled: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0  0 /home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket
+2024-09-23 11:44:39: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:44:39: (gw_backend.c.288) establishing connection failed: socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0: Connection refused
+2024-09-23 11:44:39: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:44:39: (gw_backend.c.971) all handlers for /? on / are down.
+2024-09-23 11:44:41: (gw_backend.c.365) gw-server re-enabled: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0  0 /home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket
+2024-09-23 11:44:52: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:44:52: (gw_backend.c.288) establishing connection failed: socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0: Connection refused
+2024-09-23 11:44:52: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:44:52: (gw_backend.c.971) all handlers for /? on / are down.
+2024-09-23 11:44:55: (gw_backend.c.365) gw-server re-enabled: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0  0 /home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket
+2024-09-23 11:54:37: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:54:37: (gw_backend.c.288) establishing connection failed: socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0: Connection refused
+2024-09-23 11:54:37: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:54:37: (gw_backend.c.971) all handlers for /? on / are down.
+2024-09-23 11:54:39: (gw_backend.c.365) gw-server re-enabled: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0  0 /home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket
+2024-09-23 11:54:48: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:54:48: (gw_backend.c.288) establishing connection failed: socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0: Connection refused
+2024-09-23 11:54:48: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:54:48: (gw_backend.c.971) all handlers for /index.html? on / are down.
+2024-09-23 11:54:50: (gw_backend.c.365) gw-server re-enabled: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0  0 /home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket
+2024-09-23 11:58:07: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:58:07: (gw_backend.c.288) establishing connection failed: socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0: Connection refused
+2024-09-23 11:58:07: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:58:07: (gw_backend.c.971) all handlers for /index.html? on / are down.
+2024-09-23 11:58:09: (gw_backend.c.365) gw-server re-enabled: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0  0 /home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket
+2024-09-23 11:58:54: (server.c.1943) server started (lighttpd/1.4.77-devel-lighttpd-1.4.76-55-gb41e5220)
+2024-09-23 11:58:54: (gw_backend.c.533) connect() /home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0: Connection refused
+2024-09-23 11:59:04: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:59:04: (gw_backend.c.272) got proc: pid: 982238 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:59:04: (gw_backend.c.352) released proc: pid: 982238 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:59:04: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:59:04: (gw_backend.c.272) got proc: pid: 982238 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:59:04: (gw_backend.c.352) released proc: pid: 982238 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:59:10: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:59:10: (gw_backend.c.272) got proc: pid: 982238 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:59:10: (gw_backend.c.352) released proc: pid: 982238 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 11:59:35: (gw_backend.c.945) gw - found a host  0
+2024-09-23 11:59:35: (gw_backend.c.272) got proc: pid: 982238 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 11:59:35: (gw_backend.c.352) released proc: pid: 982238 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0
+2024-09-23 12:01:35: (server.c.1943) server started (lighttpd/1.4.77-devel-lighttpd-1.4.76-55-gb41e5220)
+2024-09-23 12:02:01: (gw_backend.c.945) gw - found a host  0
+2024-09-23 12:02:01: (gw_backend.c.272) got proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 1
+2024-09-23 12:02:01: (gw_backend.c.352) released proc: pid: 0 socket: unix:/home/zlgmcu/project/config-learn/lighttpd/sockets/test.fastcgi.socket-0 load: 0

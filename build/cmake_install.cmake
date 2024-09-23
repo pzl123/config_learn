@@ -1,4 +1,4 @@
-# Install script for directory: /home/zlgmcu/project/config_learn
+# Install script for directory: /home/zlgmcu/project/config-learn
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,10 +39,10 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/zlgmcu/project/config_learn/build/src/cmake_install.cmake")
-  include("/home/zlgmcu/project/config_learn/build/lib/cmake_install.cmake")
-  include("/home/zlgmcu/project/config_learn/build/include/cmake_install.cmake")
-  include("/home/zlgmcu/project/config_learn/build/third-party/cmake_install.cmake")
+  include("/home/zlgmcu/project/config-learn/build/src/cmake_install.cmake")
+  include("/home/zlgmcu/project/config-learn/build/lib/cmake_install.cmake")
+  include("/home/zlgmcu/project/config-learn/build/include/cmake_install.cmake")
+  include("/home/zlgmcu/project/config-learn/build/third-party/cmake_install.cmake")
 
 endif()
 
@@ -54,5 +54,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/zlgmcu/project/config_learn/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/zlgmcu/project/config-learn/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

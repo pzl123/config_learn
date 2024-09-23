@@ -24,6 +24,20 @@ cJSON.h
 stddef.h
 -
 
+../third-party/fcgi/include/fcgi_stdio.h
+stdio.h
+-
+sys/types.h
+-
+fcgiapp.h
+../third-party/fcgi/include/fcgiapp.h
+
+../third-party/fcgi/include/fcgiapp.h
+stdarg.h
+-
+varargs.h
+-
+
 ../third-party/uthash/include/uthash.h
 string.h
 -
@@ -46,11 +60,11 @@ stdarg.h
 stdio.h
 -
 
-/home/zlgmcu/project/config_learn/src/main.c
+/home/zlgmcu/project/config-learn/src/main.c
 config_manage.h
-/home/zlgmcu/project/config_learn/src/config_manage.h
+/home/zlgmcu/project/config-learn/src/config_manage.h
 observer.h
-/home/zlgmcu/project/config_learn/src/observer.h
+/home/zlgmcu/project/config-learn/src/observer.h
 stdio.h
 -
 dirent.h
@@ -60,5 +74,7 @@ pthread.h
 unistd.h
 -
 zlog.h
-/home/zlgmcu/project/config_learn/src/zlog.h
+/home/zlgmcu/project/config-learn/src/zlog.h
+fcgi_stdio.h
+/home/zlgmcu/project/config-learn/src/fcgi_stdio.h
 
