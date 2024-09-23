@@ -4,6 +4,7 @@
         "cjson.h": "c",
         "type_traits": "c",
         "unistd.h": "c",
-        "random": "c"
+        "random": "c",
+        "observer.h": "c"
     }
 }
